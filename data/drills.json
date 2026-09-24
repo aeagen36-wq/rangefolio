@@ -1,0 +1,1675 @@
+{
+ "drills": [
+  {
+   "key": "pistol-el-prez",
+   "name": "Pistol El Prez",
+   "weapon": "pistol",
+   "rounds": 12,
+   "par": 11.0,
+   "dist": 7,
+   "section": "El Prez",
+   "targets": 3,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "el prez pistol",
+    "pistol elprez"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "transitions",
+    "reload",
+    "trigger speed",
+    "index"
+   ],
+   "why": "The classic: three targets, two each, reload, again. Transitions and the reload under time, with enough rounds to show a pattern.",
+   "how": "Three targets a metre apart. From a ready position, on the buzzer: two rounds to each chest box, slide-lock reload, two more to each. Twelve rounds."
+  },
+  {
+   "key": "rifle-el-prez",
+   "name": "Rifle El Prez",
+   "weapon": "rifle",
+   "rounds": 12,
+   "par": 11.0,
+   "dist": 7,
+   "section": "El Prez",
+   "targets": 3,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "el prez rifle"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "transitions",
+    "reload",
+    "recoil control",
+    "support hand"
+   ],
+   "why": "El Prez with the rifle - driving the gun between targets and a fast rifle reload.",
+   "how": "Three targets. From ready, on the buzzer: two to each chest box, bolt-lock reload, two more to each. Twelve rounds."
+  },
+  {
+   "key": "transition-el-prez",
+   "name": "Transition El Prez",
+   "weapon": "both",
+   "rounds": 12,
+   "par": 11.0,
+   "dist": 7,
+   "section": "El Prez",
+   "targets": 3,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "transition el prez",
+    "el prez transition"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "rifle-to-pistol transition",
+    "sling work",
+    "index"
+   ],
+   "why": "Six with the rifle, six with the pistol. The transition is the drill; the shooting is the test of it.",
+   "how": "Three targets. Carbine from ready: two to each chest box, transition to pistol, two more to each. Twelve rounds."
+  },
+  {
+   "key": "el-prez-body-head",
+   "name": "El Prez Body/Head",
+   "weapon": "both",
+   "rounds": 12,
+   "par": 11.0,
+   "dist": 7,
+   "section": "El Prez",
+   "targets": 3,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "body head el prez",
+    "el prez head"
+   ],
+   "head": 6,
+   "source": "standard",
+   "skills": [
+    "target discrimination",
+    "trigger control",
+    "transitions"
+   ],
+   "why": "Body then head on each target - switching from speed to precision mid-string.",
+   "how": "Three targets. Carbine from ready: two to each chest box, transition to pistol, two to each HEAD box. Twelve rounds, six of them to the head."
+  },
+  {
+   "key": "el-prez-shoulder",
+   "name": "El Prez Shoulder Switch",
+   "weapon": "rifle",
+   "rounds": 12,
+   "par": 11.0,
+   "dist": 7,
+   "section": "El Prez",
+   "targets": 3,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "shoulder switch",
+    "el prez shoulder switch"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "support-side shooting",
+    "barricade discipline",
+    "transitions"
+   ],
+   "why": "Shoulder switch mid-drill - shooting from the weak shoulder without losing the pace.",
+   "how": "Three targets. Carbine from ready: two to each chest box, switch to the opposite shoulder, two more to each. Twelve rounds."
+  },
+  {
+   "key": "low-ready",
+   "name": "Low Ready",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 1.0,
+   "dist": null,
+   "section": "Basic",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "low ready pistol"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "presentation",
+    "sight acquisition",
+    "first-shot trigger"
+   ],
+   "why": "Gun to eye and one clean round. The first shot of everything else.",
+   "how": "Pistol at low ready. On the buzzer, one round to the chest box. One second."
+  },
+  {
+   "key": "high-ready",
+   "name": "High Ready",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 1.0,
+   "dist": null,
+   "section": "Basic",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "high ready pistol"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "presentation",
+    "sight acquisition",
+    "first-shot trigger"
+   ],
+   "why": "Same as low ready from the other start. Consistency between the two.",
+   "how": "Pistol at high ready. On the buzzer, one round to the chest box. One second."
+  },
+  {
+   "key": "pistol-bill",
+   "name": "Pistol Bill Drill",
+   "weapon": "pistol",
+   "rounds": 6,
+   "par": 3.0,
+   "dist": 7,
+   "section": "Basic",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [
+    "bill drill",
+    "bill",
+    "pistol bill"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "grip",
+    "recoil control",
+    "sight tracking",
+    "trigger speed"
+   ],
+   "why": "Six rounds as fast as they'll stay in the A. The purest test of grip and how well you watch the dot come back.",
+   "how": "From the holster, on the buzzer: six rounds to the chest box as fast as you can keep them there. Three seconds."
+  },
+  {
+   "key": "rifle-bill",
+   "name": "Rifle Bill Drill",
+   "weapon": "rifle",
+   "rounds": 6,
+   "par": 2.5,
+   "dist": 7,
+   "section": "Basic",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "rifle bill",
+    "carbine bill"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "recoil control",
+    "stance",
+    "trigger speed"
+   ],
+   "why": "Six fast rounds with the rifle - drive it flat and keep the dot in the box.",
+   "how": "Carbine from any ready position: six rounds to the chest box. Two and a half."
+  },
+  {
+   "key": "3-body-2-head",
+   "name": "3 Body / 2 Head",
+   "weapon": "rifle",
+   "rounds": 5,
+   "par": 2.5,
+   "dist": null,
+   "section": "Basic",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "three body two head",
+    "3 body 2 head"
+   ],
+   "head": 2,
+   "source": "standard",
+   "skills": [
+    "target discrimination",
+    "trigger control",
+    "recoil control"
+   ],
+   "why": "Speed on the body, precision on the head, on demand.",
+   "how": "Carbine from ready: three to the chest box, then straight up for two to the head box. Five rounds in two and a half."
+  },
+  {
+   "key": "combat-reload-rifle",
+   "name": "Combat Reload Rifle",
+   "weapon": "rifle",
+   "rounds": 2,
+   "par": 5.0,
+   "dist": null,
+   "section": "Basic",
+   "targets": 1,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "combat reload",
+    "rifle reload"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "reload",
+    "economy of motion",
+    "index"
+   ],
+   "why": "The rifle reload alone - mag to mag, eyes up, gun back on target.",
+   "how": "One round, feel the bolt lock, combat reload, one more to the chest. Five seconds - it's about the reload, not the shots."
+  },
+  {
+   "key": "rifle-to-pistol",
+   "name": "Rifle to Pistol Transition",
+   "weapon": "both",
+   "rounds": 2,
+   "par": 3.0,
+   "dist": null,
+   "section": "Basic",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "transition",
+    "rifle to pistol"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "rifle-to-pistol transition",
+    "sling drop",
+    "draw"
+   ],
+   "why": "Rifle down, pistol up, one round each. What happens when the rifle stops.",
+   "how": "One round from the carbine to the chest, sling it safely, draw, one round from the pistol. Three seconds."
+  },
+  {
+   "key": "check-1-5-5",
+   "name": "Check Drill 1,5,5",
+   "weapon": "both",
+   "rounds": 11,
+   "par": 12.0,
+   "dist": null,
+   "section": "Basic",
+   "targets": 1,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "check drill",
+    "one five five",
+    "1 5 5"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "transitions",
+    "reload",
+    "rifle-to-pistol transition",
+    "pace"
+   ],
+   "why": "One, five, five: everything in one string. A check on the whole skill set, not one piece.",
+   "how": "The diagnostic. One round rifle to bolt-lock, try to safe it, transition to pistol for five to the A zone, reholster, combat reload the rifle, five more. Eleven rounds in twelve seconds. Tests everything at once."
+  },
+  {
+   "key": "bill-holster",
+   "name": "Bill Drill (holster)",
+   "weapon": "pistol",
+   "rounds": 6,
+   "par": 3.0,
+   "dist": 7,
+   "section": "Pistol",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [
+    "holster bill",
+    "bill from the holster"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "draw",
+    "grip",
+    "recoil control",
+    "trigger speed"
+   ],
+   "why": "Bill Drill from the holster - the draw sets up the grip that the six rounds test.",
+   "how": "The classic. From the holster, on the buzzer, six rounds to the chest box. Three seconds."
+  },
+  {
+   "key": "triple-bill",
+   "name": "Triple Bill Drill",
+   "weapon": "pistol",
+   "rounds": 18,
+   "par": 10.0,
+   "dist": 7,
+   "section": "Pistol",
+   "targets": 1,
+   "reload": true,
+   "dry": false,
+   "also": [
+    "triple bill"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "endurance",
+    "grip",
+    "reload",
+    "consistency"
+   ],
+   "why": "Three Bill Drills back to back with reloads. Does the grip survive eighteen rounds.",
+   "how": "Draw and six, combat reload, six, combat reload, six. Eighteen rounds in ten seconds. Reloads under pressure."
+  },
+  {
+   "key": "broken-bill",
+   "name": "Broken Bill Drill",
+   "weapon": "pistol",
+   "rounds": 6,
+   "par": 5.0,
+   "dist": 7,
+   "section": "Pistol",
+   "targets": 1,
+   "reload": true,
+   "dry": false,
+   "also": [
+    "broken bill"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "cadence control",
+    "transitions",
+    "trigger control"
+   ],
+   "why": "A Bill Drill with a pause built in - shooting fast, stopping, starting again clean.",
+   "how": "Draw and three, combat reload, three more. Six rounds in five seconds."
+  },
+  {
+   "key": "2-body-1-head",
+   "name": "2 Body / 1 Head",
+   "weapon": "pistol",
+   "rounds": 3,
+   "par": 2.5,
+   "dist": 7,
+   "section": "Pistol",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "two body one head",
+    "2 body 1 head",
+    "failure drill",
+    "mozambique",
+    "failure to stop",
+    "mozambique drill"
+   ],
+   "head": 1,
+   "source": "standard",
+   "skills": [
+    "target discrimination",
+    "trigger control",
+    "sight picture shift"
+   ],
+   "why": "Two fast to the body, one careful to the head. The gear change.",
+   "how": "The Mozambique. Draw, two to the chest box, one to the head box. Three rounds in two and a half. The head shot has to be a head shot."
+  },
+  {
+   "key": "el-prez-holster",
+   "name": "El Prez (holster, turn)",
+   "weapon": "pistol",
+   "rounds": 12,
+   "par": 8.0,
+   "dist": 7,
+   "section": "Pistol",
+   "targets": 3,
+   "reload": true,
+   "dry": false,
+   "also": [
+    "el prez holster",
+    "turning el prez"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "draw",
+    "transitions",
+    "reload"
+   ],
+   "why": "El Prez from the holster - the draw added to the transitions and reload.",
+   "how": "Three targets three feet apart, facing away. On the buzzer turn, draw, two to each, combat reload, two more to each. Twelve rounds in eight."
+  },
+  {
+   "key": "1-5-el-prez",
+   "name": "1-5 El Prez",
+   "weapon": "pistol",
+   "rounds": 15,
+   "par": 6.0,
+   "dist": 7,
+   "section": "Pistol",
+   "targets": 3,
+   "reload": false,
+   "dry": false,
+   "also": [
+    "one five el prez",
+    "1 5 el prez"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "cadence",
+    "transitions",
+    "round count discipline"
+   ],
+   "why": "One-then-five on each target - control of how many and how fast.",
+   "how": "Facing away. Turn, draw: one to the far right, two to the middle, three to the far left, four back to the middle, five to the far right. Fifteen rounds in six seconds. Counting under stress."
+  },
+  {
+   "key": "4x4",
+   "name": "4x4",
+   "weapon": "pistol",
+   "rounds": 8,
+   "par": 8.0,
+   "dist": 7,
+   "section": "Pistol",
+   "targets": 1,
+   "reload": true,
+   "dry": false,
+   "also": [
+    "four by four"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "transitions",
+    "consistency",
+    "trigger speed"
+   ],
+   "why": "Four targets, four rounds - even splits across targets, no favourite.",
+   "how": "Draw and four to the chest box, combat reload, four more. Eight rounds in eight seconds."
+  },
+  {
+   "key": "10-yard",
+   "name": "10 Yard",
+   "weapon": "pistol",
+   "rounds": 10,
+   "par": 10.0,
+   "dist": 10,
+   "section": "Pistol",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [
+    "ten yard",
+    "10 yard drill"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "trigger control",
+    "sight alignment",
+    "consistency"
+   ],
+   "why": "Ten rounds at ten yards: accuracy under a clock, where the sights matter more than the grip.",
+   "how": "From the ten yard line. Draw and ten rounds to the chest box in ten seconds."
+  },
+  {
+   "key": "draw-7",
+   "name": "Draw to First Shot, 7yd",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 1.5,
+   "dist": 7,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "draw to first shot",
+    "draw 7"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "draw",
+    "grip acquisition",
+    "first-shot trigger"
+   ],
+   "why": "Draw to one hit at seven. The single most repeated motion in pistol shooting.",
+   "how": "Holster, hands neutral. On the buzzer, draw and one round to the A zone at seven. One and a half."
+  },
+  {
+   "key": "draw-15",
+   "name": "Draw to First Shot, 15yd",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 2.0,
+   "dist": 15,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "draw 15"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "draw",
+    "sight alignment",
+    "trigger control"
+   ],
+   "why": "Draw to one hit at fifteen - the draw has to end in a real sight picture.",
+   "how": "Same as the seven yard draw, from fifteen. Two seconds."
+  },
+  {
+   "key": "concealed-draw-7",
+   "name": "Concealed Draw, 1 shot, 7yd",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 2.0,
+   "dist": 7,
+   "section": "Concealment",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "concealed draw",
+    "draw from concealment",
+    "concealment draw",
+    "concealed 7"
+   ],
+   "head": 0,
+   "source": "instructor standard",
+   "skills": [
+    "garment clear",
+    "draw",
+    "grip acquisition"
+   ],
+   "why": "The draw with a shirt in the way. The garment is the drill.",
+   "how": "From concealment, hands neutral. Clear the garment, draw, one round to the A zone at seven. Two seconds."
+  },
+  {
+   "key": "concealed-draw-15",
+   "name": "Concealed Draw, 1 shot, 15yd",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 2.5,
+   "dist": 15,
+   "section": "Concealment",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "concealed 15",
+    "concealed draw 15"
+   ],
+   "head": 0,
+   "source": "instructor standard",
+   "skills": [
+    "garment clear",
+    "draw",
+    "trigger control"
+   ],
+   "why": "Concealed draw to a longer shot - clear, present, and don't rush the trigger.",
+   "how": "From concealment at fifteen. Two and a half."
+  },
+  {
+   "key": "concealed-mozambique",
+   "name": "Mozambique from Concealment",
+   "weapon": "pistol",
+   "rounds": 3,
+   "par": 3.0,
+   "dist": 7,
+   "section": "Concealment",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "concealed mozambique",
+    "mozambique from concealment",
+    "concealed failure drill",
+    "concealed 2 body 1 head"
+   ],
+   "head": 1,
+   "source": "the 2 Body / 1 Head par plus half a second for the garment",
+   "skills": [
+    "garment clear",
+    "draw",
+    "target discrimination",
+    "trigger control"
+   ],
+   "why": "Concealed draw into two body, one head. Real-world shape, real-world start.",
+   "how": "From concealment. Clear, draw, two to the chest box, one to the head box. Three seconds."
+  },
+  {
+   "key": "failure-warmup",
+   "name": "Failure Drill 2+1 (warm-up)",
+   "weapon": "pistol",
+   "rounds": 3,
+   "par": 2.0,
+   "dist": 7,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "failure warm up",
+    "failure drill warm up",
+    "2 plus 1"
+   ],
+   "head": 1,
+   "source": "standard",
+   "skills": [
+    "target discrimination",
+    "sight picture shift",
+    "trigger control"
+   ],
+   "why": "Two-plus-one at warm-up pace - grooving the shift from body to head.",
+   "how": "Warm-up Mozambique. Draw, two chest, one head, seven yards. Two seconds - assess-then-shoot cadence."
+  },
+  {
+   "key": "speed-reload",
+   "name": "Speed Reload",
+   "weapon": "pistol",
+   "rounds": 2,
+   "par": 2.5,
+   "dist": 7,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "speed reload"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "reload",
+    "mag index",
+    "economy of motion"
+   ],
+   "why": "One round, reload, one round. The reload alone, with a clock on it.",
+   "how": "Draw, one round, speed reload - not from slide lock, one more. Two and a half."
+  },
+  {
+   "key": "headshot-7",
+   "name": "Headshot Only, 7yd",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 1.75,
+   "dist": 7,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "headshot",
+    "head shot only"
+   ],
+   "head": 1,
+   "source": "standard",
+   "skills": [
+    "trigger control",
+    "sight alignment",
+    "acceptance"
+   ],
+   "why": "One to the head at seven. Pure precision on demand.",
+   "how": "Draw, one round to the head box only, seven yards. One point seven five."
+  },
+  {
+   "key": "fast-drill",
+   "name": "FAST Drill",
+   "weapon": "pistol",
+   "rounds": 6,
+   "par": 5.0,
+   "dist": 7,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": true,
+   "dry": true,
+   "also": [
+    "fast",
+    "f.a.s.t."
+   ],
+   "head": 2,
+   "source": "standard",
+   "skills": [
+    "draw",
+    "trigger control",
+    "reload",
+    "target discrimination"
+   ],
+   "why": "Two to the head, reload, four to the body. Precision, a reload, then speed - all three in six rounds.",
+   "how": "Todd Green's F.A.S.T. Two rounds to a three-by-five card, slide-lock reload, four to an eight inch circle. Five seconds is the standard, under five twice is the coin."
+  },
+  {
+   "key": "weak-hand",
+   "name": "Weak Hand Only",
+   "weapon": "pistol",
+   "rounds": 2,
+   "par": 3.0,
+   "dist": 5,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "weak hand",
+    "support hand"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "support-hand grip",
+    "trigger control",
+    "recoil control"
+   ],
+   "why": "Two rounds weak hand only. The grip you never train, trained.",
+   "how": "Strong to weak hand transfer at low ready, two rounds, five yards. Three seconds."
+  },
+  {
+   "key": "kneeling-15",
+   "name": "Kneeling Engagement, 15yd",
+   "weapon": "pistol",
+   "rounds": 2,
+   "par": 4.0,
+   "dist": 15,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "kneeling"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "position change",
+    "stability",
+    "trigger control"
+   ],
+   "why": "Drop to a knee and make two hits at fifteen. Getting into a position without losing the gun.",
+   "how": "Standing start. Drop to kneeling, present, two rounds at fifteen. Four seconds."
+  },
+  {
+   "key": "first-hit-25",
+   "name": "First Round Hit, 25yd",
+   "weapon": "rifle",
+   "rounds": 1,
+   "par": 1.5,
+   "dist": 25,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "first round hit 25",
+    "first hit 25"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "rifle presentation",
+    "sight acquisition",
+    "first-shot trigger"
+   ],
+   "why": "Rifle up, one hit at 25. The first round is the one that counts.",
+   "how": "Carbine at low ready, safety on. Buzzer: safety off, one round to the A zone at twenty-five. One and a half."
+  },
+  {
+   "key": "first-hit-50",
+   "name": "First Round Hit, 50yd",
+   "weapon": "rifle",
+   "rounds": 1,
+   "par": 2.0,
+   "dist": 50,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "first round hit 50"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "rifle presentation",
+    "sight alignment",
+    "trigger control"
+   ],
+   "why": "One hit at 50 - presentation plus a real sight picture.",
+   "how": "Same, from fifty. Two seconds."
+  },
+  {
+   "key": "first-hit-100",
+   "name": "First Round Hit, 100yd",
+   "weapon": "rifle",
+   "rounds": 1,
+   "par": 2.5,
+   "dist": 100,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "first round hit 100"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "natural point of aim",
+    "breathing",
+    "trigger control"
+   ],
+   "why": "One hit at 100 from standing. Hold, breathe, break it clean.",
+   "how": "Same, from a hundred. Two and a half."
+  },
+  {
+   "key": "two-shot-25",
+   "name": "2-Shot String, 25yd",
+   "weapon": "rifle",
+   "rounds": 2,
+   "par": 1.75,
+   "dist": 25,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "two shot string"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "recoil control",
+    "sight tracking",
+    "trigger speed"
+   ],
+   "why": "Two at 25 - watching the dot settle and breaking the second shot when it does.",
+   "how": "Low ready, two rounds to the A zone at twenty-five. One point seven five."
+  },
+  {
+   "key": "kneeling-50",
+   "name": "Kneeling from Standing, 50yd",
+   "weapon": "rifle",
+   "rounds": 2,
+   "par": 3.5,
+   "dist": 50,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "kneeling from standing"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "position change",
+    "stability",
+    "trigger control"
+   ],
+   "why": "Standing to kneeling, two hits at 50. Build the position fast, then be still.",
+   "how": "Standing low ready. Drop to kneeling, two rounds at fifty. Three and a half."
+  },
+  {
+   "key": "prone-100",
+   "name": "Prone from Standing, 100yd",
+   "weapon": "rifle",
+   "rounds": 2,
+   "par": 6.0,
+   "dist": 100,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "prone",
+    "prone from standing"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "position change",
+    "natural point of aim",
+    "trigger control"
+   ],
+   "why": "Standing to prone at 100. Getting down fast and getting steady faster.",
+   "how": "Standing low ready. Go prone, two rounds at a hundred. Six seconds."
+  },
+  {
+   "key": "barricade-strong",
+   "name": "Barricade, strong side",
+   "weapon": "rifle",
+   "rounds": 5,
+   "par": 8.0,
+   "dist": 50,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "barricade strong"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "barricade discipline",
+    "position building",
+    "trigger control"
+   ],
+   "why": "Five from behind cover, strong side - minimal exposure, stable gun.",
+   "how": "Post on the barricade strong side, five rounds to the A zone at fifty. Eight seconds."
+  },
+  {
+   "key": "barricade-weak",
+   "name": "Barricade, weak side",
+   "weapon": "rifle",
+   "rounds": 5,
+   "par": 10.0,
+   "dist": 50,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "barricade weak"
+   ],
+   "head": 0,
+   "source": "standard",
+   "skills": [
+    "support-side shooting",
+    "barricade discipline",
+    "position building"
+   ],
+   "why": "Five from the weak side of cover - the shoulder switch under time.",
+   "how": "Post weak side, five rounds to the A zone at fifty. Ten seconds - the extra two are the point."
+  },
+  {
+   "key": "rifle-head-25",
+   "name": "Headshot (rifle), 25yd",
+   "weapon": "rifle",
+   "rounds": 1,
+   "par": 2.0,
+   "dist": 25,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "rifle headshot 25"
+   ],
+   "head": 1,
+   "source": "standard",
+   "skills": [
+    "trigger control",
+    "sight alignment",
+    "acceptance"
+   ],
+   "why": "Rifle head shot at 25 - a small target, one round, no excuses.",
+   "how": "Low ready. One round to the head box at twenty-five. Two seconds."
+  },
+  {
+   "key": "rifle-head-50",
+   "name": "Headshot (rifle), 50yd",
+   "weapon": "rifle",
+   "rounds": 1,
+   "par": 2.5,
+   "dist": 50,
+   "section": "Warm-up",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [
+    "rifle headshot 50"
+   ],
+   "head": 1,
+   "source": "standard",
+   "skills": [
+    "trigger control",
+    "sight alignment",
+    "breathing"
+   ],
+   "why": "Rifle head shot at 50 - precision on a clock.",
+   "how": "Same from fifty. Two and a half."
+  }
+ ],
+ "warmups": {
+  "dry": {
+   "which": "dry",
+   "name": "Daily dry protocol",
+   "about": "10-15 minutes with the laser trainer. Every rep on the timer.",
+   "steps": [
+    {
+     "n": 1,
+     "key": null,
+     "name": "Draw stroke - grip acquisition only",
+     "reps": 10,
+     "par": null,
+     "focus": "Path, grip, no sweep.",
+     "how": ""
+    },
+    {
+     "n": 2,
+     "key": "draw-7",
+     "name": "Draw to First Shot, 7yd",
+     "reps": 10,
+     "par": 1.5,
+     "focus": "Trigger at full extension.",
+     "how": "Holster, hands neutral. On the buzzer, draw and one round to the A zone at seven. One and a half."
+    },
+    {
+     "n": 3,
+     "key": "failure-warmup",
+     "name": "Failure Drill 2+1 (warm-up)",
+     "reps": 8,
+     "par": 2.0,
+     "focus": "Sight picture shift to the head.",
+     "how": "Warm-up Mozambique. Draw, two chest, one head, seven yards. Two seconds - assess-then-shoot cadence."
+    },
+    {
+     "n": 4,
+     "key": "speed-reload",
+     "name": "Speed Reload",
+     "reps": 8,
+     "par": 2.5,
+     "focus": "Mag index, economy of motion.",
+     "how": "Draw, one round, speed reload - not from slide lock, one more. Two and a half."
+    },
+    {
+     "n": 5,
+     "key": null,
+     "name": "Emergency reload - slidelock sim",
+     "reps": 5,
+     "par": 3.0,
+     "focus": "Slide release after the reload.",
+     "how": ""
+    },
+    {
+     "n": 6,
+     "key": "2-body-1-head",
+     "name": "2 Body / 1 Head",
+     "reps": 10,
+     "par": 2.5,
+     "focus": "Trigger control through the transition.",
+     "how": "The Mozambique. Draw, two to the chest box, one to the head box. Three rounds in two and a half. The head shot has to be a head shot."
+    },
+    {
+     "n": 7,
+     "key": "rifle-to-pistol",
+     "name": "Rifle to Pistol Transition",
+     "reps": 8,
+     "par": 3.0,
+     "focus": "Sling drop, clean draw.",
+     "how": "One round from the carbine to the chest, sling it safely, draw, one round from the pistol. Three seconds."
+    },
+    {
+     "n": 8,
+     "key": null,
+     "name": "Barricade - strong side lean",
+     "reps": 8,
+     "par": null,
+     "focus": "Minimal exposure.",
+     "how": ""
+    },
+    {
+     "n": 9,
+     "key": null,
+     "name": "Barricade - weak side",
+     "reps": 8,
+     "par": null,
+     "focus": "Alternate hand hold.",
+     "how": ""
+    }
+   ]
+  },
+  "pistol": {
+   "which": "pistol",
+   "name": "Pistol warm-up",
+   "about": "Live or dry. Three reps each unless you're grooving one.",
+   "steps": [
+    {
+     "n": 1,
+     "key": "draw-7",
+     "name": "Draw to First Shot, 7yd",
+     "reps": 3,
+     "par": 1.5,
+     "focus": "",
+     "how": "Holster, hands neutral. On the buzzer, draw and one round to the A zone at seven. One and a half."
+    },
+    {
+     "n": 2,
+     "key": "draw-15",
+     "name": "Draw to First Shot, 15yd",
+     "reps": 3,
+     "par": 2.0,
+     "focus": "",
+     "how": "Same as the seven yard draw, from fifteen. Two seconds."
+    },
+    {
+     "n": 3,
+     "key": "failure-warmup",
+     "name": "Failure Drill 2+1 (warm-up)",
+     "reps": 3,
+     "par": 2.0,
+     "focus": "",
+     "how": "Warm-up Mozambique. Draw, two chest, one head, seven yards. Two seconds - assess-then-shoot cadence."
+    },
+    {
+     "n": 4,
+     "key": "speed-reload",
+     "name": "Speed Reload",
+     "reps": 3,
+     "par": 2.5,
+     "focus": "",
+     "how": "Draw, one round, speed reload - not from slide lock, one more. Two and a half."
+    },
+    {
+     "n": 5,
+     "key": "headshot-7",
+     "name": "Headshot Only, 7yd",
+     "reps": 3,
+     "par": 1.75,
+     "focus": "",
+     "how": "Draw, one round to the head box only, seven yards. One point seven five."
+    },
+    {
+     "n": 6,
+     "key": "fast-drill",
+     "name": "FAST Drill",
+     "reps": 2,
+     "par": 5.0,
+     "focus": "",
+     "how": "Todd Green's F.A.S.T. Two rounds to a three-by-five card, slide-lock reload, four to an eight inch circle. Five seconds is the standard, under five twice is the coin."
+    },
+    {
+     "n": 7,
+     "key": "weak-hand",
+     "name": "Weak Hand Only",
+     "reps": 3,
+     "par": 3.0,
+     "focus": "",
+     "how": "Strong to weak hand transfer at low ready, two rounds, five yards. Three seconds."
+    },
+    {
+     "n": 8,
+     "key": "kneeling-15",
+     "name": "Kneeling Engagement, 15yd",
+     "reps": 2,
+     "par": 4.0,
+     "focus": "",
+     "how": "Standing start. Drop to kneeling, present, two rounds at fifteen. Four seconds."
+    }
+   ]
+  },
+  "rifle": {
+   "which": "rifle",
+   "name": "Rifle warm-up",
+   "about": "First-round hits walking out, then positions.",
+   "steps": [
+    {
+     "n": 1,
+     "key": "first-hit-25",
+     "name": "First Round Hit, 25yd",
+     "reps": 3,
+     "par": 1.5,
+     "focus": "",
+     "how": "Carbine at low ready, safety on. Buzzer: safety off, one round to the A zone at twenty-five. One and a half."
+    },
+    {
+     "n": 2,
+     "key": "first-hit-50",
+     "name": "First Round Hit, 50yd",
+     "reps": 3,
+     "par": 2.0,
+     "focus": "",
+     "how": "Same, from fifty. Two seconds."
+    },
+    {
+     "n": 3,
+     "key": "first-hit-100",
+     "name": "First Round Hit, 100yd",
+     "reps": 3,
+     "par": 2.5,
+     "focus": "",
+     "how": "Same, from a hundred. Two and a half."
+    },
+    {
+     "n": 4,
+     "key": "two-shot-25",
+     "name": "2-Shot String, 25yd",
+     "reps": 3,
+     "par": 1.75,
+     "focus": "",
+     "how": "Low ready, two rounds to the A zone at twenty-five. One point seven five."
+    },
+    {
+     "n": 5,
+     "key": "kneeling-50",
+     "name": "Kneeling from Standing, 50yd",
+     "reps": 2,
+     "par": 3.5,
+     "focus": "",
+     "how": "Standing low ready. Drop to kneeling, two rounds at fifty. Three and a half."
+    },
+    {
+     "n": 6,
+     "key": "prone-100",
+     "name": "Prone from Standing, 100yd",
+     "reps": 2,
+     "par": 6.0,
+     "focus": "",
+     "how": "Standing low ready. Go prone, two rounds at a hundred. Six seconds."
+    },
+    {
+     "n": 7,
+     "key": "barricade-strong",
+     "name": "Barricade, strong side",
+     "reps": 2,
+     "par": 8.0,
+     "focus": "",
+     "how": "Post on the barricade strong side, five rounds to the A zone at fifty. Eight seconds."
+    },
+    {
+     "n": 8,
+     "key": "barricade-weak",
+     "name": "Barricade, weak side",
+     "reps": 2,
+     "par": 10.0,
+     "focus": "",
+     "how": "Post weak side, five rounds to the A zone at fifty. Ten seconds - the extra two are the point."
+    },
+    {
+     "n": 9,
+     "key": "rifle-head-25",
+     "name": "Headshot (rifle), 25yd",
+     "reps": 3,
+     "par": 2.0,
+     "focus": "",
+     "how": "Low ready. One round to the head box at twenty-five. Two seconds."
+    },
+    {
+     "n": 10,
+     "key": "rifle-head-50",
+     "name": "Headshot (rifle), 50yd",
+     "reps": 3,
+     "par": 2.5,
+     "focus": "",
+     "how": "Same from fifty. Two and a half."
+    }
+   ]
+  }
+ },
+ "default_stages": [
+  {
+   "id": "demo-uspsa",
+   "name": "Default USPSA",
+   "format": "uspsa",
+   "builtin": true,
+   "positions": [
+    {
+     "label": "start box, hands relaxed at sides",
+     "gun": "pistol",
+     "move": 12,
+     "reload": true,
+     "targets": [
+      {
+       "n": 3,
+       "rounds": 2,
+       "kind": "paper",
+       "dist": 10
+      }
+     ],
+     "note": "Two on each paper, reload on the move."
+    },
+    {
+     "label": "port, right side",
+     "gun": "pistol",
+     "move": 0,
+     "reload": false,
+     "targets": [
+      {
+       "n": 2,
+       "rounds": 2,
+       "kind": "paper",
+       "dist": 15
+      },
+      {
+       "n": 2,
+       "rounds": 1,
+       "kind": "popper",
+       "dist": 20
+      }
+     ],
+     "note": "Steel must fall. Paper is best two."
+    }
+   ]
+  },
+  {
+   "id": "demo-3gun",
+   "name": "Default 3-gun",
+   "format": "3gun",
+   "builtin": true,
+   "positions": [
+    {
+     "label": "rifle from low ready",
+     "gun": "rifle",
+     "move": 15,
+     "reload": false,
+     "targets": [
+      {
+       "n": 4,
+       "rounds": 1,
+       "kind": "plate",
+       "dist": 50
+      }
+     ],
+     "note": "Ground the rifle safe in the barrel, move."
+    },
+    {
+     "label": "shotgun table",
+     "gun": "shotgun",
+     "move": 10,
+     "reload": true,
+     "targets": [
+      {
+       "n": 4,
+       "rounds": 1,
+       "kind": "clay",
+       "dist": 12
+      }
+     ],
+     "note": "Starts loaded with two - the reload is the stage."
+    },
+    {
+     "label": "pistol, last bay",
+     "gun": "pistol",
+     "move": 0,
+     "reload": false,
+     "targets": [
+      {
+       "n": 3,
+       "rounds": 2,
+       "kind": "paper",
+       "dist": 10
+      },
+      {
+       "n": 1,
+       "rounds": 1,
+       "kind": "popper",
+       "dist": 15
+      }
+     ],
+     "note": "Popper last - it's the stop plate."
+    }
+   ]
+  }
+ ],
+ "pro": {
+  "pistol-bill": 1.7,
+  "bill-holster": 1.7,
+  "broken-bill": 2.6,
+  "triple-bill": 6.0,
+  "pistol-el-prez": 5.0,
+  "el-prez-holster": 5.0,
+  "1-5-el-prez": 4.0,
+  "rifle-el-prez": 5.0,
+  "draw-7": 0.9,
+  "draw-15": 1.2,
+  "concealed-draw-7": 1.3,
+  "concealed-draw-15": 1.6,
+  "concealed-mozambique": 2.0,
+  "2-body-1-head": 1.4,
+  "failure-warmup": 1.4,
+  "speed-reload": 1.3,
+  "headshot-7": 1.0,
+  "fast-drill": 4.0,
+  "weak-hand": 2.0,
+  "kneeling-15": 2.5,
+  "4x4": 4.5,
+  "10-yard": 6.0,
+  "rifle-bill": 1.6,
+  "3-body-2-head": 1.6,
+  "first-hit-25": 1.0,
+  "first-hit-50": 1.3,
+  "first-hit-100": 1.7,
+  "two-shot-25": 1.2,
+  "rifle-head-25": 1.3,
+  "rifle-head-50": 1.6,
+  "combat-reload-rifle": 3.0,
+  "rifle-to-pistol": 1.8,
+  "low-ready": 0.6,
+  "high-ready": 0.6
+ },
+ "focus": {
+  "accuracy": [
+   "headshot-7",
+   "2-body-1-head",
+   "weak-hand",
+   "kneeling-15",
+   "10-yard",
+   "rifle-head-25",
+   "rifle-head-50",
+   "prone-100"
+  ],
+  "speed": [
+   "draw-7",
+   "pistol-bill",
+   "speed-reload",
+   "low-ready",
+   "high-ready",
+   "first-hit-25",
+   "two-shot-25",
+   "rifle-bill"
+  ],
+  "both": [
+   "fast-drill",
+   "pistol-el-prez",
+   "failure-warmup",
+   "concealed-mozambique",
+   "4x4",
+   "check-1-5-5",
+   "el-prez-holster"
+  ]
+ },
+ "both_split": {
+  "transition-el-prez": [
+   6,
+   6
+  ],
+  "el-prez-body-head": [
+   6,
+   6
+  ],
+  "rifle-to-pistol": [
+   1,
+   1
+  ],
+  "check-1-5-5": [
+   6,
+   5
+  ]
+ },
+ "time_plus_rules": {
+  "mg": {
+   "name": "USPSA Multigun",
+   "ftn": 5,
+   "paper_miss": 10,
+   "steel_miss": 10,
+   "steel_miss_far": 20,
+   "far_yd": 100,
+   "fte": 5,
+   "noshoot": 5,
+   "procedural": 5,
+   "ns_cap": null
+  },
+  "uml": {
+   "name": "UML Traditional",
+   "ftn": 5,
+   "paper_miss": 10,
+   "steel_miss": 10,
+   "steel_miss_far": 20,
+   "far_yd": 100,
+   "fte": 5,
+   "noshoot": 5,
+   "procedural": 5,
+   "ns_cap": null
+  },
+  "tx3g": {
+   "name": "Texas 3-Gun",
+   "ftn": 5,
+   "paper_miss": 10,
+   "steel_miss": 10,
+   "steel_miss_far": 20,
+   "far_yd": 100,
+   "fte": 5,
+   "noshoot": 10,
+   "procedural": 5,
+   "ns_cap": 2
+  }
+ },
+ "holds": {
+  "300blk-190": {
+   "name": "300 BLK 190gr",
+   "zero": 50,
+   "sight_height": 2.9,
+   "note": "suppressed, 13\" barrel, subsonic (Hornady Sub-X)",
+   "drops": {
+    "7": -2.0,
+    "25": -0.4,
+    "50": 0.0,
+    "100": -5.4,
+    "150": -19.6,
+    "200": -42.9
+   },
+   "unsure": {
+    "100": "your card had -18.5 - almost certainly centimetres, or a different zero"
+   }
+  },
+  "300blk-200": {
+   "name": "300 BLK 200gr",
+   "zero": 50,
+   "sight_height": 2.9,
+   "note": "suppressed, 13\" barrel, subsonic",
+   "drops": {
+    "7": -2.0,
+    "25": -0.4,
+    "50": 0.0,
+    "100": -5.3,
+    "150": -19.2,
+    "200": -42.0
+   },
+   "unsure": {
+    "100": "your card had -22.5 - confirm at 100"
+   }
+  },
+  "300blk-220": {
+   "name": "300 BLK 220gr",
+   "zero": 50,
+   "sight_height": 2.9,
+   "note": "suppressed, 13\" barrel, subsonic (220 SMK)",
+   "drops": {
+    "7": -2.0,
+    "25": -0.4,
+    "50": 0.0,
+    "100": -5.8,
+    "150": -20.5,
+    "200": -44.5
+   },
+   "unsure": {
+    "100": "your card had -22.5 - confirm at 100"
+   }
+  },
+  "9mm-115": {
+   "name": "9mm 115gr",
+   "zero": 25,
+   "sight_height": 1.75,
+   "note": "Holosun on pistol",
+   "drops": {
+    "7": -1.1,
+    "25": 0.0,
+    "50": 0.0,
+    "100": -6.0
+   },
+   "unsure": {
+    "7": "your card had +0.5 - the round is still below the dot at 7 with a 1.75\" sight"
+   }
+  },
+  "9mm-124": {
+   "name": "9mm 124gr",
+   "zero": 25,
+   "sight_height": 1.75,
+   "note": "Holosun on pistol",
+   "drops": {
+    "7": -1.1,
+    "25": 0.0,
+    "50": 0.0,
+    "100": -6.0
+   },
+   "unsure": {}
+  }
+ },
+ "zones": {
+  "a": "a",
+  "alpha": "a",
+  "chest": "a",
+  "zero": "a",
+  "-0": "a",
+  "down zero": "a",
+  "b": "c",
+  "bravo": "c",
+  "c": "c",
+  "charlie": "c",
+  "-1": "c",
+  "down one": "c",
+  "d": "d",
+  "delta": "d",
+  "-3": "d",
+  "down three": "d",
+  "head": "a",
+  "h": "a",
+  "head a": "a",
+  "head c": "c",
+  "miss": "miss",
+  "m": "miss",
+  "off": "miss",
+  "mike": "miss"
+ },
+ "head_words": [
+  "h",
+  "head",
+  "head a",
+  "head c"
+ ],
+ "time_plus": {
+  "a": 0.0,
+  "c": 1.0,
+  "d": 3.0,
+  "miss": 5.0
+ },
+ "points": {
+  "a": 5,
+  "c": 3,
+  "d": 1,
+  "miss": -10
+ }
+}

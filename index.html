@@ -1,0 +1,2070 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0B0D10">
+<title>Rangefolio</title>
+<meta name="description" content="Range day, scored honestly. Drills, sessions, stages, coaching and a ballistics solver - all on your phone, no account.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rangefolio">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<script src="engine.js"></script>
+<!--
+  RANGEFOLIO
+  A standalone PWA. Everything the page asks for is answered by engine.js
+  from this browser's own storage - there is no server and no account.
+  Only the weather strip on the Ballistics tab talks to the internet.
+-->
+<style>
+:root{
+  --bg:#0B0D10;--card:#14181E;--sunk:#0F1318;--hair:rgba(255,255,255,.08);
+  --ink:#F2F4F7;--dim:#9AA5B4;--faint:#6A7684;
+  --hot:#E8A33D;        /* the one accent: brass */
+  --pass:#43C57A;--fail:#E8564F;--dirty:#E8A33D;
+  --sab:env(safe-area-inset-bottom,0px);
+  --sat:env(safe-area-inset-top,0px);
+  --mono:ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#F3F1EC;--card:#FFFFFF;--sunk:#EEEBE4;--hair:rgba(0,0,0,.09);
+  --ink:#1B1F26;--dim:#4F5A68;--faint:#7B8594;
+  --hot:#B8761A;--pass:#1F8F4E;--fail:#C23B33;--dirty:#B8761A;
+}
+html[data-theme="light"] .tgt .zc button.c.on{color:var(--ink);border-color:var(--dim)}
+html[data-theme="light"] .go{color:#fff}
+html[data-theme="light"] .whoBtn[aria-pressed="true"],html[data-theme="light"] .plan .acts button.go2,html[data-theme="light"] .ed .save,html[data-theme="light"] .addRow button{color:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 var(--sans);
+  height:100%;overscroll-behavior:none}
+body{display:flex;flex-direction:column;min-height:100dvh;padding-bottom:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button,.zone,.tgt,.pad,.deck,.pages,.page{touch-action:manipulation}
+.deck,.pages{touch-action:pan-x pan-y}
+/* the number pad, zones and target scroll nothing - a thumb sliding off a key shouldn't change tabs */
+.pad,.zones,.tgt,.tgts,.timeRow,.tmode,.mode,.stageRow{touch-action:pan-y}
+button,.zone,.tgt,.pad,.tally,.time,.tabs,.mode,.who,.loads,.holdOne{-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;min-height:56px}
+button:active{transform:scale(.985)}
+button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
+.mono{font-family:var(--mono)}
+.lbl{font:700 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- top: who's shooting -------------------------------------- */
+.top{display:flex;align-items:center;gap:8px;padding:calc(8px + var(--sat)) 12px 4px;flex:none;min-height:calc(56px + var(--sat))}
+.top a{color:var(--faint);text-decoration:none;font:700 11px var(--mono);letter-spacing:.12em;
+  padding:10px 6px 10px 0;flex:none}
+.who{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;padding:2px 0}
+.who::-webkit-scrollbar{display:none}
+.whoBtn{flex:none;padding:0 14px;border-radius:999px;background:var(--card);
+  border:1.5px solid var(--hair);font-weight:700;font-size:15px;min-height:44px}
+.whoBtn[aria-pressed="true"]{background:var(--hot);color:#1A1204;border-color:var(--hot)}
+.whoBtn.add{color:var(--dim);border-style:dashed}
+/* her, from here. Same server, same mic pipeline as the main app - this
+   is a second door into the same room, not a second room. */
+.themeBtn{flex:none;width:40px;height:40px;min-height:40px;border-radius:50%;background:var(--card);border:1.5px solid var(--hair);color:var(--dim);font-size:18px}
+.brand{font:800 12px var(--mono);letter-spacing:.18em;color:var(--hot);padding:0 4px 0 2px;flex:none}
+
+/* ---------- pages: log · book · ballistics · warm-up ------------------ */
+.tabs{display:flex;gap:4px;padding:0 12px 6px;flex:none;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;min-height:40px;border-radius:12px;font:700 10.5px var(--mono);letter-spacing:.08em;white-space:nowrap;padding-left:10px;padding-right:10px;
+  text-transform:uppercase;color:var(--faint);background:transparent;border:1.5px solid transparent}
+.tabs button[aria-selected="true"]{color:var(--hot);border-color:var(--hair);background:var(--card)}
+.pages{flex:none;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;align-items:stretch}
+.pages::-webkit-scrollbar{display:none}
+.page{flex:0 0 100%;scroll-snap-align:start;min-width:0;padding:0 12px calc(14px + var(--sab));align-self:stretch;
+  overflow-y:auto;height:100%}
+/* how you enter hits: a switch as well as a swipe, for anyone who'd
+   rather press a word than guess a gesture */
+.mode[hidden]{display:none}
+.mode{display:flex;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:3px;margin-top:6px}
+.mode button{flex:1;min-height:32px;border-radius:9px;font:700 11px var(--mono);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+.mode button[aria-pressed="true"]{background:var(--card);color:var(--hot);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+
+/* ballistics */
+.loads{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.loads::-webkit-scrollbar{display:none}
+.loads button{flex:none;min-height:38px;padding:0 11px;border-radius:999px;background:var(--sunk);
+  border:1.5px solid var(--hair);font-weight:700;font-size:13px;color:var(--dim)}
+.loads button[aria-pressed="true"]{color:var(--hot);border-color:var(--hot)}
+.form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px;align-items:start}
+.f{background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:6px 10px;min-width:0}
+.f label{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.f input{width:100%;background:transparent;border:none;color:var(--ink);font:700 18px var(--mono);
+  padding:2px 0 0;outline:none;min-width:0}
+.f.wide{grid-column:span 2}
+.calRow{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+.cal{width:100%;appearance:none;-webkit-appearance:none;background:var(--sunk);border:1.5px solid var(--hot);
+  border-radius:14px;color:var(--hot);font:800 18px var(--sans);padding:12px 44px 12px 14px;min-height:52px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--hot) 50%),linear-gradient(135deg,var(--hot) 50%,transparent 50%);
+  background-position:calc(100% - 22px) 50%,calc(100% - 16px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+.calAbout{margin:6px 4px 0;color:var(--faint);font-size:12px;line-height:1.4}
+/* the conditions strip: where you're pointing, how high, what the air is doing */
+.cond{display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px;
+  background:var(--sunk);border:1.5px solid var(--hair);border-radius:16px;padding:8px}
+.cmp{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:0;padding:0}
+.cmp svg{width:60px;height:60px}
+.cmp b{font:700 12px var(--mono);color:var(--hot)}
+.cw{min-width:0}
+.cwRow{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;line-height:1.5}
+.cwRow .k{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.cwRow b{color:var(--ink);font-weight:700;margin-right:4px}
+.cwRow small{font:500 11px var(--sans);color:var(--faint);flex:1 1 100%;min-width:0;line-height:1.35}
+.cwRow.acts{gap:6px;margin-top:2px}
+.cwRow.acts .mini{width:auto;display:inline-block;margin:0;min-height:30px;padding:0 10px;border-radius:8px;background:var(--card);border:1px solid var(--hot);color:var(--hot);font:700 10px var(--mono);letter-spacing:.06em}
+.cwRow small b{font-weight:700;color:var(--dim)}
+.gunRow{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:6px;margin-bottom:6px}
+.cal.gun{border-color:var(--hair);color:var(--ink);font-weight:700;font-size:16px;min-height:48px;padding:10px 44px 10px 14px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--dim) 50%),linear-gradient(135deg,var(--dim) 50%,transparent 50%)}
+.gunBtn{min-height:48px;border-radius:14px;background:var(--sunk);border:1.5px solid var(--hair);color:var(--dim);font-size:18px}
+.f .mini{display:block;margin-top:4px;min-height:28px;padding:0 8px;border-radius:8px;background:var(--card);border:1px solid var(--hot);color:var(--hot);font:700 10px var(--mono);letter-spacing:.06em;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.f .mini[hidden]{display:none}
+.more{width:100%;min-height:38px;margin-top:8px;border-radius:12px;border:1.5px dashed var(--hair);color:var(--dim);font-weight:700;font-size:12.5px}
+.est.src{font-family:var(--mono);font-size:10.5px;color:var(--faint);word-break:break-word}
+.btab tr.tsonic td{color:#5BB8F5}
+.btab tr.tsonic td.lo{color:#5BB8F5}
+.ed .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.ed .g2 input,.ed .g2 select{width:100%;min-height:44px;font-size:15px;font-family:var(--mono);font-weight:700;padding:0 10px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;color:var(--ink)}
+.ed .g2 select{font-family:var(--sans);appearance:none;-webkit-appearance:none}
+.exportRow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.exportRow h2{margin:0}
+.exportRow span button,.exportRow button{min-height:38px;border-radius:12px;border:1.5px solid var(--hair);background:var(--sunk);
+  color:var(--dim);font-weight:700;font-size:13px;padding:0 14px}
+.work{white-space:pre-wrap;font:15px/1.55 var(--sans);color:var(--ink);margin:0}
+.work:empty::before{content:"Asking her…";color:var(--faint)}
+.verd{background:var(--sunk);border:1.5px solid var(--hot);border-radius:14px;padding:10px 12px;font-size:14.5px;line-height:1.4;margin-bottom:10px}
+.verd small{display:block;color:var(--faint);font-family:var(--mono);font-size:11px;margin-top:4px}
+.cd{background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.cd .more{display:none}.cd.open .more{display:block}
+.cd .tr{font:700 10.5px var(--mono);letter-spacing:.08em;margin-left:6px}
+.cd .tr.up{color:var(--pass)}.cd .tr.down{color:var(--fail)}.cd .tr.flat{color:var(--faint)}
+.cd .hd::after{content:"▾";color:var(--faint);font-size:12px;margin-left:4px}.cd.open .hd::after{content:"▴"}
+.cd .dw{color:var(--faint);font-size:12.5px;margin-top:6px;line-height:1.4}
+.cd .hd{display:flex;align-items:center;gap:8px}
+.cd .hd b{flex:1;font-size:15px}
+.cd .fo{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1px solid}
+.cd .fo.accuracy{color:#5BB8F5;border-color:#5BB8F5}.cd .fo.speed{color:var(--hot);border-color:var(--hot)}.cd .fo.both{color:var(--fail);border-color:var(--fail)}.cd .fo.hold{color:var(--pass);border-color:var(--pass)}.cd .fo.new{color:var(--faint);border-color:var(--hair)}
+.cd .why{color:var(--dim);font-size:13px;margin-top:4px}
+.cd .goal{display:flex;align-items:center;gap:8px;margin-top:6px;font:700 12px var(--mono);color:var(--ink)}
+.cd .goal span{color:var(--faint);font-weight:500}
+.cd .goal button{margin-left:auto;min-height:30px;padding:0 10px;border-radius:8px;border:1.5px solid var(--hair);color:var(--dim);font:700 11px var(--sans)}
+.cd .plan{color:var(--ink);font-size:13.5px;line-height:1.45;margin-top:6px}
+.sugg{margin-top:12px}
+.sugg h4{margin:8px 0 4px;font:700 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.sugg .row{display:flex;flex-wrap:wrap;gap:6px}
+.sugg .row button{min-height:36px;padding:0 12px;border-radius:999px;background:var(--sunk);border:1.5px solid var(--hair);font-size:13px;font-weight:600;color:var(--dim)}
+.seg{display:flex;gap:2px;margin-top:4px}
+.seg button{flex:1;min-height:30px;border-radius:8px;font:700 11px var(--mono);color:var(--faint);background:var(--card)}
+.seg button[aria-pressed="true"]{color:var(--hot)}
+.est{margin:8px 2px 0;color:var(--faint);font-size:12px;line-height:1.4}
+.est b{color:var(--dim)}
+.adj{margin-top:10px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px 12px;font-size:13px;line-height:1.45;color:var(--dim)}
+.adj b{color:var(--ink)}.adj .up{color:var(--hot);font-weight:700}
+.adj:empty{display:none}
+.holdOne{margin-top:10px;background:var(--sunk);border:1.5px solid var(--hot);border-radius:14px;padding:10px 12px;
+  display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
+.holdOne .yd{font:700 28px var(--mono);color:var(--hot);display:flex;align-items:center;gap:6px}
+.holdOne .yd button{min-height:36px;width:36px;border-radius:9px;background:var(--card);color:var(--dim);font-size:20px}
+.holdOne .h{font-size:17px;font-weight:700}
+.holdOne .h small{display:block;color:var(--dim);font-weight:500;font-size:12.5px;margin-top:2px;font-family:var(--mono)}
+.tblWrap{overflow-x:auto;margin:10px -6px 0;padding:0 6px;scrollbar-width:none}.tblWrap::-webkit-scrollbar{display:none}
+.btab{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+.btab th,.btab td{padding:7px 3px;text-align:right;border-bottom:1px solid var(--hair);white-space:nowrap}
+.btab th{color:var(--faint);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.btab td:first-child,.btab th:first-child{text-align:left;color:var(--hot);font-weight:700}
+.btab tr.card td{background:rgba(232,163,61,.06)}
+.btab .lo{color:var(--fail)}.btab .hi{color:#5BB8F5}.btab .on{color:var(--pass)}
+.btab .was{color:var(--faint);font-size:11px}
+.btab .dif{color:var(--dirty);font-size:11px}
+
+/* ---------- the run card --------------------------------------------- */
+.main{flex:1;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding:0 12px 12px;
+  align-content:start}
+@media (min-width:900px){.main{grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr)}}
+.card{background:var(--card);border:1px solid var(--hair);border-radius:20px;padding:12px}
+#pages .page:first-child .card{padding:8px 10px 10px}
+
+.drillPick{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:8px 14px;border-radius:14px;background:var(--sunk);border:1.5px solid var(--hair);
+  min-height:52px}
+.drillPick b{font-size:clamp(18px,4vw,26px);line-height:1.1;letter-spacing:-.01em;flex:1}
+.drillPick .par{font-family:var(--mono);font-size:13px;color:var(--dim);text-align:right;line-height:1.35}
+.drillPick .par strong{display:block;color:var(--hot);font-size:20px}
+
+/* ---- two ways to score, side by side; swipe between them ----------
+   The target is the default: tap where the round went. Swipe left for the
+   counters, which are quicker when you're reading hits off a taped target
+   after the string rather than calling them one at a time. Same numbers
+   underneath either way. */
+.deck{margin-top:8px}
+.pane{display:none}
+.pane.on{display:block}
+.dryPane{background:var(--sunk);border:1.5px dashed var(--hair);border-radius:14px;padding:12px 14px;color:var(--dim);font-size:13.5px;line-height:1.4;min-height:64px}
+.dryPane b{color:var(--hot)}
+.stageRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.stageRow .pen{flex:1 1 150px}
+.stageRow .seg{flex:0 0 auto}
+/* a stage, target by target: paper gets A/C/D, steel gets down or not */
+.tgts{display:flex;flex-direction:column;gap:5px}
+.trow{display:grid;grid-template-columns:64px minmax(0,1fr);gap:6px;align-items:center;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:5px 6px 5px 10px}
+.trow .id b{display:block;font:700 13px var(--mono);color:var(--hot)}
+.trow .id small{display:block;font:600 9.5px var(--mono);color:var(--faint);letter-spacing:.06em;text-transform:uppercase;line-height:1.2}
+.trow .zc{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.trow .zc button{min-height:40px;border-radius:9px;background:var(--card);border:1px solid var(--hair);font:700 15px var(--mono);
+  display:flex;align-items:center;justify-content:center;gap:5px;padding:0 4px}
+.trow .zc button small{font:700 9px var(--mono);letter-spacing:.1em;color:var(--faint)}
+.trow .zc button.a.on{color:var(--pass);border-color:var(--pass)}.trow .zc button.c.on{color:var(--ink);border-color:var(--dim)}.trow .zc button.d.on{color:var(--dirty);border-color:var(--dirty)}
+.trow .zc button.miss{color:var(--fail);border-color:var(--fail)}
+.trow .st{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.trow .st button{min-height:40px;border-radius:9px;background:var(--card);border:1px solid var(--hair);font:700 11px var(--mono);letter-spacing:.1em;color:var(--faint)}
+.trow .st button.on.down{color:var(--pass);border-color:var(--pass)}.trow .st button.on.up{color:var(--fail);border-color:var(--fail)}
+.trow .fte{grid-column:1 / -1;font:700 10px var(--mono);letter-spacing:.1em;color:var(--faint);min-height:26px;text-align:left;padding:0 2px}
+.trow .fte.on{color:var(--fail)}
+.trow.done{border-color:rgba(67,197,122,.5)}
+.trow.short{border-color:rgba(232,86,79,.5)}
+.tgtSum{display:flex;justify-content:space-between;align-items:center;font:700 11px var(--mono);letter-spacing:.06em;color:var(--dim);margin-top:6px;padding:0 4px}
+.tgtSum b{color:var(--hot)}
+.stageRow[hidden]{display:none}
+.pen{display:grid;grid-template-columns:1fr 32px 26px 32px;align-items:center;gap:2px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:4px 6px 4px 10px}
+.pen .lbl{font-size:9px}
+.pen button{min-height:32px;border-radius:8px;background:var(--card);color:var(--dim);font-size:16px}
+.pen b{text-align:center;font:700 16px var(--mono)}
+.stageRow .seg button{min-height:38px;padding:0 10px}
+
+/* the target */
+.tgt{position:relative;background:var(--sunk);border:1.5px solid var(--hair);border-radius:18px;
+  padding:10px;display:flex;justify-content:center;touch-action:manipulation;user-select:none}
+.tgt svg{width:100%;max-width:340px;height:auto;display:block}
+.tgt [data-z]{cursor:pointer;transition:filter .08s}
+.tgt [data-z]:active{filter:brightness(1.6)}
+.tgt .lab{font:700 16px var(--mono);fill:#fff;pointer-events:none;letter-spacing:.06em;
+  paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px}
+.tgt .lab.card{font-size:11px;fill:rgba(0,0,0,.55);stroke:none;letter-spacing:.12em}
+.tgt .hole{fill:#0B0D10;stroke:#fff;stroke-width:1.8;pointer-events:none}
+.tgt .hole.fresh{animation:pop .22s ease-out}
+@keyframes pop{0%{r:14;opacity:.3}100%{r:6;opacity:1}}
+.tally{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px;min-height:32px}
+.tally span{font:700 12px var(--mono);letter-spacing:.1em;padding:6px 10px;border-radius:999px;
+  background:var(--sunk);border:1px solid var(--hair);color:var(--dim)}
+.tally span.a{color:var(--pass)}.tally span.miss{color:var(--fail)}
+.tally .undo{margin-left:auto;
+}
+.tally .undo + .undo{margin-left:0;color:var(--dim);border:1.5px solid var(--hair);border-radius:999px;
+  padding:0 14px;min-height:36px;font-size:13px;font-weight:700}
+
+/* zones: four tiles, two by two - A, C, D and off the target. Tap the
+   tile to add one; tap the minus to take one back. There is no B and no
+   separate head zone: a head hit is an A or a C like anywhere else. */
+.zones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:0}
+.zone{background:var(--sunk);border:1.5px solid var(--hair);border-radius:16px;
+  display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;min-height:56px;min-width:0;
+  overflow:hidden;cursor:pointer;user-select:none}
+.zone:active{filter:brightness(1.35)}
+.zone button.minus{min-height:56px;height:100%;font-size:26px;font-weight:300;color:var(--faint);
+  border-right:1px solid var(--hair);border-radius:0}
+.zone .body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px 4px}
+.zone .n{font-family:var(--mono);font-size:27px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.zone .z{font:700 10.5px var(--mono);letter-spacing:.14em;color:var(--dim)}
+.zone.a .n{color:var(--pass)}
+.zone.miss .n{color:var(--fail)}
+.zone .n[data-zero="1"]{color:var(--faint)}
+.zoneFoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;min-height:30px}
+.zoneFoot span{font:700 11px var(--mono);letter-spacing:.12em;color:var(--faint);text-transform:uppercase}
+.zoneFoot .clr{color:var(--dim);border:1.5px solid var(--hair);border-radius:999px;padding:0 14px;min-height:30px;
+  font-size:13px;font-weight:700;background:var(--sunk)}
+.zoneFoot .clr:disabled{opacity:.35}
+
+/* time: the field, with clear and = par beside it, and a three-row pad */
+.timeRow{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:6px;margin-top:6px}
+.time{background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;
+  padding:4px 14px;min-height:48px;display:flex;align-items:baseline;gap:6px;min-width:0}
+.time .v{font-family:var(--mono);font-size:clamp(30px,7.5vw,40px);font-weight:700;line-height:1;
+  font-variant-numeric:tabular-nums;min-width:3ch}
+.time .v.empty{color:var(--faint)}
+.time .u{color:var(--dim);font-size:13px}
+.timeRow .act{background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;
+  min-height:48px;padding:0 11px;color:var(--dim);font-size:13px;font-weight:700}
+.timeRow .act.shot{color:var(--hot);border-color:var(--hot)}
+/* how the time goes in: one total, or shot by shot */
+.tmode{display:flex;gap:4px;margin-top:6px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:3px}
+.tmode button{flex:1;min-height:28px;border-radius:9px;font:700 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tmode button[aria-pressed="true"]{background:var(--card);color:var(--hot);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.kind{display:inline-flex;gap:2px;margin-left:2px;align-items:center}
+.kind[hidden]{display:none}
+.kind button{min-height:26px;padding:0 9px;border-radius:7px;font:700 9.5px var(--mono);letter-spacing:.1em;color:var(--faint);background:var(--sunk);border:1px solid var(--hair)}
+.kind button[aria-pressed="true"]{color:var(--hot);border-color:var(--hot)}
+/* a session in progress, pinned under the drill */
+.prog{display:none;margin-top:6px;background:var(--sunk);border:1.5px solid var(--hot);border-radius:12px;padding:5px 6px 5px 12px;
+  align-items:center;gap:8px}
+.prog.show{display:flex}
+.prog .t{flex:1;min-width:0}
+.prog .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.prog .t b{font-size:13px}
+.prog .t small{color:var(--dim);font-size:11.5px;font-family:var(--mono);margin-left:6px}
+.prog button{min-height:30px;padding:0 10px;border-radius:9px;background:var(--card);color:var(--dim);font-size:12px;font-weight:700;border:1px solid var(--hair)}
+/* the plan page */
+.plans{display:flex;flex-direction:column;gap:8px}
+.plan{background:var(--sunk);border:1.5px solid var(--hair);border-radius:16px;padding:12px 14px}
+.plan h3{margin:0;font-size:17px}
+.plan .ammo{font:700 12px var(--mono);color:var(--dim);margin-top:4px;letter-spacing:.04em}
+.plan .ammo b{color:var(--hot)}
+.plan .dl{color:var(--faint);font-size:12.5px;line-height:1.45;margin-top:6px}
+.plan .acts{display:flex;gap:6px;margin-top:10px}
+.plan .acts button{min-height:40px;border-radius:11px;padding:0 14px;font-weight:700;font-size:13px;background:var(--card);border:1.5px solid var(--hair);color:var(--dim)}
+.plan .acts button.go2{flex:1;background:var(--hot);color:#1A1204;border-color:var(--hot);font-size:14px}
+.plan.builtin{border-style:dashed}
+.plan .tag{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--hot);margin-left:8px;vertical-align:middle}
+.planH{font:700 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:14px 4px 6px}
+.ed .addRow{display:flex;gap:6px}.ed .addRow .add{flex:1;padding:0 4px;font-size:13px}
+.ed .it .dry{color:var(--hot);font-size:10px;letter-spacing:.1em;margin-left:6px}
+.ed .pos{background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.ed .pos .ph{display:flex;align-items:center;gap:8px}
+.ed .pos .ph b{font:700 11px var(--mono);letter-spacing:.14em;color:var(--hot)}
+.ed .pos .ph input{flex:1;min-width:0;font-size:15px;min-height:40px;padding:0 10px}
+.ed .pos .ph .rm{color:var(--faint);font-size:18px;width:34px;min-height:34px}
+.ed .tg{display:grid;grid-template-columns:52px minmax(0,1fr) 62px 52px 30px;gap:5px;align-items:center}
+.ed .tg input,.ed .tg select{width:100%;min-height:40px;font-size:14px;padding:0 6px;text-align:center;font-family:var(--mono);font-weight:700;
+  background:var(--card);border:1.5px solid var(--hair);border-radius:10px;color:var(--ink)}
+.ed .tg select{appearance:none;-webkit-appearance:none;font-family:var(--sans);text-align:left;padding:0 8px}
+.ed .tg .rm{color:var(--faint);font-size:18px;min-height:34px}
+.ed .tgh{display:grid;grid-template-columns:52px minmax(0,1fr) 62px 52px 30px;gap:5px;font:700 9px var(--mono);letter-spacing:.1em;color:var(--faint);text-transform:uppercase;padding:0 2px}
+.ed .pf{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ed .pf label{margin:0}
+.ed .pf input{width:70px;min-height:38px;font-size:14px;text-align:center;font-family:var(--mono);padding:0 6px}
+.ed .pf select{min-height:38px;background:var(--card);border:1.5px solid var(--hair);border-radius:10px;color:var(--ink);font:inherit;font-size:14px;padding:0 8px}
+.ed .tgl{min-height:38px;padding:0 12px;border-radius:10px;border:1.5px solid var(--hair);background:var(--card);color:var(--dim);font-size:13px;font-weight:700}
+.ed .tgl[aria-pressed="true"]{border-color:var(--hot);color:var(--hot)}
+.ed .seg2{display:flex;gap:4px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:3px}
+.ed .seg2 button{flex:1;min-height:36px;border-radius:9px;font:700 11px var(--mono);letter-spacing:.12em;color:var(--dim)}
+.ed .seg2 button[aria-pressed="true"]{background:var(--card);color:var(--hot)}
+.plan .dl b{color:var(--dim);font-weight:700}
+.plan .fmt{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-left:8px;vertical-align:middle;border:1px solid var(--hair);border-radius:6px;padding:2px 6px}
+.newPlan{width:100%;min-height:52px;border-radius:14px;border:1.5px dashed var(--hair);color:var(--dim);font-weight:700;font-size:14px;margin-bottom:10px}
+/* editors: a run, a session */
+.ed{display:flex;flex-direction:column;gap:10px}
+.ed label{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:4px}
+.ed .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.ed .grid4 input{width:100%;text-align:center;font-family:var(--mono);font-weight:700}
+.ed .slots input{font-size:15px;padding:0 4px;min-height:44px}
+.ed textarea{width:100%;min-height:74px;font:inherit;font-size:15px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;color:var(--ink);padding:10px 12px;resize:vertical}
+.ed textarea:focus{outline:none;border-color:var(--hot)}
+.ed .row{display:flex;gap:8px}
+.ed .row button{flex:1;min-height:48px;border-radius:12px;font-weight:800;font-size:15px}
+.ed .save{background:var(--hot);color:#1A1204}
+.ed .del{background:transparent;border:1.5px solid var(--fail);color:var(--fail);flex:0 0 auto;padding:0 16px}
+.ed .items{display:flex;flex-direction:column;gap:6px}
+.ed .it{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:var(--sunk);border:1px solid var(--hair);border-radius:12px;padding:8px 10px}
+.ed .it b{font-size:14px;display:block}.ed .it small{color:var(--faint);font-size:11.5px;font-family:var(--mono)}
+.ed .reps{display:inline-flex;align-items:center;gap:2px}
+.ed .reps button{width:34px;min-height:34px;border-radius:8px;background:var(--card);border:1px solid var(--hair);color:var(--dim);font-size:18px}
+.ed .reps span{min-width:34px;text-align:center;font:700 16px var(--mono)}
+.ed .it .rm{color:var(--faint);font-size:18px;width:30px;min-height:34px}
+.ed .add{min-height:44px;border-radius:12px;border:1.5px dashed var(--hair);color:var(--dim);font-weight:700}
+.ed .sum{font:700 12px var(--mono);color:var(--dim);letter-spacing:.04em}
+.ed .sum b{color:var(--hot)}
+.run{cursor:pointer}
+.run .note{grid-column:1 / -1;color:var(--dim);font-size:12.5px;font-style:italic;margin-top:2px}
+/* shot times off the timer: each one a chip, the split to the one before
+   underneath it. The last shot is the run's time unless he types another. */
+.shots{display:none;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.shots.show{display:flex}
+.shots .s{background:var(--sunk);border:1px solid var(--hair);border-radius:10px;padding:5px 9px;
+  font-family:var(--mono);font-size:13px;font-weight:700;line-height:1.1;text-align:center}
+.shots .s small{display:block;color:var(--hot);font-size:10px;font-weight:700;margin-top:2px}
+.shots .s:first-child small{color:var(--faint)}
+.shots .x{margin-left:auto;color:var(--dim);font-size:12px;font-weight:700;border:1.5px solid var(--hair);
+  border-radius:999px;padding:0 12px;min-height:32px}
+.shots .lbl{font:700 9.5px var(--mono);letter-spacing:.14em;color:var(--faint);text-transform:uppercase;flex-basis:100%}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.pad button{background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;
+  font-family:var(--mono);font-size:21px;font-weight:700;min-height:40px}
+.pad button.act{color:var(--dim);font-size:18px}
+
+.go{width:100%;margin-top:14px;min-height:54px;border-radius:16px;background:var(--hot);position:relative;overflow:hidden;
+  color:#1A1204;font-size:20px;font-weight:800;letter-spacing:.02em}
+.go:disabled{opacity:.35}
+/* Hold, don't tap: it sits under the number pad and a stray tap logged
+   half-entered runs. The fill shows it's working. */
+.go{touch-action:none}
+.pages.noswipe{overflow-x:hidden}
+.go::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.28);transform:scaleX(0);transform-origin:left;pointer-events:none}
+.go.holding::before{transition:transform .45s linear;transform:scaleX(1)}
+.go span{position:relative}
+.go small{display:block;font:700 9.5px var(--mono);letter-spacing:.14em;opacity:.7;margin-top:1px;position:relative}
+.hint{margin:10px 2px 0;color:var(--faint);font-size:12.5px;line-height:1.4}
+.how{margin:5px 4px 0;color:var(--dim);font-size:12.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.how.open{-webkit-line-clamp:unset;display:block}
+.how .sk{display:block;color:var(--faint);font-size:11.5px;margin-top:3px;font-family:var(--mono);letter-spacing:.02em}
+.goalLine{display:flex;align-items:center;gap:8px;width:100%;text-align:left;min-height:32px;margin-top:4px;padding:0 4px;
+  font:700 11.5px var(--mono);letter-spacing:.06em;color:var(--dim)}
+.goalLine b{color:var(--hot)}
+.goalLine span{color:var(--faint);font-weight:500;margin-left:auto;font-size:10.5px}
+.how:empty{display:none}
+/* warm-up: a checklist you work down. Tapping a step loads that drill. */
+.wu{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.wu .st{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;text-align:left;
+  background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px 12px;min-height:60px}
+.wu .st .n{font:700 20px var(--mono);color:var(--faint);text-align:center}
+.wu .st b{font-size:16px;display:block}.wu .st small{color:var(--dim);font-size:12.5px;line-height:1.35;display:block}
+.wu .st .p{font:700 14px var(--mono);color:var(--hot);white-space:nowrap}
+.wu .st.done{opacity:.45}.wu .st.done .n{color:var(--pass)}
+.wuTabs{display:flex;gap:6px;margin-bottom:6px}
+.wuTabs button{flex:1;min-height:44px;border-radius:12px;background:var(--sunk);border:1.5px solid var(--hair);
+  font-weight:700;font-size:13px;color:var(--dim)}
+.wuTabs button[aria-pressed="true"]{border-color:var(--hot);color:var(--hot)}
+.hint b{color:var(--dim);font-weight:600}
+
+/* verdict banner */
+.verdict{margin-top:12px;border-radius:16px;padding:14px 16px;font-size:17px;line-height:1.4;
+  border:1.5px solid var(--hair);background:var(--sunk);display:none}
+.verdict.show{display:block}
+.verdict.pass{border-color:var(--pass);color:var(--pass)}
+.verdict.fail{border-color:var(--fail)}
+.verdict.dirty{border-color:var(--dirty)}
+.verdict small{display:block;color:var(--dim);font-size:13px;margin-top:4px}
+
+/* ---------- right: the book ------------------------------------------ */
+.book h2{margin:0 0 10px;font-size:15px;letter-spacing:.14em;text-transform:uppercase;
+  font-family:var(--mono);color:var(--dim)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--sunk);border-radius:14px;padding:10px 12px}
+.stat .k{font:700 10px var(--mono);letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
+.stat .v{font-family:var(--mono);font-size:24px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.runs{display:flex;flex-direction:column;gap:6px;max-height:44vh;overflow-y:auto;scrollbar-width:thin}
+.run{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;
+  background:var(--sunk);border-radius:12px;padding:10px 12px;font-size:14px}
+.run .t{font-family:var(--mono);font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.run .d{color:var(--dim);font-size:12.5px;line-height:1.35}
+.run .m{font:700 10px var(--mono);letter-spacing:.12em;padding:4px 8px;border-radius:999px;
+  border:1px solid currentColor}
+.run.pass .m{color:var(--pass)}.run.dirty .m{color:var(--dirty)}.run.clean .m{color:var(--dim)}
+.run.fresh{outline:2px solid var(--hot)}
+.empty{color:var(--faint);padding:20px 6px;text-align:center;font-size:14px}
+
+/* ---------- sheets ---------------------------------------------------- */
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center}
+.sheet .box{width:min(560px,100%);max-height:88dvh;background:var(--card);border-radius:22px 22px 0 0;
+  border:1px solid var(--hair);padding:14px 14px calc(14px + var(--sab));display:flex;flex-direction:column;overflow-y:auto}
+.sheet .box > .list{flex:1 1 auto;min-height:0}
+@media (min-width:641px){.sheet{align-items:center}.sheet .box{border-radius:22px}}
+.sheet input{font:inherit;font-size:18px;background:var(--sunk);border:1.5px solid var(--hair);color:var(--ink);
+  border-radius:14px;padding:14px 16px;min-height:56px;width:100%}
+.sheet input:focus{outline:none;border-color:var(--hot)}
+.list{overflow-y:auto;margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.sec{font:700 10px var(--mono);letter-spacing:.16em;color:var(--faint);text-transform:uppercase;margin:10px 4px 2px}
+.item{display:flex;align-items:center;gap:12px;text-align:left;width:100%;background:var(--sunk);
+  border:1.5px solid var(--hair);border-radius:14px;padding:12px 14px;min-height:60px}
+.item b{flex:1;font-size:17px}
+.item .par{font-family:var(--mono);color:var(--hot);font-weight:700}
+.item small{color:var(--faint);font-size:12px;font-family:var(--mono)}
+.sheet .cancel{color:var(--dim);margin-top:6px}
+
+/* holds table */
+.holds table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:14px}
+.holds th,.holds td{padding:8px 6px;text-align:right;border-bottom:1px solid var(--hair)}
+.holds th:first-child,.holds td:first-child{text-align:left}
+.holds th{color:var(--faint);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.holds .lo{color:var(--fail)}.holds .hi{color:#5BB8F5}.holds .on{color:var(--pass)}
+
+.toast{position:fixed;left:50%;bottom:calc(18px + var(--sab));transform:translateX(-50%) translateY(10px);
+  background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;
+  opacity:0;transition:.2s;pointer-events:none;z-index:30;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.row2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+@media (max-width:560px){.row2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.row2 button{background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;
+  font-weight:700;color:var(--dim);font-size:14px;min-height:48px;white-space:nowrap}
+
+/* ---------- tester gate (invite code) --------------------------------- */
+.gate{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:14px;text-align:center}
+.gate[hidden]{display:none}
+.gate h1{font:800 22px/1.1 var(--sans);letter-spacing:.14em;color:var(--hot);margin:0}
+.gate p{color:var(--dim);margin:0;max-width:320px}
+.gate input{width:100%;max-width:320px;padding:16px;border-radius:14px;border:1px solid var(--hair);background:var(--card);color:var(--ink);font:700 22px var(--mono);letter-spacing:.12em;text-align:center;text-transform:uppercase}
+.gate button{width:100%;max-width:320px;background:var(--hot);color:#0B0D10;font-weight:800;border-radius:14px;letter-spacing:.08em}
+.gate .err{color:var(--fail);min-height:1.4em;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate" hidden>
+  <h1>RANGEFOLIO</h1>
+  <p>Test build. Enter the invite code you were given.</p>
+  <input id="gateCode" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="BRASS-0000" aria-label="Invite code">
+  <button id="gateGo">LET ME IN</button>
+  <div class="err" id="gateErr"></div>
+</div>
+
+<div class="top">
+  <span class="brand">RANGEFOLIO</span>
+  <div class="who" id="who"></div>
+  <button class="themeBtn" id="themeBtn" type="button" aria-label="Light or dark" title="Light or dark">☼</button>
+</div>
+
+<div class="tabs" id="tabs" role="tablist">
+  <button role="tab" data-p="0" aria-selected="true">Log</button>
+  <button role="tab" data-p="1" aria-selected="false">Book</button>
+  <button role="tab" data-p="2" aria-selected="false">Coach</button>
+  <button role="tab" data-p="3" aria-selected="false">Session</button>
+  <button role="tab" data-p="4" aria-selected="false">Comp</button>
+  <button role="tab" data-p="5" aria-selected="false">Ballistics</button>
+</div>
+<div class="pages" id="pages">
+  <div class="page">
+    <section class="card">
+    <button class="drillPick" id="drillPick" type="button" aria-haspopup="dialog">
+      <b id="drillName">Pick a drill</b>
+      <span class="par"><span id="drillMeta">—</span><strong id="drillPar">—</strong></span>
+    </button>
+    <p class="how open" id="drillHow"></p>
+    <button type="button" class="goalLine" id="drillGoal"></button>
+    <div class="prog" id="prog"><div class="t"><b id="progName"></b><small id="progStep"></small></div>
+      <button type="button" id="progSkip">skip</button><button type="button" id="progStop">stop</button></div>
+
+    <div class="mode" id="mode" role="group" aria-label="How to enter hits">
+      <button type="button" data-p="0" aria-pressed="true">Counters</button>
+      <button type="button" data-p="1" aria-pressed="false">Target</button>
+      <button type="button" data-p="2" aria-pressed="false">Dry</button>
+    </div>
+    <div class="deck" id="deck">
+      <div class="pane on">
+        <div class="zones" id="zones">
+          <!-- built by script: a c d miss -->
+        </div>
+        <div class="zoneFoot"><span id="zoneSum"></span><button type="button" class="clr" id="clearHits">clear hits</button></div>
+      </div>
+      <div class="pane">
+        <div class="tgt" id="tgt" aria-label="Target - tap where the round went">
+          <!--
+            A USPSA/IPSC-style metric silhouette, because that's the one
+            whose zones are literally called A, C and D and a head box. It
+            is drawn, not photographed: a photo of a cardboard target reads
+            as brown mush at arm's length in sunlight. This reads.
+            Card = miss. Everything inside the silhouette is a hit somewhere.
+          -->
+          <svg viewBox="0 0 300 460" role="img">
+            <!-- the card: a miss -->
+            <rect data-z="miss" x="0" y="0" width="300" height="460" rx="14" fill="#B58F63"/>
+            <rect x="0" y="0" width="300" height="460" rx="14" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="2"/>
+            <text class="lab card" x="18" y="446">MISS · TAP OFF THE TARGET</text>
+
+            <!-- D: the whole body, octagonal shoulders, tapered bottom -->
+            <path data-z="d" fill="#8E3B31" stroke="#1E1414" stroke-width="2"
+              d="M113 74 H187 V98 H216 L246 122 V300 L232 434 H68 L54 300 V122 L84 98 H113 Z"/>
+            <!-- C -->
+            <path data-z="c" fill="#3E4358" stroke="#1E1414" stroke-width="1.5" stroke-dasharray="4 3"
+              d="M113 74 H187 V112 H208 L226 140 V318 L212 370 H88 L74 318 V140 L92 112 H113 Z"/>
+            <!-- A: chest -->
+            <rect data-z="a" x="120" y="150" width="60" height="118" rx="5" fill="#4E7A34" stroke="#1E1414" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+            <!-- head: scores like the body - the head's A box is an A, the rest of the head is a C.
+                 data-head marks it so a drill that called for a head shot knows one arrived. -->
+            <rect data-z="c" data-head="1" x="113" y="14" width="74" height="62" rx="4" fill="#3E4358" stroke="#1E1414" stroke-width="2"/>
+            <rect data-z="a" data-head="1" x="128" y="24" width="44" height="26" rx="3" fill="#4E7A34" stroke="#1E1414" stroke-width="1.2" stroke-dasharray="3 2"/>
+
+            <!-- labels, the way the real one is printed -->
+            <text class="lab" x="146" y="42">A</text>
+            <text class="lab" x="146" y="215">A</text>
+            <text class="lab" x="98" y="215">C</text>
+            <text class="lab" x="194" y="215">C</text>
+            <text class="lab" x="60" y="215">D</text>
+            <text class="lab" x="232" y="215">D</text>
+
+            <g id="holes"></g>
+          </svg>
+        </div>
+        <div class="tally" id="tally"></div>
+      </div>
+      <div class="pane dryPane"><b>Dry rep.</b> No hits to count - just the time against par. LOG IT works with no rounds, and with no time if there wasn't a timer.</div>
+      <div class="pane stagePane" id="stagePane"><div class="tgts" id="tgts"></div></div>
+    </div>
+
+    <div class="stageRow" id="stageRow" hidden>
+      <div class="pen"><span class="lbl">no-shoot</span><button type="button" data-k="noshoot" data-d="-1">−</button><b id="pen_ns">0</b><button type="button" data-k="noshoot" data-d="1">+</button></div>
+      <div class="pen"><span class="lbl">procedural</span><button type="button" data-k="procedural" data-d="-1">−</button><b id="pen_pr">0</b><button type="button" data-k="procedural" data-d="1">+</button></div>
+      <div class="seg" id="power" style="margin:0"><button type="button" data-m="minor" aria-pressed="true">minor</button><button type="button" data-m="major" aria-pressed="false">major</button></div>
+    </div>
+    <div class="tmode" id="tmode" role="group" aria-label="How to enter the time">
+      <button type="button" data-m="total" aria-pressed="true">Total time</button>
+      <button type="button" data-m="shots" aria-pressed="false">Shot by shot</button>
+      <span class="kind" id="kind" hidden><button type="button" data-k="cum" aria-pressed="true">times</button><button type="button" data-k="gap" aria-pressed="false">splits</button></span>
+    </div>
+    <div class="timeRow">
+      <div class="time" role="group" aria-label="Time">
+        <span class="v empty" id="timeV">0.00</span><span class="u" id="timeU">s</span>
+      </div>
+      <button class="act" type="button" data-k="back" id="tBack">⌫</button>
+      <button class="act" type="button" data-k="par" id="tPar">= par</button>
+      <button class="act shot" type="button" data-k="shot" id="tShot" title="Record this shot" hidden>+ shot</button>
+    </div>
+    <div class="shots" id="shots"></div>
+    <div class="pad" id="pad">
+      <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+      <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+      <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+      <button data-k=".">.</button><button data-k="0">0</button><button class="act" data-k="clr">clear</button>
+    </div>
+
+    <button class="go" id="go" type="button" disabled><span>LOG IT</span><small>HOLD</small></button>
+    <div class="verdict" id="verdict" role="status" aria-live="polite"></div>
+
+    <p class="hint">Counters, the target, or dry. Shot by shot keeps your splits. Hold LOG IT.</p>
+  </section>
+  </div>
+  <div class="page">
+    <section class="card book">
+    <div class="exportRow"><h2 id="bookTitle">My book</h2>
+      <span style="display:flex;gap:6px"><button type="button" id="sheetBtn">CSV ↓</button><button type="button" id="backupBtn">Backup</button><label class="restore" style="position:relative"><button type="button" tabindex="-1">Restore</button><input id="restoreIn" type="file" accept="application/json" style="position:absolute;inset:0;opacity:0"></label></span></div>
+    <div class="stats">
+      <div class="stat"><div class="k">runs</div><div class="v" id="sRuns">0</div></div>
+      <div class="stat"><div class="k">passes</div><div class="v" id="sPass">0</div></div>
+      <div class="stat"><div class="k">best clean</div><div class="v" id="sBest">—</div></div>
+    </div>
+    <div class="runs" id="runs"><div class="empty">Nothing on the book yet.</div></div>
+    <p class="hint"><b>GOAL ✓</b> hit your goal · <b>PASS</b> every round on target and inside par · <b>CLEAN</b> all on target, over par · <b>2 MISS</b> rounds off the target · <b>DRY</b> no rounds, time only · <b>HF</b> a USPSA stage, hit factor · <b>T+</b> a 3-gun stage, time plus penalties. Tap a run to edit it or add a note.</p>
+  </section>
+  </div>
+  <div class="page">
+    <section class="card" id="workCard">
+      <h2 style="margin:0 0 10px;font:700 15px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Coach</h2>
+      <div id="workBody"><div class="empty">Reading the book…</div></div>
+      <pre class="work" id="workText" hidden></pre>
+      <p class="hint">Every drill you've shot, read over your last 12 live runs of it: whether the problem is hits or time, the trend, a goal (yours, or a suggested one built on what good shooters do), and what to do next. Tap a drill to open it.</p>
+    </section>
+  </div>
+  <div class="page">
+    <section class="card" id="planCard">
+      <button type="button" class="newPlan" id="newPlan">+ New session</button>
+      <div class="plans" id="plans"><div class="empty">No sessions yet. Build one: pick the drills for the day and it counts the ammo.</div></div>
+    </section>
+  </div>
+  <div class="page">
+    <section class="card" id="compCard">
+      <button type="button" class="newPlan" id="newStage">+ New stage</button>
+      <div class="plans" id="stagesList"></div>
+      <p class="hint">A stage is positions in order - targets, rounds, reloads, movement - scored on hit factor (USPSA) or time-plus (3-gun). The two built-ins use every mechanic once; <b>Copy</b> one to start from it.</p>
+    </section>
+  </div>
+  <div class="page">
+    <section class="card" id="ballCard">
+      <div class="cond" id="cond">
+        <button type="button" class="cmp" id="cmp" title="Compass - tap to enable">
+          <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="27" fill="var(--sunk)" stroke="var(--hair)" stroke-width="1.5"/>
+            <text x="30" y="11" text-anchor="middle" font-size="8" font-weight="700" fill="var(--faint)" font-family="var(--mono)">N</text>
+            <g id="needle" transform="rotate(0 30 30)"><path d="M30 8 L34 30 L30 34 L26 30 Z" fill="var(--hot)"/><path d="M30 52 L34 30 L30 26 L26 30 Z" fill="var(--faint)"/></g>
+            <circle cx="30" cy="30" r="2.2" fill="var(--ink)"/></svg>
+          <b id="hdg">—°</b></button>
+        <div class="cw">
+          <div class="cwRow"><span class="k">elev</span><b id="c_elev">—</b><span class="k">temp</span><b id="c_temp">—</b><span class="k">press</span><b id="c_press">—</b></div>
+          <div class="cwRow"><span class="k">rh</span><b id="c_rh">—</b><span class="k">wind</span><b id="c_wind">—</b><span class="k">dens alt</span><b id="c_da">—</b></div>
+          <div class="cwRow acts"><button type="button" class="mini" id="condGo">refresh weather</button><button type="button" class="mini" id="condUse" hidden>fill the fields</button></div>
+          <div class="cwRow"><small id="c_note">Weather at your location; tap the compass to point it.</small></div>
+        </div>
+      </div>
+      <div class="gunRow"><select class="cal gun" id="gun" aria-label="Gun"></select><button type="button" id="gunEdit" class="gunBtn" title="Edit this gun">✎</button></div>
+      <div class="calRow"><select class="cal" id="cal" aria-label="Calibre"></select></div>
+      <p class="calAbout" id="calAbout"></p>
+      <div class="loads" id="loads"></div>
+      <div class="form" id="bform">
+        <div class="f"><label>grains</label><input id="b_gr" inputmode="decimal" value="220"></div>
+        <div class="f"><label>BC</label><input id="b_bc" inputmode="decimal" value="0.31">
+          <div class="seg" id="bmodel"><button type="button" data-m="G1" aria-pressed="true">G1</button><button type="button" data-m="G7" aria-pressed="false">G7</button></div></div>
+        <div class="f"><label>muzzle fps</label><input id="b_mv" inputmode="numeric" value="1020"><button type="button" class="mini" id="mvEst" hidden></button></div>
+        <div class="f"><label>height over bore in</label><input id="b_sh" inputmode="decimal" value="2.9"></div>
+        <div class="f"><label>zero yd</label><input id="b_zero" inputmode="numeric" value="50"></div>
+        <div class="f"><label>to yd</label><input id="b_max" inputmode="numeric" value="200"></div>
+        <div class="f"><label>temp °F</label><input id="b_temp" inputmode="numeric" value="75"></div>
+        <div class="f"><label>altitude ft</label><input id="b_alt" inputmode="numeric" value="1000"></div>
+        <div class="f"><label>wind mph · from o'clock</label><div style="display:flex;gap:6px"><input id="b_wind" inputmode="decimal" value="0" style="width:45%"><input id="b_wdir" inputmode="numeric" value="3" style="width:45%"></div></div>
+      </div>
+      <button type="button" class="more" id="moreBtn">More · twist, incline, humidity, Coriolis, powder temp ▾</button>
+      <div class="form" id="bmore" hidden>
+        <div class="f"><label>bullet dia in</label><input id="b_dia" inputmode="decimal" value="0.308"></div>
+        <div class="f"><label>bullet length in</label><input id="b_len" inputmode="decimal" value="" placeholder="for spin drift"></div>
+        <div class="f"><label>twist 1:</label><div style="display:flex;gap:6px;align-items:center"><input id="b_twist" inputmode="decimal" value="" placeholder="8" style="width:55%">
+          <div class="seg" id="btdir" style="margin:0;flex:1"><button type="button" data-m="R" aria-pressed="true">R</button><button type="button" data-m="L" aria-pressed="false">L</button></div></div></div>
+        <div class="f"><label>humidity %</label><input id="b_rh" inputmode="numeric" value="50"></div>
+        <div class="f"><label>incline ° (+up)</label><input id="b_inc" inputmode="decimal" value="0"></div>
+        <div class="f"><label>latitude °</label><input id="b_lat" inputmode="decimal" value="32.6"></div>
+        <div class="f"><label>azimuth ° (0=N)</label><input id="b_az" inputmode="numeric" value="" placeholder="—"></div>
+        <div class="f"><label>fps per °F</label><input id="b_tk" inputmode="decimal" value="0" placeholder="1.0"></div>
+        <div class="f"><label>zero-day temp °F</label><input id="b_zt" inputmode="numeric" value="" placeholder="same"></div>
+      </div>
+      <p class="est" id="best"></p>
+      <p class="est src" id="bsrc" hidden></p>
+      <div class="adj" id="adj"></div>
+      <div class="holdOne">
+        <div class="yd"><button type="button" id="ydDown">−</button><span id="ydShow">100</span><button type="button" id="ydUp">+</button></div>
+        <div class="h" id="holdSay">—</div>
+      </div>
+      <div class="tblWrap"><table class="btab"><thead><tr><th>yd</th><th>path in</th><th>moa</th><th>mil</th><th>drift</th><th>fps</th><th>M</th><th>ft·lb</th><th>s</th></tr></thead>
+        <tbody id="btab"></tbody></table></div>
+      <p class="hint" id="bfoot">Point-mass solver on the standard G1 / G7 drag tables, checked against maker tables (see ballistics/BALLISTICS-FINDINGS.md).
+        ● rows are on your hold card; grey is what the card said. Drift is wind + spin + Coriolis; the readout breaks it down.
+        Rows in blue are transonic - trust them less.</p>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// Tester gate. Codes are stored as SHA-256 hashes; a good code is remembered on this device.
+(() => {
+  const OK = ["3f9943cab9048fb952ef4598a195b4e2effb3cbc49a7c06e2232127b9dac8b15","46796dd36cacaab6d2bfa0cf97f354091d1f06dc91a19dd74a94ddf235ac2bf9","9ae2a7a05bcec64346e96f9e7588b2d4cd424231953fd6a5a3550027a6c2de58","7db1314f3fb384a2c949bff274a396fdd1e1a252ae59b06ffc99392d7f228cf1","0c7c3c82a4691ea2253a29e0f14c7275482c322cf1601f30c938a7a5c2d16127"];
+  const gate = document.getElementById("gate"), inp = document.getElementById("gateCode"), err = document.getElementById("gateErr");
+  let saved = null; try { saved = localStorage.getItem("range.invite"); } catch {}
+  if (saved && OK.includes(saved)) return;
+  gate.hidden = false;
+  async function sha(t) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); }
+  async function go() {
+    const code = inp.value.trim().toUpperCase().replace(/\s+/g, "");
+    if (!code) return;
+    let h = ""; try { h = await sha(code); } catch { err.textContent = "This browser can't check codes - open the link over https."; return; }
+    if (OK.includes(h)) { try { localStorage.setItem("range.invite", h); } catch {} gate.hidden = true; }
+    else { err.textContent = "That code isn't on the list."; inp.select(); }
+  }
+  document.getElementById("gateGo").addEventListener("click", go);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+})();
+</script>
+<script>
+(() => {
+"use strict";
+const $ = id => document.getElementById(id);
+// Everything under /api/range is answered locally by engine.js. The only
+// network call left is the weather.
+const _fetch = window.fetch.bind(window);
+window.fetch = (u, o) => {
+  const url = String(u);
+  if (url.startsWith("/api/range") && !url.startsWith("/api/range/conditions")) {
+    let body = null; try { body = o && o.body ? JSON.parse(o.body) : null; } catch {}
+    return RangefolioEngine.api(url, body).then(j => new Response(JSON.stringify(j), { status: 200, headers: { "Content-Type": "application/json" } }));
+  }
+  return _fetch(u, o);
+};
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+// Light or dark. Dark is the range default - it's what you want at 6 am
+// and it's easier on a phone in the sun than white glare; light is there
+// for the kitchen table.
+(function theme() {
+  let t = null; try { t = localStorage.getItem("range.theme"); } catch {}
+  const apply = m => { document.documentElement.dataset.theme = m; $("themeBtn").textContent = m === "light" ? "☾" : "☼";
+    const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = m === "light" ? "#F3F1EC" : "#0B0D10"; };
+  apply(t === "light" ? "light" : "dark");
+  $("themeBtn").addEventListener("click", () => { const m = document.documentElement.dataset.theme === "light" ? "dark" : "light"; apply(m); try { localStorage.setItem("range.theme", m); } catch {} });
+})();
+
+// ---- state --------------------------------------------------------------
+let DATA = { drills: [], holds: {}, shooters: ["me"], runs: [] };
+let who = "me";
+let drill = null;
+let hits = { a: 0, c: 0, d: 0, miss: 0 };
+let headHits = 0;      // taps on the head box (target pane only)
+let shots = [];        // shot times off the timer, cumulative
+let time = "";
+let lastSeen = null;      // newest run id we've shown, to flag voice arrivals
+
+const ZONE_ORDER = [["a","ALPHA"],["c","CHARLIE"],["d","DELTA"],["miss","MISS"]];
+
+// ---- loading ------------------------------------------------------------
+async function load(silent) {
+  try {
+    const r = await fetch(`/api/range?who=${encodeURIComponent(who)}`, { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    const before = lastSeen;
+    DATA = d;
+    if (!drill && d.drills.length) {
+      // Bill drill is the one he shoots most; start there.
+      drill = d.drills.find(x => x.key === "pistol-bill") || d.drills[0];
+      showDrill();
+    }
+    renderWho(); renderBook();
+    if (!curCal && d.loads) { curCal = d.loads["300blk"] ? "300blk" : Object.keys(d.loads)[0]; curLoad = "300blk-220"; }
+    const newest = d.runs[0] && d.runs[0].at + d.runs[0].name;
+    if (!silent && before && newest && newest !== before) {
+      const r0 = d.runs[0];
+      toast(`${r0.who === "me" ? "" : r0.who + ": "}${r0.name} — ${r0.secs ?? "—"}${r0.made ? " · PASS" : ""}`);
+      loadWork(true);     // a voice-logged run changes what to work on too
+    }
+    lastSeen = newest || lastSeen;
+  } catch (e) {
+    toast("can't reach her");
+  }
+}
+
+// ---- who ----------------------------------------------------------------
+function renderWho() {
+  const names = Array.from(new Set(["me", ...(DATA.shooters || [])]));
+  $("who").innerHTML = names.map(n =>
+    `<button class="whoBtn" data-who="${n}" aria-pressed="${n === who}">${n === "me" ? "Me" : cap(n)}</button>`).join("")
+    + `<button class="whoBtn add" data-add="1">+ someone</button>`;
+  $("bookTitle").textContent = who === "me" ? "My book" : `${cap(who)}’s book`;
+}
+$("who").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.add) return addShooter();
+  who = b.dataset.who; lastSeen = null; await load(true);
+});
+async function addShooter() {
+  const name = prompt("Who's shooting?");
+  if (!name || !name.trim()) return;
+  const r = await post("/api/range/shooter", { name: name.trim() });
+  if (r && r.ok) { who = name.trim().toLowerCase(); await load(true); toast(`${cap(who)} is on the book`); }
+}
+
+// ---- drill picker ---------------------------------------------------------
+function findDrill(key) {
+  return DATA.drills.find(x => x.key === key) || ((DATA.stages || []).find(st => "stage:" + st.id === key) || {}).drill || null;
+}
+function showDrill(dryRep) {
+  $("drillName").textContent = drill ? drill.name : "Pick a drill";
+  $("drillHow").innerHTML = drill ? esc(drill.how || "") + (drill.skills && drill.skills.length ? `<span class="sk">trains: ${esc(drill.skills.join(" · "))}</span>` : "") : "";
+  const goal = drill && DATA.goals && DATA.goals[drill.key];
+  // The big number is what you're shooting against: the goal when you've
+  // set one, the standard par otherwise. The other one sits underneath.
+  $("drillPar").textContent = drill ? (goal ? goal.secs.toFixed(2) + "s" : drill.par > 0 ? drill.par.toFixed(2) + "s" : "no par") : "—";
+  $("drillPar").title = goal ? "your goal" : "par";
+  $("drillGoal").innerHTML = !drill ? "" : drill.stage ? `scored on ${drill.format === "3gun" ? "time-plus" : "hit factor"}`
+    : goal ? `GOAL <b>${goal.secs.toFixed(2)}</b> ${goal.all_a ? "all A" : "clean"} · par ${drill.par.toFixed(2)}<span>tap to change</span>`
+    : `PAR <b>${drill.par.toFixed(2)}</b> · no goal yet<span>tap to set one</span>`;
+  $("drillGoal").hidden = !drill || !!drill.stage;
+  $("drillMeta").textContent = drill
+    ? (drill.stage
+        ? `${drill.rounds} rds · ${(drill.guns || [drill.weapon]).join("+")} · ${drill.format === "3gun" ? "3-gun" : "USPSA"} stage · hit factor`
+        : `${drill.rounds} rds${drill.head ? " · " + drill.head + " head" : ""} · ${drill.weapon}${drill.dist ? " · " + drill.dist + "yd" : ""}`)
+    : "—";
+  const isStage = !!(drill && drill.stage);
+  $("mode").hidden = isStage;
+  if (isStage) { buildTargets(); showPane(3); }
+  else if (drill && (dryRep || drill.dry)) showPane(2);
+  else if (paneNo === 2 || paneNo === 3) showPane(0);
+  $("stageRow").hidden = !isStage;
+  $("power").hidden = !isStage || drill.format === "3gun";
+  updateGo();
+}
+// ---- a stage, target by target ----------------------------------------------
+// Paper: tap A / C / D to add a hit (tap the lit one to take it back). The
+// best `req` hits score; anything else is unscored, exactly as Comstock
+// works. Steel and clays: down or not. A target with nothing on it can be
+// marked "not shot at" - that's a failure to engage, which costs more.
+let tgtHits = [];
+function buildTargets() {
+  tgtHits = (drill.targets || []).map(t => t.paper ? { a: 0, c: 0, d: 0, engaged: true } : { down: false, engaged: true });
+  renderTargets();
+}
+function targetsHtml(defs, hitsArr) {
+  return defs.map((t, i) => {
+    const h = hitsArr[i] || {};
+    if (t.paper) {
+      const n = (h.a || 0) + (h.c || 0) + (h.d || 0), short = n < t.req;
+      return `<div class="trow ${n >= t.req ? "done" : n ? "short" : ""}" data-i="${i}">
+        <div class="id"><b>T${t.i}</b><small>P${t.pos} · ${t.dist ? t.dist + "yd · " : ""}${t.req} rds</small></div>
+        <div class="zc">
+          <button type="button" data-z="a" class="a ${h.a ? "on" : ""}">${h.a || 0}<small>A</small></button>
+          <button type="button" data-z="c" class="c ${h.c ? "on" : ""}">${h.c || 0}<small>C</small></button>
+          <button type="button" data-z="d" class="d ${h.d ? "on" : ""}">${h.d || 0}<small>D</small></button></div>
+        ${n === 0 ? `<button type="button" class="fte ${h.engaged === false ? "on" : ""}" data-fte="1">${h.engaged === false ? "✕ NOT SHOT AT (FTE)" : "no hits · tap if you never shot at it"}</button>` : short ? `<button type="button" class="fte" disabled>${t.req - n} MISS</button>` : ""}
+      </div>`;
+    }
+    return `<div class="trow ${h.down ? "done" : "short"}" data-i="${i}">
+      <div class="id"><b>T${t.i}</b><small>P${t.pos} · ${esc(t.kind)}${t.dist ? " · " + t.dist + "yd" : ""}</small></div>
+      <div class="st"><button type="button" data-st="down" class="down ${h.down ? "on" : ""}">DOWN</button><button type="button" data-st="up" class="up ${h.down ? "" : "on"}">${h.engaged === false ? "NOT SHOT" : "STANDING"}</button></div>
+      ${!h.down ? `<button type="button" class="fte ${h.engaged === false ? "on" : ""}" data-fte="1">${h.engaged === false ? "✕ NOT SHOT AT (FTE)" : "standing · tap if you never shot at it"}</button>` : ""}
+    </div>`;
+  }).join("");
+}
+function renderTargets() {
+  const defs = drill && drill.targets || [];
+  $("tgts").innerHTML = targetsHtml(defs, tgtHits) + (defs.length ? `<div class="tgtSum" id="tgtSum"></div>` : `<div class="empty">No targets on this stage.</div>`);
+  const need = defs.reduce((n, t) => n + (t.paper ? t.req : 1), 0);
+  const got = defs.reduce((n, t, i) => n + (t.paper ? Math.min(t.req, (tgtHits[i].a || 0) + (tgtHits[i].c || 0) + (tgtHits[i].d || 0)) : (tgtHits[i].down ? 1 : 0)), 0);
+  if ($("tgtSum")) $("tgtSum").innerHTML = `<span><b>${got}</b> of ${need} scoring hits</span><span>${defs.length} targets</span>`;
+  updateGo();
+}
+$("tgts").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const i = +b.closest(".trow").dataset.i, h = tgtHits[i]; if (!h) return;
+  if (b.dataset.z) { h[b.dataset.z] = (h[b.dataset.z] || 0) + 1; h.engaged = true; if (navigator.vibrate) navigator.vibrate(10); }
+  else if (b.dataset.st === "down") { h.down = true; h.engaged = true; }
+  else if (b.dataset.st === "up") { h.down = false; }
+  else if (b.dataset.fte) { h.engaged = h.engaged === false ? true : false; }
+  renderTargets();
+});
+// long-press a zone to take one back
+let zHold = null;
+$("tgts").addEventListener("pointerdown", e => {
+  const b = e.target.closest("button[data-z]"); if (!b) return;
+  zHold = setTimeout(() => { const i = +b.closest(".trow").dataset.i, h = tgtHits[i]; if (h && h[b.dataset.z] > 0) { h[b.dataset.z]--; renderTargets(); if (navigator.vibrate) navigator.vibrate(25); } zHold = "fired"; }, 500);
+});
+["pointerup", "pointercancel", "pointerleave"].forEach(ev => $("tgts").addEventListener(ev, () => { if (zHold && zHold !== "fired") clearTimeout(zHold); }));
+$("tgts").addEventListener("click", e => { if (zHold === "fired") { e.stopImmediatePropagation(); zHold = null; } }, true);
+function pickDrill(onPick) {
+  const sheet = document.createElement("div");
+  sheet.className = "sheet";
+  const bySec = {};
+  DATA.drills.forEach(d => (bySec[d.section] ||= []).push(d));
+  sheet.innerHTML = `<div class="box" role="dialog" aria-label="Pick a drill">
+    <input id="dq" placeholder="Search — bill, el prez, check…" autocomplete="off" inputmode="search">
+    <div class="list" id="dl"></div>
+    <button class="add" type="button" id="dNew" style="margin-top:6px;min-height:42px;border:1.5px dashed var(--hair);border-radius:12px;color:var(--dim);font-weight:700">+ New drill of your own</button>
+    <button class="cancel" type="button">Cancel</button></div>`;
+  const list = sheet.querySelector("#dl");
+  const draw = q => {
+    q = (q || "").toLowerCase().trim();
+    list.innerHTML = Object.entries(bySec).map(([sec, ds]) => {
+      const rows = ds.filter(d => !q || (d.name + " " + d.also.join(" ")).toLowerCase().includes(q));
+      if (!rows.length) return "";
+      return `<div class="sec">${sec}</div>` + rows.map(d =>
+        `<button class="item" data-key="${d.key}"><b>${d.name}</b>
+           <small>${d.rounds} rds${d.dist ? " · " + d.dist + "yd" : ""}</small>
+           <span class="par">${d.par.toFixed(2)}</span></button>`).join("");
+    }).join("") || `<div class="empty">Nothing called that.</div>`;
+  };
+  draw("");
+  sheet.querySelector("#dq").addEventListener("input", e => draw(e.target.value));
+  sheet.addEventListener("click", e => {
+    if (e.target === sheet || e.target.closest(".cancel")) return sheet.remove();
+    if (e.target.closest("#dNew")) { sheet.remove(); return editDrill(null, onPick); }
+    const it = e.target.closest(".item"); if (!it) return;
+    const d = DATA.drills.find(x => x.key === it.dataset.key);
+    sheet.remove(); if (d) onPick(d);
+  });
+  document.body.appendChild(sheet);
+  setTimeout(() => sheet.querySelector("#dq").focus(), 50);
+}
+$("drillPick").addEventListener("click", () => pickDrill(d => { drill = d; resetEntry(); showDrill(); }));
+// Your own drills: same shape as the built-ins, kept on this device.
+function editDrill(d, onDone) {
+  const v = d || { name: "", weapon: "pistol", rounds: 6, par: 3, dist: 7, head: 0, reload: false, dry: false, how: "", skills: "", why: "" };
+  openSheet(`<div class="ed">
+    <div><label>Drill name</label><input id="nd_name" value="${esc(v.name)}" placeholder="Barricade doubles"></div>
+    <div class="g2">
+      <div><label>weapon</label><select id="nd_weapon">${["pistol", "rifle", "both"].map(w => `<option value="${w}"${v.weapon === w ? " selected" : ""}>${w}</option>`).join("")}</select></div>
+      <div><label>rounds</label><input id="nd_rounds" inputmode="numeric" value="${v.rounds}"></div>
+      <div><label>par (s) · 0 for none</label><input id="nd_par" inputmode="decimal" value="${v.par}"></div>
+      <div><label>distance yd</label><input id="nd_dist" inputmode="decimal" value="${v.dist ?? ""}"></div>
+      <div><label>head shots called</label><input id="nd_head" inputmode="numeric" value="${v.head || 0}"></div>
+      <div><label>flags</label><div style="display:flex;gap:6px"><button type="button" class="tgl" id="nd_reload" aria-pressed="${!!v.reload}">reload</button><button type="button" class="tgl" id="nd_dry" aria-pressed="${!!v.dry}">dry ok</button></div></div>
+    </div>
+    <div><label>How it runs</label><textarea id="nd_how" placeholder="Start position, the buzzer, what you shoot, what counts.">${esc(v.how || "")}</textarea></div>
+    <div><label>What it trains (comma-separated)</label><input id="nd_skills" value="${esc(Array.isArray(v.skills) ? v.skills.join(", ") : v.skills || "")}" placeholder="draw, transitions, reload"></div>
+    <div class="row">${d ? `<button type="button" class="del" id="nd_del">Delete</button>` : ""}<button type="button" class="save" id="nd_save">Save drill</button></div>
+  </div>`);
+  ["nd_reload", "nd_dry"].forEach(id => $(id).addEventListener("click", () => $(id).setAttribute("aria-pressed", $(id).getAttribute("aria-pressed") !== "true")));
+  $("nd_save").addEventListener("click", async () => {
+    const body = { key: d ? d.key : undefined, name: $("nd_name").value.trim(), weapon: $("nd_weapon").value, rounds: $("nd_rounds").value, par: $("nd_par").value, dist: $("nd_dist").value, head: $("nd_head").value,
+      reload: $("nd_reload").getAttribute("aria-pressed") === "true", dry: $("nd_dry").getAttribute("aria-pressed") === "true", how: $("nd_how").value.trim(), skills: $("nd_skills").value };
+    if (!body.name) return toast("give it a name");
+    const r = await post("/api/range/drill", body);
+    if (!r || !r.ok) return toast("didn't save — " + (r && r.said || ""));
+    document.querySelector(".sheet")?.remove(); DATA.drills = r.drills; toast(r.said);
+    if (onDone) onDone(r.drill);
+  });
+  if ($("nd_del")) $("nd_del").addEventListener("click", async () => { if (!confirm(`Delete ${d.name}?`)) return; const r = await post("/api/range/drill", { key: d.key, delete: true }); document.querySelector(".sheet")?.remove(); if (r) { DATA.drills = r.drills; if (drill && drill.key === d.key) { drill = null; showDrill(); } } });
+}
+$("drillHow").addEventListener("click", () => $("drillHow").classList.toggle("open"));
+$("drillPick").addEventListener("contextmenu", e => { e.preventDefault(); if (drill && drill.mine) editDrill(drill, d => { drill = d; showDrill(); }); });
+$("drillGoal").addEventListener("click", () => { if (drill && !drill.stage) editGoal(drill.key); });
+
+// ---- zones ----------------------------------------------------------------
+function renderZones() {
+  $("zones").innerHTML = ZONE_ORDER.map(([k, label]) => `
+    <div class="zone ${k}" data-z="${k}" role="button" aria-label="add one ${label}">
+      <button type="button" class="minus" aria-label="one fewer ${label}">−</button>
+      <div class="body"><div class="n" data-zero="${hits[k] === 0 ? 1 : 0}">${hits[k]}</div><div class="z">${label}</div></div>
+    </div>`).join("");
+  const n = fired();
+  $("zoneSum").textContent = n ? `${n} round${n === 1 ? "" : "s"} counted` : "";
+  $("clearHits").disabled = !n;
+}
+function clearHits() {
+  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; holes = [];
+  if (drill && drill.stage) buildTargets();
+  redrawHoles(); renderZones(); renderTally(); updateGo();
+}
+$("clearHits").addEventListener("click", clearHits);
+$("zones").addEventListener("click", e => {
+  const tile = e.target.closest(".zone"); if (!tile) return;
+  const z = tile.dataset.z;
+  const d = e.target.closest(".minus") ? -1 : 1;
+  if (d > 0 && capHit()) return;
+  hits[z] = Math.max(0, hits[z] + d);
+  if (d > 0 && navigator.vibrate) navigator.vibrate(10);
+  renderZones(); renderTally(); updateGo();
+});
+
+// ---- the target -----------------------------------------------------------
+// Each tap is one round, drawn where it landed. `holes` is the order they
+// went in, so undo takes back the last one and only the last one.
+let holes = [];   // [{z, x, y}]
+const svg = $("tgt").querySelector("svg");
+function svgPoint(e) {
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+$("tgt").addEventListener("pointerdown", e => {
+  const el = e.target.closest("[data-z]"); if (!el) return;
+  const z = el.dataset.z;
+  if (capHit()) return;
+  const p = svgPoint(e);
+  const head = !!el.dataset.head;
+  hits[z] = (hits[z] || 0) + 1;
+  if (head) headHits++;
+  holes.push({ z, head, x: p.x, y: p.y });
+  drawHole(p.x, p.y, true);
+  if (navigator.vibrate) navigator.vibrate(12);
+  renderZones(); renderTally(); updateGo();
+});
+function drawHole(x, y, fresh) {
+  const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 6);
+  c.setAttribute("class", "hole" + (fresh ? " fresh" : ""));
+  $("holes").appendChild(c);
+}
+function redrawHoles() {
+  $("holes").innerHTML = "";
+  holes.forEach(h => drawHole(h.x, h.y, false));
+}
+function undoLast() {
+  const h = holes.pop();
+  if (h) { hits[h.z] = Math.max(0, hits[h.z] - 1); if (h.head) headHits = Math.max(0, headHits - 1); }
+  else {
+    // Nothing tapped on the target - take one off whatever was counted
+    // last on the other pane, worst zone first.
+    for (const z of ["miss", "d", "c", "a"]) if (hits[z] > 0) { hits[z]--; break; }
+  }
+  redrawHoles(); renderZones(); renderTally(); updateGo();
+}
+function renderTally() {
+  const parts = ZONE_ORDER.filter(([k]) => hits[k] > 0)
+    .map(([k, l]) => `<span class="${k}">${hits[k]} ${l}</span>`);
+  $("tally").innerHTML = (parts.join("") || `<span style="opacity:.5">no rounds yet</span>`)
+    + `<button class="undo" type="button" id="undo">undo</button>`
+    + (fired() ? `<button class="undo" type="button" id="tallyClr">clear</button>` : "");
+  $("undo").addEventListener("click", undoLast);
+  if ($("tallyClr")) $("tallyClr").addEventListener("click", clearHits);
+}
+// which pane is showing. A switch, not a swipe: a swipe next to a grid of
+// things you tap fast is a swipe you'll trigger by accident.
+let paneNo = 0;
+let pens = { noshoot: 0, procedural: 0 };
+$("stageRow").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.k) { pens[b.dataset.k] = Math.max(0, pens[b.dataset.k] + (+b.dataset.d)); $("pen_ns").textContent = pens.noshoot; $("pen_pr").textContent = pens.procedural; }
+  else if (b.dataset.m) setSeg("power", b.dataset.m);
+});
+function showPane(i) {
+  paneNo = i;
+  [...$("deck").children].forEach((p, n) => p.classList.toggle("on", n === i));
+  [...$("mode").children].forEach((b, n) => b.setAttribute("aria-pressed", n === i));
+  if (typeof updateGo === "function") updateGo();
+}
+$("mode").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  showPane(+b.dataset.p);
+});
+
+// ---- the pages: log, book, ballistics, warm-up. Swipe, or tap the tab.
+// The page strip is exactly the screen below the tabs - measured, because
+// the notch, the tabs and the browser chrome all vary and a guess left a
+// dead band at the bottom of every phone.
+function fitPages() {
+  const el = $("pages");
+  const top = el.getBoundingClientRect().top;
+  const h = (window.visualViewport ? window.visualViewport.height : innerHeight) - top;
+  el.style.height = Math.max(200, Math.floor(h)) + "px";
+}
+window.addEventListener("resize", fitPages);
+if (window.visualViewport) window.visualViewport.addEventListener("resize", fitPages);
+function goPage(i, smooth = true) {
+  $("pages").scrollTo({ left: i * $("pages").clientWidth, behavior: smooth ? "smooth" : "auto" });
+}
+function markPage() {
+  const i = Math.round($("pages").scrollLeft / Math.max(1, $("pages").clientWidth));
+  [...$("tabs").children].forEach((b, n) => b.setAttribute("aria-selected", n === i));
+  if (i === 2) loadWork(true);
+  if (i === 3) renderPlans();
+  if (i === 4) renderStages();
+  if (i === 5 && !ballReady) { ballReady = true; renderGuns(); pickCal(curCal, true); }
+}
+let ballReady = false, wuReady = false, workAt = 0;
+$("pages").addEventListener("scroll", markPage, { passive: true });
+$("tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) goPage(+b.dataset.p); });
+window.addEventListener("resize", () => { const i = Math.round($("pages").scrollLeft / Math.max(1, $("pages").clientWidth)); goPage(i, false); });
+
+// ---- time -----------------------------------------------------------------
+// Two ways to put a time in. Total: type the timer's final. Shot by shot:
+// type each shot and tap + shot, either as the timer's cumulative reading
+// or as the gap since the last shot - a switch in the strip says which.
+let tmode = "total", splitKind = "cum";
+function setTmode(m) {
+  tmode = m;
+  [...$("tmode").children].forEach(b => b.setAttribute("aria-pressed", b.dataset.m === m));
+  $("tShot").hidden = m !== "shots";
+  $("tPar").hidden = m === "shots";
+  $("kind").hidden = m !== "shots";
+  if (m === "total") { shots = []; }
+  time = "";
+  renderShots(); showTime(); updateGo();
+}
+$("tmode").addEventListener("click", e => { const b = e.target.closest("button[data-m]"); if (b) setTmode(b.dataset.m); });
+function padKey(k) {
+  if (k === "shot") return addShot();
+  if (k === "clr") time = "";
+  else if (k === "back") time = time.slice(0, -1);
+  else if (k === "par") time = drill ? drill.par.toFixed(2) : time;
+  else if (k === ".") { if (!time.includes(".")) time = (time || "0") + "."; }
+  else if (time.replace(".", "").length < 5) time += k;
+  showTime(); updateGo();
+}
+$("pad").addEventListener("click", e => { const b = e.target.closest("button"); if (b) padKey(b.dataset.k); });
+$("tBack").addEventListener("click", () => padKey("back"));
+$("tPar").addEventListener("click", () => padKey("par"));
+$("tShot").addEventListener("click", () => padKey("shot"));
+// Shot times: type what the timer shows for a shot, tap + shot, repeat.
+// Cumulative, like the timer; the split is the gap to the one before.
+// The last one becomes the run's time so you don't type it twice.
+function addShot() {
+  let v = parseFloat(time);
+  if (!isFinite(v) || v <= 0) { toast(splitKind === "gap" && shots.length ? "type the split first" : "type the shot time first"); return; }
+  if (shots.length >= roundCap()) { toast(`that's all ${roundCap()} shots`); return; }
+  if (splitKind === "gap" && shots.length) v = shots[shots.length - 1] + v;
+  if (shots.length && v < shots[shots.length - 1]) { toast("that's earlier than the last shot"); return; }
+  shots.push(Math.round(v * 100) / 100);
+  time = "";
+  renderShots(); showTime(); updateGo();
+}
+function renderShots() {
+  const el = $("shots");
+  el.classList.toggle("show", tmode === "shots" && shots.length > 0);
+  if (tmode !== "shots" || !shots.length) { el.innerHTML = ""; return; }
+  el.innerHTML = shots.map((t, i) =>
+    `<span class="s">${t.toFixed(2)}<small>${i ? "+" + (t - shots[i - 1]).toFixed(2) : "first"}</small></span>`).join("")
+    + `<button class="x" type="button" id="shotsX">clear</button>`;
+  $("shotsX").addEventListener("click", () => { shots = []; renderShots(); showTime(); updateGo(); });
+}
+$("kind").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  splitKind = b.dataset.k;
+  [...$("kind").children].forEach(x => x.setAttribute("aria-pressed", x.dataset.k === splitKind));
+  showTime();
+});
+function showTime() {
+  const v = $("timeV");
+  const fromShots = !time && shots.length ? shots[shots.length - 1].toFixed(2) : "";
+  v.textContent = time || fromShots || "0.00";
+  v.classList.toggle("empty", !time && !fromShots);
+  $("timeU").textContent = tmode !== "shots" ? "s"
+    : time ? (splitKind === "gap" && shots.length ? "split" : "shot")
+    : shots.length ? "total" : (splitKind === "gap" ? "first shot, then each split" : "each shot as the timer shows it");
+}
+function fired() { return Object.values(hits).reduce((a, b) => a + b, 0); }
+function updateGo() { $("go").disabled = !(drill && (fired() > 0 || paneNo === 2 || (paneNo === 3 && tgtHits.some(h => h.a || h.c || h.d || h.down || h.engaged === false)))); }
+function resetEntry() {
+  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; shots = []; time = ""; holes = [];
+  pens = { noshoot: 0, procedural: 0 }; $("pen_ns").textContent = 0; $("pen_pr").textContent = 0;
+  if (drill && drill.stage) buildTargets();
+  redrawHoles(); renderZones(); renderTally(); renderShots(); showTime(); updateGo();
+  $("verdict").className = "verdict";
+}
+// A drill has a round count; you can't have hit more than you fired.
+// Stages are the exception - make-up shots are part of the game.
+function roundCap() { return drill && !drill.stage && drill.rounds > 0 ? drill.rounds : Infinity; }
+function capHit() {
+  if (fired() >= roundCap()) { toast(`that's all ${roundCap()} rounds`); if (navigator.vibrate) navigator.vibrate([20, 30, 20]); return true; }
+  return false;
+}
+function updateGoTime() { return time ? parseFloat(time) : (shots.length ? shots[shots.length - 1] : null); }
+
+// ---- log it ---------------------------------------------------------------
+// Press and hold ~half a second. A tap shows the hint and does nothing.
+let holdT = null, held = false;
+const goBtn = $("go");
+goBtn.addEventListener("pointerdown", e => {
+  if (goBtn.disabled) return;
+  held = false; goBtn.classList.add("holding"); $("pages").classList.add("noswipe");
+  holdT = setTimeout(() => { held = true; goBtn.classList.remove("holding"); logIt(); }, 450);
+});
+const holdOff = () => { clearTimeout(holdT); $("pages").classList.remove("noswipe"); if (goBtn.classList.contains("holding")) { goBtn.classList.remove("holding"); if (!held) toast("hold LOG IT for half a second"); } };
+goBtn.addEventListener("pointerup", holdOff); goBtn.addEventListener("pointercancel", holdOff); goBtn.addEventListener("pointerleave", holdOff);
+goBtn.addEventListener("contextmenu", e => e.preventDefault());
+async function logIt() {
+  if (!drill) return;
+  const dryRun = paneNo === 2;
+  const body = { who, drill: drill.key, hits: {}, seconds: updateGoTime(), dry: dryRun,
+                 penalties: drill.stage ? { ...pens, power: segVal("power") || "minor" } : undefined,
+                 targets: drill.stage ? tgtHits.map(h => ({ ...h })) : undefined,
+                 shots: shots.length ? shots : undefined,
+                 // Only the target pane knows whether a round was a head shot.
+                 head_hits: paneNo === 1 || holes.length ? headHits : undefined };
+  if (!dryRun) for (const [k, n] of Object.entries(hits)) if (n > 0) body.hits[k] = n;
+  $("go").disabled = true;
+  const r = await post("/api/range/run", body);
+  if (!r || !r.ok) { toast("didn't log — " + (r && r.error || "no answer")); updateGo(); return; }
+  const v = $("verdict");
+  v.className = "verdict show " + (r.run.made ? "pass" : r.run.clean ? "dirty" : "fail");
+  const sp = r.run.splits || [];
+  const stg = r.run.stage;
+  const brk = stg ? [stg.ftn ? `${stg.ftn} FTN` : "", stg.fte ? `${stg.fte} FTE` : "", r.run.misses ? `${r.run.misses} miss` : "", stg.noshoot ? `${stg.noshoot} NS` : "", stg.procedural ? `${stg.procedural} proc` : ""].filter(Boolean).join(" · ") : "";
+  v.innerHTML = `${esc(r.said)}<small>${stg ? `${r.run.points} / ${stg.possible} pts (${stg.pct ?? "—"}%) · ${esc(stg.rules || "")}${brk ? " · " + brk : ""} · ` : ""}${r.run.time_plus != null ? "time-plus " + r.run.time_plus.toFixed(2) + " · " : ""}`
+              + `hit factor ${r.run.hit_factor != null ? r.run.hit_factor.toFixed(2) : "—"}`
+              + (sp.length ? ` · splits ${sp.map(x => x.toFixed(2)).join(" ")}` : "") + `</small>`;
+  if (navigator.vibrate) navigator.vibrate(r.run.made ? [30, 40, 30] : 60);
+  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; shots = []; time = ""; holes = [];
+  pens = { noshoot: 0, procedural: 0 }; $("pen_ns").textContent = 0; $("pen_pr").textContent = 0;
+  if (drill && drill.stage) buildTargets();
+  redrawHoles(); renderZones(); renderTally(); renderShots(); showTime(); updateGo();
+  await load(true);
+  loadWork(true);
+  progAdvance();
+}
+
+// ---- the book -------------------------------------------------------------
+function renderBook() {
+  const runs = DATA.runs || [];
+  const mine = drill ? runs.filter(r => r.drill === drill.key) : runs;
+  const clean = mine.filter(r => r.clean && r.secs != null).map(r => r.secs);
+  $("sRuns").textContent = mine.length;
+  $("sPass").textContent = mine.filter(r => r.made).length;
+  $("sBest").textContent = clean.length ? Math.min(...clean).toFixed(2) : "—";
+  if (!runs.length) { $("runs").innerHTML = `<div class="empty">Nothing on the book yet.</div>`; return; }
+  const newestKey = runs[0].at + runs[0].name;
+  $("runs").innerHTML = runs.slice(0, 40).map(r => {
+    const cls = r.made ? "pass" : r.clean ? "clean" : "dirty";
+    const mark = r.dry ? (r.made ? "DRY ✓" : "DRY") : r.goal_met ? "GOAL ✓" : r.par > 0 ? (r.made ? "PASS" : r.clean ? "CLEAN" : (r.misses ? r.misses + " MISS" : "DIRTY"))
+               : (r.stage && r.stage.format === "3gun" && r.time_plus != null ? "T+ " + r.time_plus.toFixed(2) : r.hit_factor != null ? "HF " + r.hit_factor.toFixed(2) : "STAGE");
+    const h = (r.dry ? "dry" : Object.entries(r.hits || {}).map(([z, n]) => `${n}${z === "miss" ? "M" : z.toUpperCase()}`).join(" "))
+            + (r.splits && r.splits.length ? ` · splits ${Math.min(...r.splits).toFixed(2)}–${Math.max(...r.splits).toFixed(2)}` : "");
+    const fresh = lastSeen && (r.at + r.name) === newestKey && newestKey !== lastSeen;
+    return `<div class="run ${cls}${fresh ? " fresh" : ""}" data-id="${r.id || ""}" role="button" title="Tap to edit">
+      <div class="t">${r.secs != null ? r.secs.toFixed(2) : "—"}</div>
+      <div><div>${esc(r.name)}</div><div class="d">${h}${r.par > 0 ? " · par " + r.par.toFixed(2) : ""}${r.time_plus != null && r.time_plus !== r.secs ? " · t+ " + r.time_plus.toFixed(2) : ""} · ${r.at.slice(5, 16).replace("T", " ")}</div></div>
+      <div class="m">${mark}</div>${r.note ? `<div class="note">${esc(r.note)}</div>` : ""}</div>`;
+  }).join("");
+}
+$("runs").addEventListener("click", e => {
+  const el = e.target.closest(".run"); if (!el || !el.dataset.id) return;
+  const r = (DATA.runs || []).find(x => x.id === el.dataset.id); if (r) editRun(r);
+});
+// Fix a run after the fact. Re-scored on the server; the time and id stay.
+function editRun(r) {
+  const h = r.hits || {};
+  const dd = findDrill(r.drill) || {};
+  const slotsN = dd.stage ? Math.max(r.shots ? r.shots.length : 0, dd.rounds || 1) : Math.max(dd.rounds || 1, 1);
+  openSheet(`<div class="ed">
+    <div><b style="font-size:17px">${esc(r.name)}</b><div style="color:var(--faint);font-size:12px;font-family:var(--mono)">${r.at.replace("T", " ")} · par ${r.par.toFixed(2)}</div></div>
+    <div><label>Time (s)</label><input id="e_secs" inputmode="decimal" value="${r.secs ?? ""}" placeholder="—"></div>
+    <div><label>Hits</label><div class="grid4">
+      <div><input id="e_a" inputmode="numeric" value="${h.a || 0}"><label style="text-align:center;margin-top:3px">A</label></div>
+      <div><input id="e_c" inputmode="numeric" value="${(h.c || 0) + (h.b || 0)}"><label style="text-align:center;margin-top:3px">C</label></div>
+      <div><input id="e_d" inputmode="numeric" value="${h.d || 0}"><label style="text-align:center;margin-top:3px">D</label></div>
+      <div><input id="e_m" inputmode="numeric" value="${h.miss || 0}"><label style="text-align:center;margin-top:3px">Miss</label></div></div></div>
+    <div><label>Shot times, as the timer shows them${dd.rounds ? ` · ${dd.rounds} rounds` : ""}</label><div class="grid4 slots" id="e_slots"></div>
+      ${dd.stage ? `<button type="button" class="add" id="e_more" style="margin-top:6px;min-height:36px;width:100%">+ make-up shot</button>` : ""}</div>
+    ${r.stage && r.stage.per_target ? `<div><label>Targets · tap to add a hit, hold to take one back</label><div class="tgts" id="e_tgts"></div></div>` : ""}
+    ${r.stage ? `<div class="grid4"><div><input id="e_ns" inputmode="numeric" value="${r.stage.noshoot || 0}"><label style="text-align:center;margin-top:3px">no-shoot</label></div>
+      <div><input id="e_pr" inputmode="numeric" value="${r.stage.procedural || 0}"><label style="text-align:center;margin-top:3px">proced.</label></div>
+      <div style="grid-column:span 2"><select id="e_pw" style="width:100%;min-height:44px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;color:var(--ink);font:inherit;padding:0 10px"><option value="minor"${r.stage.power !== "major" ? " selected" : ""}>minor</option><option value="major"${r.stage.power === "major" ? " selected" : ""}>major</option></select><label style="text-align:center;margin-top:3px">power</label></div></div>` : ""}
+    <div><label>Note</label><textarea id="e_note" placeholder="What happened. The good. The bad. The ugly. Write it here.">${esc(r.note || "")}</textarea></div>
+    <div class="row"><button type="button" class="del" id="e_del">Delete</button><button type="button" class="save" id="e_save">Save</button></div>
+  </div>`);
+  const drawSlots = n => {
+    const cur = [...document.querySelectorAll("#e_slots input")].map(i => i.value);
+    $("e_slots").innerHTML = Array.from({ length: n }, (_, i) =>
+      `<div><input inputmode="decimal" data-i="${i}" value="${cur[i] ?? (r.shots && r.shots[i] != null ? r.shots[i].toFixed(2) : "")}" placeholder="—"><label style="text-align:center;margin-top:3px">${i + 1}${["st", "nd", "rd"][i] || "th"}</label></div>`).join("");
+  };
+  drawSlots(slotsN);
+  // per-target hits for a stage run: same widget as the log page, its own state
+  let eHits = null;
+  if (r.stage && r.stage.per_target && dd.targets) {
+    eHits = dd.targets.map((t, i) => { const p = (r.stage.targets || [])[i] || {}; return t.paper ? { a: p.a || 0, c: p.c || 0, d: p.d || 0, engaged: p.engaged !== false } : { down: !!p.down, engaged: p.engaged !== false }; });
+    const drawE = () => { $("e_tgts").innerHTML = targetsHtml(dd.targets, eHits); };
+    drawE();
+    $("e_tgts").addEventListener("click", e => {
+      const b = e.target.closest("button"); if (!b) return;
+      const i = +b.closest(".trow").dataset.i, h = eHits[i]; if (!h) return;
+      if (b.dataset.z) { h[b.dataset.z] = (h[b.dataset.z] || 0) + 1; h.engaged = true; }
+      else if (b.dataset.st === "down") { h.down = true; h.engaged = true; }
+      else if (b.dataset.st === "up") { h.down = false; }
+      else if (b.dataset.fte) { h.engaged = h.engaged === false ? true : false; }
+      drawE();
+    });
+    let eh = null;
+    $("e_tgts").addEventListener("pointerdown", e => { const b = e.target.closest("button[data-z]"); if (!b) return;
+      eh = setTimeout(() => { const i = +b.closest(".trow").dataset.i, h = eHits[i]; if (h && h[b.dataset.z] > 0) { h[b.dataset.z]--; drawE(); } eh = "fired"; }, 500); });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(ev => $("e_tgts").addEventListener(ev, () => { if (eh && eh !== "fired") clearTimeout(eh); }));
+    $("e_tgts").addEventListener("click", e => { if (eh === "fired") { e.stopImmediatePropagation(); eh = null; } }, true);
+  }
+  if ($("e_more")) $("e_more").addEventListener("click", () => drawSlots(document.querySelectorAll("#e_slots input").length + 1));
+  $("e_save").addEventListener("click", async () => {
+    const n = id => Math.max(0, parseInt($(id).value) || 0);
+    const secs = parseFloat($("e_secs").value);
+    const shots = [...document.querySelectorAll("#e_slots input")].map(i => parseFloat(i.value)).filter(x => isFinite(x) && x > 0);
+    const body = { id: r.id, hits: { a: n("e_a"), c: n("e_c"), d: n("e_d"), miss: n("e_m") },
+                   seconds: isFinite(secs) ? secs : null, shots, note: $("e_note").value.trim() };
+    const total = body.hits.a + body.hits.c + body.hits.d + body.hits.miss;
+    if (!dd.stage && dd.rounds && total > dd.rounds) return toast(`${total} hits on a ${dd.rounds}-round drill - fix the counts`);
+    if (r.stage) body.penalties = { noshoot: n("e_ns"), procedural: n("e_pr"), power: $("e_pw").value };
+    if (eHits) { body.targets = eHits; delete body.hits; }
+    const res = await post("/api/range/run/edit", body);
+    document.querySelector(".sheet")?.remove();
+    if (!res || !res.ok) return toast("didn't save — " + (res && res.said || "no answer"));
+    toast("updated"); lastSeen = null; await load(true); loadWork(true);
+  });
+  $("e_del").addEventListener("click", async () => {
+    if (!confirm(`Take ${r.name} (${r.secs ?? "no time"}) off the book?`)) return;
+    const res = await post("/api/range/run/edit", { id: r.id, delete: true });
+    document.querySelector(".sheet")?.remove();
+    toast(res && res.said || "gone"); lastSeen = null; await load(true); loadWork(true);
+  });
+}
+
+// ---- holds / work on / sheet ---------------------------------------------
+// ---- ballistics -------------------------------------------------------------
+//
+// A point-mass solver, not a lookup. The standard G1 and G7 drag tables,
+// air density from temperature, altitude and humidity, wind as a vector,
+// gravity split for an incline, spin drift (Litz's fit on Miller
+// stability), Coriolis. What the pros' apps ask for, minus the doppler
+// bullet library we don't have. Loads are the verified catalogue in
+// ballistics/loads.json - every number has a source, shown on tap.
+const G1 = [[0,.2629],[.05,.2558],[.1,.2487],[.15,.2413],[.2,.2344],[.25,.2278],[.3,.2214],[.35,.2155],[.4,.2104],[.45,.2061],[.5,.2032],[.55,.2020],[.6,.2034],[.7,.2165],[.725,.2230],[.75,.2313],[.775,.2417],[.8,.2546],[.825,.2706],[.85,.2901],[.875,.3136],[.9,.3415],[.925,.3734],[.95,.4084],[.975,.4448],[1,.4805],[1.025,.5136],[1.05,.5427],[1.075,.5677],[1.1,.5883],[1.125,.6053],[1.15,.6191],[1.2,.6393],[1.25,.6518],[1.3,.6589],[1.35,.6621],[1.4,.6625],[1.45,.6607],[1.5,.6573],[1.55,.6528],[1.6,.6474],[1.65,.6413],[1.7,.6347],[1.75,.6280],[1.8,.6210],[1.9,.6072],[2,.5934],[2.2,.5666],[2.4,.5413],[2.6,.5180],[2.8,.4970],[3,.4783],[3.5,.4352],[4,.4025],[5,.3557]];
+const G7 = [[0,.1198],[.1,.1197],[.2,.1196],[.3,.1194],[.4,.1193],[.5,.1194],[.6,.1194],[.7,.1194],[.8,.1197],[.85,.1202],[.9,.1215],[.925,.1234],[.95,.1291],[.975,.1391],[1,.1620],[1.025,.2038],[1.05,.2588],[1.075,.3065],[1.1,.3385],[1.15,.3742],[1.2,.3901],[1.3,.3990],[1.4,.3977],[1.5,.3909],[1.6,.3827],[1.8,.3664],[2,.3503],[2.2,.3355],[2.4,.3214],[2.6,.3084],[2.8,.2966],[3,.2860],[3.5,.2636],[4,.2452],[5,.2192]];
+function cdOf(t, m) {
+  if (m <= t[0][0]) return t[0][1];
+  for (let i = 1; i < t.length; i++) if (m <= t[i][0]) { const [m0, c0] = t[i - 1], [m1, c1] = t[i]; return c0 + (c1 - c0) * (m - m0) / (m1 - m0); }
+  return t[t.length - 1][1];
+}
+function solve(p) {
+  const table = p.model === "G7" ? G7 : G1;
+  const TR = p.temp + 459.67, Tc = (p.temp - 32) / 1.8;
+  const Phpa = 1013.25 * Math.pow(1 - 6.8756e-6 * p.alt, 5.2559);
+  const es = 6.1078 * Math.pow(10, 7.5 * Tc / (237.3 + Tc));            // saturation vapour pressure, hPa
+  const rho = (Phpa / 1013.25) * (518.67 / TR) * (1 - 0.378 * (p.rh / 100) * es / Phpa);
+  const vs = 49.0223 * Math.sqrt(TR);
+  const K = 0.00020856 * rho / p.bc;                                    // (pi/8) rho_std / (144/32.174)
+  const mv = p.mv + (p.tk || 0) * (p.temp - (p.zt ?? p.temp));         // powder temperature
+  const w = p.wind * 1.46667, ang = (p.wdir % 12) * Math.PI / 6;        // o'clock -> radians, 12 = headwind
+  const wx = -w * Math.cos(ang), wz = w * Math.sin(ang);
+  const inc = (p.inc || 0) * Math.PI / 180, gy = 32.174 * Math.cos(inc), gx = 32.174 * Math.sin(inc);
+  const sight = p.sh / 12, dt = 0.0004;
+  function fly(angle, untilFt) {
+    let x = 0, y = -sight, z = 0, vx = mv * Math.cos(angle), vy = mv * Math.sin(angle), vz = 0, t = 0, next = 0;
+    const out = [];
+    while (x < untilFt && t < 8) {
+      const rx = vx - wx, ry = vy, rz = vz - wz, v = Math.hypot(rx, ry, rz);
+      const a = K * cdOf(table, v / vs) * v;
+      vx += (-a * rx - gx) * dt; vy += (-a * ry - gy) * dt; vz += -a * rz * dt;
+      x += vx * dt; y += vy * dt; z += vz * dt; t += dt;
+      if (x >= next * 3) { out.push({ yd: next, y, z, v: Math.hypot(vx, vy, vz), t }); next++; }
+    }
+    return out;
+  }
+  let lo = -0.02, hi = 0.08, a = 0;
+  for (let i = 0; i < 40; i++) {
+    a = (lo + hi) / 2;
+    const at = fly(a, p.zero * 3 + 3).find(q => q.yd === p.zero);
+    if (!at || at.y > 0) hi = a; else lo = a;
+  }
+  // Gyroscopic stability (Miller) -> spin drift (Litz). Needs a bullet length.
+  let sg = null;
+  if (p.len > 0 && p.twist > 0 && p.dia > 0) {
+    const tcal = p.twist / p.dia, L = p.len / p.dia;
+    sg = (30 * p.gr) / (tcal * tcal * Math.pow(p.dia, 3) * L * (1 + L * L))
+       * Math.pow(mv / 2800, 1 / 3) * (TR / 518.67) * (29.92 / (Phpa * 0.02953));
+  }
+  const spinSign = p.tdir === "L" ? -1 : 1;
+  const OMEGA = 7.292e-5, lat = (p.lat || 0) * Math.PI / 180, az = p.az == null ? null : p.az * Math.PI / 180;
+  return fly(a, p.max * 3 + 3).filter(q => q.yd <= p.max).map(q => {
+    const wind = q.z * 12;
+    const spin = sg ? spinSign * 1.25 * (sg + 1.2) * Math.pow(q.t, 1.83) : 0;
+    const corH = OMEGA * (q.yd * 3) * q.t * Math.sin(lat) * 12;                              // right in the N hemisphere
+    const corV = az == null ? 0 : -(2 * OMEGA * mv * Math.cos(lat) * Math.sin(az) / 32.174) * (q.y * 12 + p.sh); // Eotvos on the drop
+    const path = q.y * 12 + corV;
+    return { yd: q.yd, path, wind, spin, cor: corH, drift: wind + spin + corH, v: q.v, mach: q.v / vs, t: q.t,
+             moa: q.yd ? path / (1.047 * q.yd / 100) : 0, mil: q.yd ? path / (3.6 * q.yd / 100) : 0,
+             e: p.gr * q.v * q.v / 450240, sg };
+  });
+}
+
+// Rough bullet lengths for the catalogue, inches - enough for a spin-drift
+// estimate. Anything he measures beats these.
+const BLEN = { "9mm-115": .55, "9mm-124": .58, "9mm-124p": .60, "9mm-147": .68,
+  "300blk-110": .95, "300blk-125": 1.05, "300blk-150": 1.12, "300blk-190": 1.45, "300blk-200": 1.40, "300blk-208": 1.53, "300blk-220": 1.49,
+  "556-55": .74, "556-62": .90, "556-69": .90, "556-77": .99,
+  "308-149": 1.12, "308-150": 1.10, "308-168": 1.21, "308-175": 1.24, "308-178": 1.33,
+  "65cm-120": 1.24, "65cm-129": 1.25, "65cm-140": 1.39, "65cm-143": 1.42, "65cm-147": 1.46 };
+
+let curCal = null, curLoad = null, curGun = null, holdYd = 100, lastRows = [];
+function calData() { return (DATA.loads || {})[curCal] || null; }
+function loadData() { const c = calData(); return c ? c.loads.find(l => l.key === curLoad) || null : null; }
+function gunData() { return (DATA.guns || []).find(g => g.id === curGun) || null; }
+function renderGuns() {
+  const G = DATA.guns || [];
+  $("gun").innerHTML = `<option value="">No gun - just the calibre</option>` + G.map(g =>
+    `<option value="${g.id}"${g.id === curGun ? " selected" : ""}>${esc(g.name)}${g.barrel ? ` · ${g.barrel}"` : ""}${g.suppressor ? " · " + esc(g.suppressor) : ""}</option>`).join("")
+    + `<option value="+">+ New gun…</option>`;
+  $("gunEdit").hidden = !curGun;
+}
+$("gun").addEventListener("change", e => {
+  if (e.target.value === "+") { renderGuns(); return editGun(null); }
+  curGun = e.target.value || null;
+  const g = gunData();
+  if (g) {
+    pickCal(g.calibre && DATA.loads[g.calibre] ? g.calibre : curCal, true, true);
+    if (g.sight_height) $("b_sh").value = g.sight_height;
+    if (g.zero) $("b_zero").value = g.zero;
+    if (g.twist) $("b_twist").value = g.twist;
+    setSeg("btdir", g.twist_dir === "left" ? "L" : "R");
+    if (g.zero_temp) $("b_zt").value = g.zero_temp;
+    if (g.load && (calData() || { loads: [] }).loads.some(l => l.key === g.load)) curLoad = g.load;
+    applyLoad(); renderLoads(); calc();
+  }
+  renderGuns();
+});
+$("gunEdit").addEventListener("click", () => { const g = gunData(); if (g) editGun(g); });
+function renderCal() {
+  const L = DATA.loads || {};
+  $("cal").innerHTML = Object.entries(L).map(([k, c]) => `<option value="${k}"${k === curCal ? " selected" : ""}>${esc(c.name)}</option>`).join("");
+  const c = calData();
+  $("calAbout").textContent = c ? c.about : "";
+}
+function renderLoads() {
+  const c = calData();
+  $("loads").innerHTML = (c ? c.loads : []).map(l =>
+    `<button type="button" data-k="${l.key}" aria-pressed="${l.key === curLoad}">${l.gr}gr${l.tag ? " " + esc(l.tag) : ""}${l.card ? " ●" : ""}</button>`).join("")
+    + `<button type="button" data-k="" aria-pressed="${!curLoad}">Custom</button>`;
+}
+function pickCal(k, keepLoad, quiet) {
+  curCal = k;
+  const c = calData();
+  if (c) {
+    if (!keepLoad || !c.loads.some(l => l.key === curLoad)) curLoad = c.loads[0].key;
+    $("b_sh").value = c.sight_height; $("b_zero").value = c.zero; $("b_max").value = c.max;
+    if (c.dia) $("b_dia").value = c.dia;
+    if (c.twist && !$("b_twist").value) $("b_twist").value = c.twist;
+    holdYd = c.zero >= 100 ? 200 : 100;
+  }
+  renderCal();
+  if (!quiet) { applyLoad(); renderLoads(); calc(); }
+}
+function applyLoad() {
+  const l = loadData(); if (!l) return;
+  const g = gunData();
+  $("b_gr").value = l.gr; $("b_bc").value = l.bc;
+  $("b_mv").value = g && g.mv && g.mv[l.key] ? g.mv[l.key] : l.mv;
+  setSeg("bmodel", l.model || "G1");
+  $("b_len").value = BLEN[l.key] || "";
+}
+$("cal").addEventListener("change", e => { pickCal(e.target.value, false); });
+$("loads").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  curLoad = b.dataset.k || null;
+  applyLoad(); renderLoads(); calc();
+});
+function setSeg(id, m) { [...$(id).children].forEach(b => b.setAttribute("aria-pressed", b.dataset.m === m)); }
+function segVal(id) { return ([...$(id).children].find(b => b.getAttribute("aria-pressed") === "true") || {}).dataset?.m; }
+function setModel(m) { setSeg("bmodel", m); }
+$("bmodel").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  // A load that publishes both BCs swaps to the matching one.
+  const l = loadData(), m = b.dataset.m;
+  if (l) { if (m === "G7" && l.bc_g7) $("b_bc").value = l.bc_g7; else if (m === "G1" && l.bc_g1) $("b_bc").value = l.bc_g1; else if (m === (l.model || "G1")) $("b_bc").value = l.bc; }
+  setSeg("bmodel", m); calc();
+});
+$("btdir").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { setSeg("btdir", b.dataset.m); calc(); } });
+$("bform").addEventListener("input", calc);
+$("bmore").addEventListener("input", calc);
+$("moreBtn").addEventListener("click", () => { const h = $("bmore").hidden = !$("bmore").hidden; $("moreBtn").textContent = (h ? "More" : "Less") + " · twist, incline, humidity, Coriolis, powder temp " + (h ? "▾" : "▴"); });
+$("mvEst").addEventListener("click", () => { const v = +$("mvEst").dataset.v; if (v) { $("b_mv").value = v; calc(); } });
+function ydStep(up) { const big = (calData() || {}).max >= 500; return holdYd >= (big ? 200 : 100) + (up ? 0 : 1) ? (big ? 50 : 25) : 5; }
+$("ydUp").addEventListener("click", () => { holdYd += ydStep(true); sayHold(); calc(); });
+$("ydDown").addEventListener("click", () => { holdYd = Math.max(5, holdYd - ydStep(false)); sayHold(); calc(); });
+function num(id, d) { const v = parseFloat($(id).value); return isFinite(v) ? v : d; }
+function calc() {
+  const p = { gr: num("b_gr", 220), bc: Math.max(0.05, num("b_bc", .3)), mv: Math.max(300, num("b_mv", 1000)),
+              sh: num("b_sh", 2), zero: Math.max(5, Math.round(num("b_zero", 50))), max: Math.min(2000, Math.max(25, num("b_max", 200))),
+              temp: num("b_temp", 59), alt: num("b_alt", 0), wind: num("b_wind", 0), wdir: num("b_wdir", 3),
+              rh: Math.min(100, Math.max(0, num("b_rh", 50))), inc: num("b_inc", 0), lat: num("b_lat", 0),
+              az: $("b_az").value === "" ? null : num("b_az", 0), tk: num("b_tk", 0), zt: $("b_zt").value === "" ? null : num("b_zt", 0),
+              dia: num("b_dia", 0), len: num("b_len", 0), twist: num("b_twist", 0), tdir: segVal("btdir") || "R",
+              model: segVal("bmodel") || "G1" };
+  lastRows = solve(p);
+  const h = curLoad && DATA.holds && DATA.holds[curLoad];
+  const card = h ? h.drops : {};
+  const c = calData(), l = loadData(), g = gunData();
+  const step = c && c.step ? c.step : (p.max <= 100 ? 5 : p.max <= 300 ? 25 : 50);
+  const want = new Set([...Object.keys(card).map(Number)]);
+  for (let d = 0; d <= p.max; d += step) want.add(d);
+  want.add(p.zero);
+  const rows = lastRows.filter(r => want.has(r.yd));
+  $("btab").innerHTML = rows.map(r => {
+    const cls = Math.abs(r.path) < .25 ? "on" : r.path < 0 ? "lo" : "hi";
+    const was = card[r.yd];
+    const wasTxt = was === undefined ? "" : `<span class="was"> card ${was}</span>`
+      + (Math.abs(was - r.path) > 1 ? `<span class="dif"> Δ${(r.path - was).toFixed(1)}</span>` : "");
+    return `<tr class="${was !== undefined ? "card" : ""}${r.mach < 1.2 && r.mach > 0.8 && p.mv / (49.0223 * Math.sqrt(p.temp + 459.67)) > 1.2 ? " tsonic" : ""}"><td>${r.yd}${was !== undefined ? " ●" : ""}</td>
+      <td class="${cls}">${r.path.toFixed(1)}${wasTxt}</td><td>${r.moa.toFixed(1)}</td><td>${r.mil.toFixed(2)}</td>
+      <td>${Math.abs(r.drift) >= .05 ? r.drift.toFixed(1) : "—"}</td><td>${Math.round(r.v)}</td><td>${r.mach.toFixed(2)}</td><td>${Math.round(r.e)}</td><td>${r.t.toFixed(2)}</td></tr>`;
+  }).join("");
+  // the estimate line: where the numbers came from, and the barrel gap
+  const sg = lastRows[0] && lastRows[0].sg;
+  let est = l ? `<b>${esc((c ? c.name + " " : "") + l.gr + "gr")}:</b> ${esc(l.note)}.` : "Custom load - every number is yours.";
+  if (sg) est += ` SG ${sg.toFixed(2)}${sg < 1.3 ? " - marginal stability" : sg < 1.5 ? " - stable, BC a touch optimistic" : ""}.`;
+  else if (l) est += " No bullet length, so no spin drift.";
+  if (g && g.barrel && c && c.barrel && Math.abs(g.barrel - c.barrel) >= 1 && l) {
+    // Subsonics lose far less per inch than supers - the powder's done early.
+    const perIn = l.mv < 1200 ? Math.min(c.fps_per_in || 25, 12) : (c.fps_per_in || 25);
+    const estMv = Math.round(l.mv - perIn * (c.barrel - g.barrel));
+    const using = +$("b_mv").value === (g.mv && g.mv[l.key]) ? "" : ` Maker tested in a ${c.barrel}" barrel; yours is ${g.barrel}" → ${c.barrel - g.barrel > 0 ? "−" : "+"}${Math.abs(c.barrel - g.barrel)}" × ${perIn} fps ≈ ${estMv} fps. A rule of thumb - a chrono beats it.`;
+    est += using;
+    $("mvEst").hidden = !using; $("mvEst").textContent = `use ${estMv}`; $("mvEst").dataset.v = estMv;
+  } else { $("mvEst").hidden = true; }
+  if (g && g.suppressor) est += ` ${esc(g.suppressor)} on: expect a few fps more and a POI shift - zero with it on.`;
+  if (g && l && $("b_mv").value && +$("b_mv").value !== (g.mv && g.mv[l.key]) && +$("b_mv").value !== l.mv)
+    est += ` <button type="button" class="mini" id="saveMv" style="display:inline-block;width:auto;margin:0 0 0 6px">save ${$("b_mv").value} fps to ${esc(g.name)}</button>`;
+  $("best").innerHTML = est;
+  if ($("saveMv")) $("saveMv").addEventListener("click", async () => {
+    const mv = { ...(g.mv || {}) }; mv[l.key] = +$("b_mv").value;
+    const r = await post("/api/range/gun", { ...g, mv });
+    if (r && r.ok) { DATA.guns = r.guns; toast(`${g.name}: ${l.gr}gr at ${mv[l.key]} fps saved`); calc(); }
+  });
+  $("bsrc").hidden = !(l && l.src); $("bsrc").textContent = l && l.src ? "source: " + l.src : "";
+  showAdj(p);
+  sayHold();
+}
+// What today's air does versus the day you zeroed: the same load run in
+// the zero conditions, and the difference at the readout distance. That
+// difference is the dial for today.
+function showAdj(p) {
+  const g = gunData();
+  const zeroT = p.zt != null ? p.zt : (g && g.zero_temp) || null, zeroA = (g && g.zero_alt != null) ? g.zero_alt : null;
+  const el = $("adj");
+  if (zeroT == null && zeroA == null) { el.innerHTML = `Set a zero-day temperature (under More, or on the gun) and this will show the correction for today's air.`; return; }
+  const q = { ...p, temp: zeroT != null ? zeroT : p.temp, alt: zeroA != null ? zeroA : p.alt, rh: 50, wind: 0, tk: 0 };
+  const base = solve(q);
+  const now = lastRows.find(r => r.yd === holdYd) || lastRows[lastRows.length - 1];
+  const then = base.find(r => r.yd === (now && now.yd));
+  if (!now || !then) { el.innerHTML = ""; return; }
+  const dIn = now.path - then.path, dMoa = now.moa - then.moa, dMil = now.mil - then.mil;
+  const wind = now.wind, wMoa = now.yd ? wind / (1.047 * now.yd / 100) : 0, wMil = now.yd ? wind / (3.6 * now.yd / 100) : 0;
+  const elev = Math.abs(dIn) < 0.15 ? `no change from your zero day` : `<span class="up">${dIn < 0 ? "come up" : "come down"} ${Math.abs(dMoa).toFixed(2)} moa / ${Math.abs(dMil).toFixed(2)} mil</span> (${Math.abs(dIn).toFixed(1)}" ${dIn < 0 ? "more drop" : "less drop"} than your zero day)`;
+  el.innerHTML = `<b>Today at ${now.yd} yd:</b> ${elev}` + (Math.abs(wind) >= 0.25 ? ` · <span class="up">wind ${Math.abs(wMoa).toFixed(2)} moa / ${Math.abs(wMil).toFixed(2)} mil ${wind > 0 ? "left" : "right"}</span>` : "")
+    + `<br><small>Zero day: ${zeroT != null ? zeroT + "°F" : "today's temp"}, ${zeroA != null ? zeroA + " ft" : "today's altitude"}. Today: ${p.temp}°F, ${p.alt} ft pressure alt, ${p.rh}% RH. Total drop today ${Math.abs(now.path).toFixed(1)}" (${Math.abs(now.moa).toFixed(2)} moa).</small>`;
+}
+$("best").addEventListener("click", e => { if (!e.target.closest("button")) $("bsrc").hidden = !$("bsrc").hidden; });
+function sayHold() {
+  $("ydShow").textContent = holdYd;
+  const r = lastRows.find(q => q.yd === holdYd) || lastRows[lastRows.length - 1];
+  if (r && r.yd !== holdYd) { holdYd = r.yd; $("ydShow").textContent = holdYd; }
+  if (!r) { $("holdSay").textContent = "—"; return; }
+  const inch = Math.abs(r.path);
+  const word = inch < .25 ? "dead on" : r.path < 0 ? `${inch.toFixed(1)}" low — hold ${inch.toFixed(1)}" high` : `${inch.toFixed(1)}" high — hold ${inch.toFixed(1)}" low`;
+  const parts = [];
+  if (Math.abs(r.wind) >= .25) parts.push(`wind ${Math.abs(r.wind).toFixed(1)}" ${r.wind > 0 ? "R" : "L"}`);
+  if (Math.abs(r.spin) >= .25) parts.push(`spin ${Math.abs(r.spin).toFixed(1)}" ${r.spin > 0 ? "R" : "L"}`);
+  if (Math.abs(r.cor) >= .25) parts.push(`coriolis ${Math.abs(r.cor).toFixed(1)}" ${r.cor > 0 ? "R" : "L"}`);
+  const drift = Math.abs(r.drift) >= .25 ? ` · hold ${Math.abs(r.drift).toFixed(1)}" ${r.drift > 0 ? "left" : "right"} (${parts.join(", ")})` : "";
+  $("holdSay").innerHTML = `${word}<small>${Math.abs(r.moa).toFixed(1)} moa · ${Math.abs(r.mil).toFixed(2)} mil · ${Math.round(r.v)} fps · M${r.mach.toFixed(2)} · ${Math.round(r.e)} ft·lb${drift}</small>`;
+}
+// ---- conditions: compass, elevation, weather --------------------------------
+// Heading feeds the azimuth (Coriolis) and turns the wind's true direction
+// into o'clock. Weather is Open-Meteo, free and keyless, at the phone's fix:
+// temperature, humidity, station pressure and 10 m wind. Station pressure
+// becomes pressure altitude for the solver - that's what the bullet feels,
+// whatever the map says the elevation is.
+let heading = null, cond = null, compassOn = false;
+function onHeading(e) {
+  let h = null;
+  if (typeof e.webkitCompassHeading === "number") h = e.webkitCompassHeading;          // iOS: true-ish heading
+  else if (e.absolute && typeof e.alpha === "number") h = (360 - e.alpha) % 360;        // Android absolute
+  if (h == null) return;
+  heading = Math.round(h);
+  $("hdg").textContent = heading + "°";
+  $("needle").setAttribute("transform", `rotate(${-heading} 30 30)`);
+}
+async function startCompass() {
+  if (compassOn) return;
+  try {
+    if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === "function") {
+      const ok = await DeviceOrientationEvent.requestPermission();
+      if (ok !== "granted") { toast("compass not allowed"); return; }
+    }
+    window.addEventListener("deviceorientationabsolute", onHeading, true);
+    window.addEventListener("deviceorientation", onHeading, true);
+    compassOn = true;
+    setTimeout(() => { if (heading == null) toast("no compass on this device - type the azimuth under More"); }, 2500);
+  } catch { toast("no compass here"); }
+}
+$("cmp").addEventListener("click", startCompass);
+function pressAlt(hpa) { return Math.round((1 - Math.pow(hpa / 1013.25, 0.190284)) * 145366.45); }
+function densAlt(hpa, tempF) {
+  const pa = pressAlt(hpa), isaC = 15 - 0.00198 * pa, tC = (tempF - 32) / 1.8;
+  return Math.round(pa + 118.8 * (tC - isaC));
+}
+async function fetchCond() {
+  $("c_note").textContent = "finding you…";
+  const pos = await new Promise(ok => navigator.geolocation
+    ? navigator.geolocation.getCurrentPosition(p => ok(p), () => ok(null), { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 })
+    : ok(null));
+  if (!pos) { $("c_note").textContent = "no location - allow it for this site, or type the numbers in."; return; }
+  const { latitude, longitude, altitude } = pos.coords;
+  $("c_note").textContent = "asking the weather…";
+  try {
+        let j = null;
+    {
+      const u = `https://api.open-meteo.com/v1/forecast?latitude=${latitude.toFixed(4)}&longitude=${longitude.toFixed(4)}&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto`;
+      j = await fetch(u).then(r => r.json());
+    }
+    const c = j.current;
+    cond = { lat: latitude, lon: longitude, elev: Math.round((altitude != null && isFinite(altitude) ? altitude * 3.28084 : j.elevation * 3.28084) || 0),
+             temp: Math.round(c.temperature_2m), rh: Math.round(c.relative_humidity_2m), hpa: c.surface_pressure,
+             wind: Math.round(c.wind_speed_10m), gust: Math.round(c.wind_gusts_10m || 0), wdir: Math.round(c.wind_direction_10m), at: Date.now() };
+    cond.pa = pressAlt(cond.hpa); cond.da = densAlt(cond.hpa, cond.temp);
+    $("c_elev").textContent = cond.elev + " ft"; $("c_temp").textContent = cond.temp + "°F";
+    $("c_press").textContent = (cond.hpa * 0.02953).toFixed(2) + " inHg"; $("c_rh").textContent = cond.rh + "%";
+    $("c_wind").textContent = `${cond.wind}${cond.gust > cond.wind + 3 ? "-" + cond.gust : ""} mph from ${cond.wdir}°`;
+    $("c_da").textContent = cond.da + " ft";
+    $("c_note").innerHTML = `Just now, at your fix. The solver uses station pressure, temperature and humidity directly; density altitude is the one-number summary. Wind is the 10 m reading - expect two-thirds of it at rifle height.`;
+    $("condUse").hidden = false;
+  } catch { $("c_note").textContent = "couldn't reach the weather - type the numbers in."; }
+}
+$("condGo").addEventListener("click", fetchCond);
+$("condUse").addEventListener("click", () => {
+  if (!cond) return;
+  $("b_temp").value = cond.temp; $("b_rh").value = cond.rh; $("b_alt").value = cond.pa;
+  $("b_lat").value = cond.lat.toFixed(2); $("b_wind").value = cond.wind;
+  if (heading != null) {
+    $("b_az").value = heading;
+    // Wind "from" bearing relative to where you're pointing, as a clock face.
+    let rel = ((cond.wdir - heading) % 360 + 360) % 360;
+    let oc = Math.round(rel / 30) % 12; if (oc === 0) oc = 12;
+    $("b_wdir").value = oc;
+  }
+  calc();
+  toast(heading != null ? `filled - wind from ${$("b_wdir").value} o'clock` : "filled - point the compass to set the wind clock and azimuth");
+});
+
+// ---- guns: a real rifle, not a calibre --------------------------------------
+function editGun(g) {
+  const d = g || { name: "", calibre: curCal || "300blk", barrel: "", suppressor: "", suppressor_len: "", twist: "", twist_dir: "right", sight_height: "", zero: "", zero_temp: "", zero_alt: "", note: "" };
+  const cals = Object.entries(DATA.loads || {});
+  openSheet(`<div class="ed">
+    <div><label>Gun</label><input id="g_name" value="${esc(d.name)}" placeholder="13&quot; 300 BLK SBR"></div>
+    <div class="g2">
+      <div><label>calibre</label><select id="g_cal">${cals.map(([k, c]) => `<option value="${k}"${k === d.calibre ? " selected" : ""}>${esc(c.name)}</option>`).join("")}</select></div>
+      <div><label>barrel in</label><input id="g_barrel" inputmode="decimal" value="${d.barrel ?? ""}"></div>
+      <div><label>suppressor (name, or leave blank)</label><input id="g_sup" value="${esc(d.suppressor || "")}" placeholder="none"></div>
+      <div><label>can length in (for notes only)</label><input id="g_supl" inputmode="decimal" value="${d.suppressor_len ?? ""}"></div>
+      <div><label>twist 1:</label><input id="g_twist" inputmode="decimal" value="${d.twist ?? ""}"></div>
+      <div><label>twist direction</label><select id="g_tdir"><option value="right"${d.twist_dir !== "left" ? " selected" : ""}>right</option><option value="left"${d.twist_dir === "left" ? " selected" : ""}>left</option></select></div>
+      <div><label>height over bore in</label><input id="g_sh" inputmode="decimal" value="${d.sight_height ?? ""}"></div>
+      <div><label>zero yd</label><input id="g_zero" inputmode="numeric" value="${d.zero ?? ""}"></div>
+      <div><label>zero-day temp °F</label><input id="g_zt" inputmode="numeric" value="${d.zero_temp ?? ""}"></div>
+      <div><label>zero-day altitude ft</label><input id="g_za" inputmode="numeric" value="${d.zero_alt ?? ""}"></div>
+    </div>
+    <div><label>Note</label><textarea id="g_note" placeholder="Optic, mount, what it likes.">${esc(d.note || "")}</textarea></div>
+    <div class="row">${g ? `<button type="button" class="del" id="g_del">Delete</button>` : ""}<button type="button" class="save" id="g_save">Save gun</button></div>
+  </div>`);
+  $("g_save").addEventListener("click", async () => {
+    const body = { id: g ? g.id : undefined, name: $("g_name").value.trim(), calibre: $("g_cal").value, barrel: $("g_barrel").value,
+      suppressor: $("g_sup").value.trim(), suppressor_len: $("g_supl").value, twist: $("g_twist").value, twist_dir: $("g_tdir").value,
+      sight_height: $("g_sh").value, zero: $("g_zero").value, zero_temp: $("g_zt").value, zero_alt: $("g_za").value, note: $("g_note").value.trim(),
+      mv: g ? g.mv : {}, load: g ? g.load : "" };
+    if (!body.name) return toast("give it a name");
+    const r = await post("/api/range/gun", body);
+    if (!r || !r.ok) return toast("didn't save — " + (r && r.said || "no answer"));
+    document.querySelector(".sheet")?.remove();
+    DATA.guns = r.guns; curGun = r.gun.id; renderGuns(); $("gun").dispatchEvent(new Event("change")); toast(r.said);
+  });
+  if ($("g_del")) $("g_del").addEventListener("click", async () => {
+    if (!confirm(`Delete ${d.name}?`)) return;
+    const r = await post("/api/range/gun", { id: d.id, delete: true });
+    document.querySelector(".sheet")?.remove();
+    if (r) { DATA.guns = r.guns; curGun = null; renderGuns(); }
+  });
+}
+
+async function loadWork(force) {
+  if (!force && Date.now() - workAt < 3000) return;
+  workAt = Date.now();
+  const r = await fetch(`/api/range/work?who=${encodeURIComponent(who)}`).then(r => r.json()).catch(() => null);
+  if (!r || !r.coach) { $("workBody").innerHTML = `<div class="empty">${esc(r && r.text || "couldn't ask her")}</div>`; return; }
+  const c = r.coach;
+  const goalTxt = a => a.goal_set ? `goal <b>${a.goal.secs.toFixed(2)}</b>${a.goal.all_a ? " all A" : " clean"}` : `suggested <b>${a.goal.secs.toFixed(2)}</b> all A <span>· pro ~${(a.goal.pro || 0).toFixed(2)}</span>`;
+  $("workBody").innerHTML = `<div class="verd">${esc(c.verdict)}<small>${esc(c.head)}</small></div>`
+    + (c.drills.length ? c.drills.map(a => `<div class="cd" data-key="${a.key}">
+        <div class="hd"><b>${esc(a.name)}</b>${a.trend ? `<span class="tr ${a.trend[0]}">${a.trend[0] === "up" ? "↑" : a.trend[0] === "down" ? "↓" : "→"}</span>` : ""}<span class="fo ${a.focus}">${a.focus}</span></div>
+        <div class="why">${esc(a.why)}${a.n ? ` · last ${a.n} run${a.n === 1 ? "" : "s"}` : ""}${a.goal_set && a.n ? ` · goal hit ${a.goal_hits}/${a.n}` : ""}</div>
+        <div class="more">
+          ${a.trend ? `<div class="why">trend: ${esc(a.trend[1])}</div>` : ""}
+          <div class="goal">${goalTxt(a)}<button type="button" data-goal="${a.key}">${a.goal_set ? "edit goal" : "set goal"}</button></div>
+          <div class="plan">${esc(a.plan)}</div>
+          ${a.drill_why ? `<div class="dw">${esc(a.drill_why)}${a.skills && a.skills.length ? ` Trains ${esc(a.skills.join(", "))}.` : ""}</div>` : ""}
+          <div class="goal" style="margin-top:8px"><button type="button" data-load="${esc(a.name)}" style="margin-left:0">shoot it now</button></div>
+        </div></div>`).join("")
+      : `<div class="empty">Nothing live on the book yet.</div>`)
+    + ((c.matches || []).length ? `<h4 class="planH" style="margin:14px 4px 6px">Stages</h4>` + c.matches.map(m => `<div class="cd" data-key="${m.key}">
+        <div class="hd"><b>${esc(m.name)}</b><span class="fo ${m.focus}">${m.focus}</span></div>
+        <div class="why">${m.avg_pct != null ? m.avg_pct + "% of points" : "—"} · ${m.best_label} ${m.best != null ? (+m.best).toFixed(2) : "—"} · ${m.misses} miss · ${m.penalties} pen · last ${m.n}</div>
+        <div class="more"><div class="why">${esc(m.why)}</div><div class="plan">${esc(m.plan)}</div></div></div>`).join("") : "")
+    + `<div class="sugg">${["accuracy", "speed", "both"].map(k => c.suggest[k] && c.suggest[k].length ? `<h4>add for ${k}</h4><div class="row">${c.suggest[k].map(n => `<button type="button" data-load="${esc(n)}">${esc(n)}</button>`).join("")}</div>` : "").join("")}
+       ${c.never.length ? `<h4>never shot</h4><div class="row">${c.never.map(n => `<button type="button" data-load="${esc(n)}">${esc(n)}</button>`).join("")}</div>` : ""}</div>`;
+}
+$("workBody").addEventListener("click", e => {
+  const g = e.target.closest("button[data-goal]");
+  if (g) return editGoal(g.dataset.goal);
+  const l = e.target.closest("button[data-load]");
+  if (l) { const d = DATA.drills.find(x => x.name === l.dataset.load); if (d) { drill = d; resetEntry(); showDrill(); goPage(0); toast(`${d.name} loaded`); } return; }
+  const cd = e.target.closest(".cd");
+  if (cd) cd.classList.toggle("open");
+});
+function editGoal(key) {
+  const d = findDrill(key); if (!d) return;
+  fetch(`/api/range/work?who=${encodeURIComponent(who)}`).then(r => r.json()).then(r => {
+    const a = (r.coach.drills || []).find(x => x.key === key) || { goal: { secs: d.par * 0.7, all_a: true, pro: null } };
+    openSheet(`<div class="ed">
+      <div><b style="font-size:17px">${esc(d.name)}</b><div style="color:var(--faint);font-size:12px;font-family:var(--mono)">par ${d.par.toFixed(2)}${a.goal.pro ? " · a pro is around " + a.goal.pro.toFixed(2) : ""}${a.best ? " · your best clean " + a.best.toFixed(2) : ""}</div></div>
+      <div><label>Goal time (s)</label><input id="go_secs" inputmode="decimal" value="${a.goal.secs.toFixed(2)}"></div>
+      <div class="seg2" id="go_aa"><button type="button" data-v="1" aria-pressed="${a.goal.all_a !== false}">EVERY ROUND IN THE A</button><button type="button" data-v="0" aria-pressed="${a.goal.all_a === false}">CLEAN IS ENOUGH</button></div>
+      <p class="hint">The suggestion is all A's at a time between your best and a pro's - never slower than par. Set it where you want it.</p>
+      <div class="row">${a.goal_set ? `<button type="button" class="del" id="go_clear">Clear</button>` : ""}<button type="button" class="save" id="go_save">Set goal</button></div>
+    </div>`);
+    $("go_aa").addEventListener("click", e => { const b = e.target.closest("button"); if (b) [...$("go_aa").children].forEach(x => x.setAttribute("aria-pressed", x === b)); });
+    $("go_save").addEventListener("click", async () => {
+      const secs = parseFloat($("go_secs").value); if (!isFinite(secs) || secs <= 0) return toast("need a time");
+      const all_a = $("go_aa").querySelector('[aria-pressed="true"]').dataset.v === "1";
+      const res = await post("/api/range/goal", { who, drill: key, seconds: secs, all_a });
+      document.querySelector(".sheet")?.remove(); toast(res && res.said || "saved"); await load(true); showDrill(); loadWork(true);
+    });
+    if ($("go_clear")) $("go_clear").addEventListener("click", async () => {
+      await post("/api/range/goal", { who, drill: key, clear: true });
+      document.querySelector(".sheet")?.remove(); await load(true); showDrill(); loadWork(true);
+    });
+  });
+}
+$("sheetBtn").addEventListener("click", async () => {
+  const text = await RangefolioEngine.csv(who);
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/csv" })); a.download = `rangefolio-${who}-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+});
+$("backupBtn").addEventListener("click", async () => {
+  const r = await post("/api/range/export", {});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(r.book)], { type: "application/json" })); a.download = `rangefolio-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+});
+$("restoreIn").addEventListener("change", async e => {
+  const f = e.target.files && e.target.files[0]; if (!f) return;
+  try { const book = JSON.parse(await f.text()); const r = await post("/api/range/import", { book }); toast(r && r.said || "restored"); lastSeen = null; await load(true); }
+  catch { toast("couldn't read that backup"); }
+  e.target.value = "";
+});
+
+// ---- sessions ---------------------------------------------------------------
+// A range day planned ahead: drills with reps, and the ammo it takes.
+// Start one and the log page walks it - each LOG IT moves to the next.
+let prog = null;   // {name, queue:[drillKey...], i}
+function warmItems(w) {
+  // A warm-up as session items: its drill steps, one live rep each. The
+  // dry protocol stays dry - those reps cost no ammo and say so.
+  return (w.steps || []).filter(st => st.key).map(st => ({ drill: st.key, reps: 1, dry: w.which === "dry" || undefined }));
+}
+function renderPlans() {
+  const ps = DATA.programs || [];
+  const W = DATA.warmups || {};
+  const builtin = Object.values(W).map(w => {
+    const items = warmItems(w), a = ammoOf(items);
+    return `<div class="plan builtin" data-w="${w.which}">
+      <h3>${esc(w.name)}<span class="tag">built in</span></h3>
+      <div class="ammo"><b>${a.pistol}</b> pistol · <b>${a.rifle}</b> rifle · ${items.length} drills${w.which === "dry" ? " · dry" : ""}</div>
+      <div class="dl">${esc(w.about)}</div>
+      <div class="acts"><button type="button" class="go2" data-act="start">Start</button>
+        <button type="button" data-act="edit">Add to it</button></div></div>`;
+  }).join("");
+  $("plans").innerHTML = (ps.length ? ps.map(p => `<div class="plan" data-id="${p.id}">
+      <h3>${esc(p.name)}</h3>
+      <div class="ammo"><b>${p.ammo.pistol}</b> pistol · <b>${p.ammo.rifle}</b> rifle · ${p.runs} runs</div>
+      <div class="dl">${p.drills.map(d => `${esc(d.name)}${d.reps > 1 ? " ×" + d.reps : ""}`).join(" · ")}</div>
+      <div class="acts"><button type="button" class="go2" data-act="start">Start</button>
+        <button type="button" data-act="edit">Edit</button><button type="button" data-act="del">Delete</button></div>
+    </div>`).join("")
+    : `<div class="empty">No sessions of your own yet. Start from a warm-up below and add to it, or build one from scratch.</div>`)
+    + `<div class="planH">Warm-ups</div>` + builtin;
+}
+function renderStages() {
+  const sts = DATA.stages || [];
+  const card = st => `<div class="plan${st.builtin ? " builtin" : ""}" data-s="${st.id}">
+      <h3>${esc(st.name)}<span class="fmt">${st.format === "3gun" ? "3-gun" : "USPSA"}</span>${st.builtin ? `<span class="tag">built in</span>` : ""}</h3>
+      <div class="ammo">${Object.entries(st.ammo).map(([g, n]) => `<b>${n}</b> ${g}`).join(" · ")} · ${st.positions.length} positions</div>
+      <div class="dl">${st.positions.map((p, i) => `<b>P${i + 1}</b> ${esc(p.label || "")}: ${p.targets.map(t => `${t.n}×${t.kind}${t.dist ? " @" + t.dist : ""} ×${t.rounds}`).join(", ")}${st.format === "3gun" ? " · " + p.gun : ""}${p.reload ? " · reload" : ""}${p.move ? " · move " + p.move + "yd" : ""}`).join("<br>")}</div>
+      <div class="acts"><button type="button" class="go2" data-act="start">Start</button>
+        <button type="button" data-act="edit">${st.builtin ? "Copy" : "Edit"}</button>${st.builtin ? "" : `<button type="button" data-act="del">Delete</button>`}</div>
+    </div>`;
+  const mine = sts.filter(s => !s.builtin), demo = sts.filter(s => s.builtin);
+  $("stagesList").innerHTML = (mine.map(card).join("") || `<div class="empty">No stages of your own yet. Copy a built-in below and change it, or build one.</div>`)
+    + `<div class="planH">Built in</div>` + demo.map(card).join("");
+}
+$("newStage").addEventListener("click", () => editStage(null));
+$("stagesList").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const st = (DATA.stages || []).find(x => x.id === b.closest(".plan").dataset.s); if (!st) return;
+  if (b.dataset.act === "start") return progStart({ name: st.name, items: [{ drill: "stage:" + st.id, reps: 1 }] });
+  if (b.dataset.act === "edit") return editStage(st.builtin ? { ...st, id: undefined, builtin: false, name: st.name.replace("Default ", "") + " (mine)" } : st);
+  if (b.dataset.act === "del") {
+    if (!confirm(`Delete ${st.name}?`)) return;
+    const r = await post("/api/range/stage", { id: st.id, delete: true });
+    if (r && r.stages) { DATA.stages = r.stages; renderStages(); }
+  }
+});
+$("plans").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const card = b.closest(".plan");
+  if (card.dataset.w) {
+    const w = DATA.warmups[card.dataset.w];
+    const items = warmItems(w);
+    if (b.dataset.act === "start") return progStart({ name: w.name, items });
+    // A copy you own: same drills, your name on it, add what you like.
+    return editPlan({ id: undefined, name: w.name + " +", items });
+  }
+  const id = card.dataset.id;
+  const p = (DATA.programs || []).find(x => x.id === id); if (!p) return;
+  if (b.dataset.act === "start") return progStart(p);
+  if (b.dataset.act === "edit") return editPlan(p);
+  if (b.dataset.act === "del") {
+    if (!confirm(`Delete ${p.name}?`)) return;
+    const r = await post("/api/range/program", { id, delete: true });
+    if (r && r.programs) { DATA.programs = r.programs; renderPlans(); }
+  }
+});
+$("newPlan").addEventListener("click", () => editPlan(null));
+function ammoOf(items) {
+  // Mirror of the server's count, so the editor updates as you build.
+  const SPLIT = { "transition-el-prez": [6, 6], "el-prez-body-head": [6, 6], "rifle-to-pistol": [1, 1], "check-1-5-5": [6, 5] };
+  let pistol = 0, rifle = 0, shotgun = 0;
+  for (const it of items) {
+    if (String(it.drill).startsWith("stage:")) {
+      const st = (DATA.stages || []).find(x => "stage:" + x.id === it.drill); if (!st) continue;
+      pistol += (st.ammo.pistol || 0) * it.reps; rifle += (st.ammo.rifle || 0) * it.reps; shotgun += (st.ammo.shotgun || 0) * it.reps;
+      continue;
+    }
+    const d = DATA.drills.find(x => x.key === it.drill); if (!d || it.dry) continue;
+    if (d.weapon === "pistol") pistol += d.rounds * it.reps;
+    else if (d.weapon === "rifle") rifle += d.rounds * it.reps;
+    else { const [rf, pi] = SPLIT[d.key] || [Math.floor(d.rounds / 2), d.rounds - Math.floor(d.rounds / 2)]; rifle += rf * it.reps; pistol += pi * it.reps; }
+  }
+  return { pistol, rifle, shotgun };
+}
+function editPlan(p) {
+  const items = p ? p.items.map(it => ({ ...it })) : [];
+  if (p && !p.id) p = { ...p };   // a warm-up copy: no id yet, saves as new
+  openSheet(`<div class="ed">
+    <div><label>Session name</label><input id="p_name" value="${esc(p ? p.name : "")}" placeholder="Saturday pistol day"></div>
+    <div><label>Drills, in order</label><div class="items" id="p_items"></div></div>
+    <div class="addRow"><button type="button" class="add" id="p_add">+ drill</button><button type="button" class="add" id="p_addw">+ warm-up</button><button type="button" class="add" id="p_adds">+ stage</button></div>
+    <div class="sum" id="p_sum"></div>
+    <div class="row"><button type="button" class="save" id="p_save">Save session</button></div>
+  </div>`);
+  const draw = () => {
+    $("p_items").innerHTML = items.map((it, i) => {
+      const d = findDrill(it.drill) || { name: it.drill, rounds: "?", weapon: "" };
+      return `<div class="it" data-i="${i}"><div><b>${esc(d.name)}${it.dry ? `<span class="dry">DRY</span>` : ""}</b><small>${d.rounds} rds · ${d.weapon}${d.par ? " · par " + d.par.toFixed(2) : ""}</small></div>
+        <span class="reps"><button type="button" data-d="-1">−</button><span>${it.reps}</span><button type="button" data-d="1">+</button></span>
+        <button type="button" class="rm" aria-label="remove">×</button></div>`;
+    }).join("") || `<div class="empty">Nothing yet.</div>`;
+    const a = ammoOf(items), runs = items.reduce((n, it) => n + it.reps, 0);
+    $("p_sum").innerHTML = items.length ? `Bring <b>${a.pistol}</b> pistol, <b>${a.rifle}</b> rifle${a.shotgun ? `, <b>${a.shotgun}</b> shotgun` : ""} · ${runs} runs` : "";
+  };
+  draw();
+  $("p_items").addEventListener("click", e => {
+    const it = e.target.closest(".it"); if (!it) return;
+    const i = +it.dataset.i;
+    if (e.target.closest(".rm")) items.splice(i, 1);
+    else if (e.target.closest("[data-d]")) items[i].reps = Math.max(1, Math.min(50, items[i].reps + (+e.target.closest("[data-d]").dataset.d)));
+    draw();
+  });
+  $("p_add").addEventListener("click", () => pickDrill(d => { items.push({ drill: d.key, reps: 1 }); draw(); }));
+  $("p_adds").addEventListener("click", () => {
+    const S = DATA.stages || [];
+    if (!S.length) return toast("no stages yet - build one on the Plan tab");
+    const m = document.createElement("div"); m.className = "sheet";
+    m.innerHTML = `<div class="box"><div class="list">${S.map(st => `<button class="item" data-s="${st.id}"><b>${esc(st.name)}</b><small>${Object.entries(st.ammo).map(([g, n]) => n + " " + g).join(" · ")}</small></button>`).join("")}</div><button class="cancel" type="button">Cancel</button></div>`;
+    m.addEventListener("click", e => {
+      if (e.target === m || e.target.closest(".cancel")) return m.remove();
+      const it = e.target.closest(".item"); if (!it) return;
+      items.push({ drill: "stage:" + it.dataset.s, reps: 1 }); m.remove(); draw();
+    });
+    document.body.appendChild(m);
+  });
+  $("p_addw").addEventListener("click", () => {
+    const W = Object.values(DATA.warmups || {});
+    const m = document.createElement("div"); m.className = "sheet";
+    m.innerHTML = `<div class="box"><div class="list">${W.map(w => `<button class="item" data-w="${w.which}"><b>${esc(w.name)}</b><small>${warmItems(w).length} drills${w.which === "dry" ? " · dry" : ""}</small></button>`).join("")}</div><button class="cancel" type="button">Cancel</button></div>`;
+    m.addEventListener("click", e => {
+      if (e.target === m || e.target.closest(".cancel")) return m.remove();
+      const it = e.target.closest(".item"); if (!it) return;
+      items.push(...warmItems(DATA.warmups[it.dataset.w])); m.remove(); draw();
+    });
+    document.body.appendChild(m);
+  });
+  $("p_save").addEventListener("click", async () => {
+    const name = $("p_name").value.trim();
+    if (!name) return toast("give it a name");
+    if (!items.length) return toast("add a drill first");
+    const r = await post("/api/range/program", { id: p && p.id ? p.id : undefined, name, items });
+    if (!r || !r.ok) return toast("didn't save — " + (r && r.said || "no answer"));
+    document.querySelector(".sheet")?.remove();
+    DATA.programs = r.programs; renderPlans(); toast(r.said);
+  });
+}
+// ---- stages: a course of fire -------------------------------------------------
+// Positions in order; each has targets (how many, what kind, how far, rounds
+// each), whether you reload there, and how far you move to the next.
+// 3-gun adds which gun you're holding at each position.
+const KINDS = ["paper", "steel", "popper", "plate", "clay", "slug"];
+function editStage(st) {
+  const d = st ? JSON.parse(JSON.stringify(st)) : { name: "", format: "uspsa", positions: [{ label: "", gun: "pistol", move: 0, reload: false, targets: [{ n: 2, rounds: 2, kind: "paper", dist: 10 }] }] };
+  openSheet(`<div class="ed">
+    <div><label>Stage name</label><input id="s_name" value="${esc(d.name)}" placeholder="Stage 3 - the hallway"></div>
+    <div class="seg2" id="s_fmt"><button type="button" data-f="uspsa" aria-pressed="${d.format !== "3gun"}">USPSA</button><button type="button" data-f="3gun" aria-pressed="${d.format === "3gun"}">3-GUN</button></div>
+    <div id="s_rulesWrap" ${d.format === "3gun" ? "" : "hidden"}><label>Time-plus penalties</label><select id="s_rules" style="width:100%;min-height:44px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;color:var(--ink);font:inherit;padding:0 10px">
+      <option value="mg"${(d.rules || "mg") === "mg" ? " selected" : ""}>USPSA Multigun (FTN 5 · miss 10 · NS 5 · proc 5)</option>
+      <option value="uml"${d.rules === "uml" ? " selected" : ""}>UML Traditional (miss 10/20 by distance)</option>
+      <option value="tx3g"${d.rules === "tx3g" ? " selected" : ""}>Texas 3-Gun (NS 10, max 2)</option></select></div>
+    <div class="items" id="s_pos"></div>
+    <button type="button" class="add" id="s_addp">+ position</button>
+    <div class="sum" id="s_sum"></div>
+    <div class="row">${st && st.id ? `<button type="button" class="del" id="s_del">Delete</button>` : ""}<button type="button" class="save" id="s_save">Save stage</button></div>
+  </div>`);
+  const three = () => d.format === "3gun";
+  const draw = () => {
+    $("s_pos").innerHTML = d.positions.map((p, i) => `<div class="pos" data-i="${i}">
+      <div class="ph"><b>P${i + 1}</b><input data-k="label" value="${esc(p.label || "")}" placeholder="where (start box, port, barricade)">${d.positions.length > 1 ? `<button type="button" class="rm" data-act="rmpos">×</button>` : ""}</div>
+      <div class="tgh"><span>#</span><span>target</span><span>yd</span><span>rds</span><span></span></div>
+      ${p.targets.map((t, j) => `<div class="tg" data-j="${j}">
+        <input inputmode="numeric" data-k="n" value="${t.n}">
+        <select data-k="kind">${KINDS.map(k => `<option value="${k}"${t.kind === k ? " selected" : ""}>${k}</option>`).join("")}</select>
+        <input inputmode="decimal" data-k="dist" value="${t.dist ?? ""}" placeholder="—">
+        <input inputmode="numeric" data-k="rounds" value="${t.rounds}">
+        <button type="button" class="rm" data-act="rmtg">×</button></div>`).join("")}
+      <button type="button" class="add" data-act="addtg" style="min-height:36px">+ target</button>
+      <div class="pf">
+        ${three() ? `<select data-k="gun"><option value="pistol"${p.gun === "pistol" ? " selected" : ""}>pistol</option><option value="rifle"${p.gun === "rifle" ? " selected" : ""}>rifle</option><option value="shotgun"${p.gun === "shotgun" ? " selected" : ""}>shotgun</option></select>` : ""}
+        <button type="button" class="tgl" data-act="reload" aria-pressed="${!!p.reload}">reload here</button>
+        <label style="display:flex;align-items:center;gap:6px;font:600 12px var(--sans);color:var(--dim);text-transform:none;letter-spacing:0">move <input inputmode="decimal" data-k="move" value="${p.move || ""}" placeholder="0"> yd to next</label>
+      </div>
+    </div>`).join("");
+    sum();
+  };
+  const sum = () => {
+    const ammo = {};
+    d.positions.forEach(p => { const g = three() ? (p.gun || "pistol") : "pistol"; ammo[g] = (ammo[g] || 0) + p.targets.reduce((n, t) => n + (+t.n || 0) * (+t.rounds || 0), 0); });
+    const tg = d.positions.reduce((n, p) => n + p.targets.reduce((m, t) => m + (+t.n || 0), 0), 0);
+    const mv = d.positions.reduce((n, p) => n + (+p.move || 0), 0);
+    $("s_sum").innerHTML = Object.entries(ammo).map(([g, n]) => `<b>${n}</b> ${g}`).join(" · ") + ` · ${tg} targets` + (mv ? ` · ${mv} yd of movement` : "");
+  };
+  const read = () => {
+    document.querySelectorAll("#s_pos .pos").forEach(pe => {
+      const p = d.positions[+pe.dataset.i];
+      pe.querySelectorAll(":scope > .ph [data-k], :scope > .pf [data-k]").forEach(el => { p[el.dataset.k] = el.value; });
+      pe.querySelectorAll(".tg").forEach(te => { const t = p.targets[+te.dataset.j]; te.querySelectorAll("[data-k]").forEach(el => { t[el.dataset.k] = el.value; }); });
+    });
+  };
+  draw();
+  $("s_fmt").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; read(); d.format = b.dataset.f; [...$("s_fmt").children].forEach(x => x.setAttribute("aria-pressed", x.dataset.f === d.format)); $("s_rulesWrap").hidden = d.format !== "3gun"; draw(); });
+  // Typing never redraws - a redraw mid-entry steals the keyboard. Only
+  // adding/removing things does.
+  $("s_pos").addEventListener("input", () => { read(); sum(); });
+  $("s_pos").addEventListener("change", () => { read(); sum(); });
+  $("s_pos").addEventListener("click", e => {
+    const b = e.target.closest("button[data-act]"); if (!b) return;
+    read();
+    const pe = b.closest(".pos"), p = d.positions[+pe.dataset.i];
+    if (b.dataset.act === "rmpos") d.positions.splice(+pe.dataset.i, 1);
+    else if (b.dataset.act === "addtg") p.targets.push({ n: 1, rounds: 2, kind: "paper", dist: "" });
+    else if (b.dataset.act === "rmtg") { p.targets.splice(+b.closest(".tg").dataset.j, 1); if (!p.targets.length) p.targets.push({ n: 1, rounds: 2, kind: "paper", dist: "" }); }
+    else if (b.dataset.act === "reload") p.reload = !p.reload;
+    draw();
+  });
+  $("s_addp").addEventListener("click", () => { read(); const last = d.positions[d.positions.length - 1]; d.positions.push({ label: "", gun: last ? last.gun : "pistol", move: 0, reload: false, targets: [{ n: 1, rounds: 2, kind: "paper", dist: "" }] }); draw(); });
+  $("s_save").addEventListener("click", async () => {
+    read();
+    d.name = $("s_name").value.trim(); d.rules = $("s_rules").value;
+    if (!d.name) return toast("give it a name");
+    const r = await post("/api/range/stage", d);
+    if (!r || !r.ok) return toast("didn't save — " + (r && r.said || "no answer"));
+    document.querySelector(".sheet")?.remove();
+    DATA.stages = r.stages; renderStages(); toast(r.said);
+  });
+  if ($("s_del")) $("s_del").addEventListener("click", async () => {
+    if (!confirm(`Delete ${d.name}?`)) return;
+    const r = await post("/api/range/stage", { id: d.id, delete: true });
+    document.querySelector(".sheet")?.remove();
+    if (r && r.stages) { DATA.stages = r.stages; renderStages(); }
+  });
+}
+
+function progStart(p) {
+  const queue = [];
+  p.items.forEach(it => { for (let i = 0; i < it.reps; i++) queue.push(it.dry ? it.drill + "|dry" : it.drill); });
+  prog = { name: p.name, queue, i: 0 };
+  progShow(); goPage(0);
+}
+function progShow() {
+  const el = $("prog");
+  if (!prog || prog.i >= prog.queue.length) { el.classList.remove("show"); return; }
+  const [key, dry] = prog.queue[prog.i].split("|");
+  const d = findDrill(key);
+  if (d && (!drill || drill.key !== d.key)) { drill = d; resetEntry(); showDrill(!!dry); }
+  else if (d && dry && paneNo !== 2) showPane(2);
+  const next = findDrill((prog.queue[prog.i + 1] || "").split("|")[0]);
+  $("progName").textContent = prog.name + (dry ? " · dry rep" : "");
+  $("progStep").textContent = `${prog.i + 1}/${prog.queue.length}${next ? " · next " + next.name : " · last one"}`;
+  el.classList.add("show");
+}
+function progAdvance() {
+  if (!prog) return;
+  prog.i++;
+  if (prog.i >= prog.queue.length) { toast(`${prog.name} — done. Nice.`); prog = null; progShow(); return; }
+  progShow();
+}
+$("progSkip").addEventListener("click", progAdvance);
+$("progStop").addEventListener("click", () => { prog = null; progShow(); toast("session stopped"); });
+
+function openSheet(html) {
+  const s = document.createElement("div");
+  s.className = "sheet";
+  s.innerHTML = `<div class="box">${html}<button class="cancel" type="button">Close</button></div>`;
+  s.addEventListener("click", e => { if (e.target === s || e.target.closest(".cancel")) s.remove(); });
+  document.body.appendChild(s);
+}
+
+async function post(url, body) {
+  try {
+    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" },
+                                 body: JSON.stringify(body) });
+    return await r.json();
+  } catch { return null; }
+}
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function cap(s) { return s ? s[0].toUpperCase() + s.slice(1) : s; }
+let toastT = null;
+function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove("show"), 2600); }
+
+// ---- go -------------------------------------------------------------------
+renderZones(); renderTally(); setTmode("total"); showPane(0); fitPages(); markPage();
+setTimeout(fitPages, 300);
+load(true);
+// Voice-logged runs arrive through her, not this page. Poll lightly so
+// they show up while the phone's still in your hand.
+setInterval(() => { if (document.visibilityState === "visible") load(false); }, 4000);
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") load(true); });
+})();
+</script>
+</body>
+</html>

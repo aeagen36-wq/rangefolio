@@ -1,0 +1,1697 @@
+{
+  "_about": "Factory load catalogue for the Range Day ballistics page. Every number here was read off the maker's page or maker catalogue/ballistics chart (or a retailer reproducing it, marked) on 24 Sep 2026. MV is at the maker's test barrel; the app should let the user override MV from a chrono. bc is the model named in 'model'. 'src' is where the number came from.",
+  "_test_barrels": {
+    "federal_handgun": "4 in (380 Auto 3.75 in; 45 Auto and 10mm 5 in; 5.7x28 4.8 in) — per Federal LE detail pages",
+    "federal_rifle_gold_medal": "24 in",
+    "hornady_rifle": "24 in unless noted; 300 BLK 16 in; 7.62x39 20 in; 350 Legend 20 in (InterLock) / 24 in (FTX) / 16 in (Sub-X)",
+    "sellier_bellot": "16.25 in",
+    "magtech": "16 in",
+    "winchester_remington_federal_xm": "not stated",
+    "speer_gold_dot": "per 2024 Speer catalog: 380 3.75 in; 38 Spl +P SB 2 in vented; 357 Mag 4 in vented; 40 S&W 3.5-4 in; 45 Auto/10mm 5 in",
+    "federal_rifle": "not stated on product pages except where noted (6.5 Grendel Fusion MSR says 24 in); 24 in is the SAAMI convention",
+    "cci_federal_rimfire": "not stated on product pages",
+    "federal_shotshell": "not stated on product pages",
+    "remington_rifle": "not stated on product page",
+    "sellier_bellot_pistol": "6 in (10mm)"
+  },
+  "calibres": {
+    "9mm": {
+      "name": "9mm",
+      "sight_height": 1.75,
+      "zero": 25,
+      "max": 100,
+      "step": 5,
+      "about": "Pistol with a dot, 1.75\" over the bore. Maker numbers are from a 4\" test barrel.",
+      "loads": [
+        {
+          "key": "9mm-115",
+          "gr": 115,
+          "mv": 1180,
+          "bc": 0.12,
+          "model": "G1",
+          "note": "FMJ — Federal American Eagle AE9DP",
+          "card": true,
+          "src": "federalpremium.com 11-AE9DP; BC from Federal LE (le.vistaoutdoor.com id=94)"
+        },
+        {
+          "key": "9mm-124",
+          "gr": 124,
+          "mv": 1150,
+          "bc": 0.15,
+          "model": "G1",
+          "note": "FMJ — Federal American Eagle AE9AP",
+          "card": true,
+          "src": "federalpremium.com 11-AE9AP; Federal LE id=93"
+        },
+        {
+          "key": "9mm-124p",
+          "gr": 124,
+          "mv": 1200,
+          "bc": 0.15,
+          "model": "G1",
+          "note": "+P JHP — Federal HST P9HST3",
+          "tag": "+P",
+          "src": "federalpremium.com 11-P9HST3S; Federal LE id=675"
+        },
+        {
+          "key": "9mm-147",
+          "gr": 147,
+          "mv": 1000,
+          "bc": 0.2,
+          "model": "G1",
+          "note": "FMJ / HST subsonic — Federal AE9FP / P9HST2",
+          "src": "federalpremium.com 11-AE9FP, 11-P9HST2S; Federal LE id=95, 580"
+        }
+      ]
+    },
+    "300blk": {
+      "name": "300 BLK",
+      "sight_height": 2.9,
+      "zero": 50,
+      "max": 300,
+      "step": 25,
+      "about": "Maker numbers are from a 16\" barrel. A 13\" barrel gives up roughly 50-75 fps on supers and 20-30 fps on subs — chrono it.",
+      "loads": [
+        {
+          "key": "300blk-110",
+          "gr": 110,
+          "mv": 2375,
+          "bc": 0.29,
+          "model": "G1",
+          "note": "V-MAX supersonic — Hornady BLACK 80873",
+          "src": "hornady.com 300-blackout-110-gr-v-max-black (MV, 16\"); BC hornadyle.com 110 TAP Urban"
+        },
+        {
+          "key": "300blk-125",
+          "gr": 125,
+          "mv": 2175,
+          "bc": 0.32,
+          "model": "G1",
+          "note": "HP Match supersonic — Hornady American Gunner 80897",
+          "src": "hornady.com 300-blackout-125-gr-hp-american-gunner (16\"); bullet #30192 BC via Midsouth/PSA"
+        },
+        {
+          "key": "300blk-150",
+          "gr": 150,
+          "mv": 1900,
+          "bc": 0.406,
+          "model": "G1",
+          "note": "FMJ supersonic — Federal American Eagle AE300BLK1",
+          "src": "federalpremium.com 11-AE300BLK1"
+        },
+        {
+          "key": "300blk-190",
+          "gr": 190,
+          "mv": 1050,
+          "bc": 0.437,
+          "model": "G1",
+          "note": "Sub-X subsonic — Hornady 80877",
+          "card": true,
+          "src": "hornady.com 300-blackout-190-gr-sub-x-subsonic (16\"); BC hornadyle.com 190 Sub-X TAP"
+        },
+        {
+          "key": "300blk-200",
+          "gr": 200,
+          "mv": 1060,
+          "bc": 0.558,
+          "model": "G1",
+          "bc_g7": 0.242,
+          "note": "FMJ subsonic — Sellier & Bellot SB300BLKSUBA",
+          "card": true,
+          "src": "sellierbellot.us detail/492 (16.25\")"
+        },
+        {
+          "key": "300blk-208",
+          "gr": 208,
+          "mv": 1020,
+          "bc": 0.348,
+          "model": "G7",
+          "bc_g1": 0.69,
+          "note": "ELD Match subsonic — Hornady BLACK 80891 (was A-MAX)",
+          "src": "hornady.com 300-blackout-208-gr-a-max-black (16\"); BC hornady.com/bc"
+        },
+        {
+          "key": "300blk-220",
+          "gr": 220,
+          "mv": 1030,
+          "bc": 0.608,
+          "model": "G1",
+          "note": "220gr Sierra MatchKing subsonic — Gorilla / Barnes / HSM type loads. Remington's 220 sub is a different flat-base bullet at 940 fps.",
+          "card": true,
+          "src": "gorillaammo.com GA300220SMKSUB data sheet; Sierra #2240 banded BC (.608 below 1700 fps) via creedmoorsports.com"
+        }
+      ]
+    },
+    "556": {
+      "name": "5.56",
+      "sight_height": 2.6,
+      "zero": 50,
+      "max": 500,
+      "step": 50,
+      "about": "Maker numbers are from 20-24\" barrels. Knock off ~150-200 fps for a 14.5-16\" gun, or chrono it.",
+      "loads": [
+        {
+          "key": "556-55",
+          "gr": 55,
+          "mv": 3165,
+          "bc": 0.246,
+          "model": "G1",
+          "note": "M193 — Federal XM193 / AE193",
+          "src": "federalpremium.com 11-AE193 (barrel not stated; XM loads are 20\" by convention)"
+        },
+        {
+          "key": "556-62",
+          "gr": 62,
+          "mv": 3020,
+          "bc": 0.304,
+          "model": "G1",
+          "note": "M855 — Federal XM855. BC unverified: Federal page is down; a Federal rep has quoted .349, AE223N 62gr FMJ-BT shows .307.",
+          "src": "MV from targetbarn.com (retailer); BC unverified"
+        },
+        {
+          "key": "556-69",
+          "gr": 69,
+          "mv": 2950,
+          "bc": 0.301,
+          "model": "G1",
+          "bc_g7": 0.165,
+          "note": "69gr SMK — Federal Gold Medal GM223M",
+          "src": "federalpremium.com 11-GM223M (24\")"
+        },
+        {
+          "key": "556-77",
+          "gr": 77,
+          "mv": 2720,
+          "bc": 0.372,
+          "model": "G1",
+          "bc_g7": 0.188,
+          "note": "77gr SMK — Federal Gold Medal GM223M3 (Mk262-type). Sierra's own band at 2720 fps is .362.",
+          "src": "federalpremium.com 11-GM223M3; Federal LE id=147 (24\")"
+        }
+      ]
+    },
+    "308": {
+      "name": ".308",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 800,
+      "step": 100,
+      "about": "Maker numbers are from a 24\" barrel. G7 where the maker publishes it.",
+      "loads": [
+        {
+          "key": "308-149",
+          "gr": 149,
+          "mv": 2790,
+          "bc": 0.408,
+          "model": "G1",
+          "note": "M80 ball — Federal XM80C",
+          "src": "targetsportsusa.com XM80CL (retailer; Federal page is down)"
+        },
+        {
+          "key": "308-150",
+          "gr": 150,
+          "mv": 2820,
+          "bc": 0.313,
+          "model": "G1",
+          "note": "150gr soft point — Federal Power-Shok 308A",
+          "src": "federalpremium.com 11-308A"
+        },
+        {
+          "key": "308-168",
+          "gr": 168,
+          "mv": 2650,
+          "bc": 0.224,
+          "model": "G7",
+          "bc_g1": 0.462,
+          "note": "168gr SMK — Federal Gold Medal GM308M",
+          "src": "federalpremium.com 11-GM308M (24\")"
+        },
+        {
+          "key": "308-175",
+          "gr": 175,
+          "mv": 2600,
+          "bc": 0.25,
+          "model": "G7",
+          "bc_g1": 0.505,
+          "note": "175gr SMK — Federal Gold Medal GM308M2 (M118LR-type)",
+          "src": "federalpremium.com 11-GM308M2 (24\")"
+        },
+        {
+          "key": "308-178",
+          "gr": 178,
+          "mv": 2600,
+          "bc": 0.278,
+          "model": "G7",
+          "bc_g1": 0.552,
+          "note": "178gr ELD-X — Hornady Precision Hunter 80994",
+          "src": "Hornady 2022 Standard Ballistics Chart; hornady.com/bc (24\")"
+        }
+      ]
+    },
+    "65cm": {
+      "name": "6.5 Creedmoor",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 1000,
+      "step": 100,
+      "about": "Maker numbers are from a 24\" barrel. G7 where the maker publishes it.",
+      "loads": [
+        {
+          "key": "65cm-120",
+          "gr": 120,
+          "mv": 2910,
+          "bc": 0.245,
+          "model": "G7",
+          "bc_g1": 0.486,
+          "note": "120gr ELD-M — Hornady 81491",
+          "src": "Hornady 2022 Standard Ballistics Chart; hornady.com/bc"
+        },
+        {
+          "key": "65cm-129",
+          "gr": 129,
+          "mv": 2950,
+          "bc": 0.485,
+          "model": "G1",
+          "note": "129gr SST — Hornady Superformance 81496",
+          "src": "Hornady 2022 Standard Ballistics Chart; bullet #26202 BC via PSA/Prophet River"
+        },
+        {
+          "key": "65cm-140",
+          "gr": 140,
+          "mv": 2710,
+          "bc": 0.326,
+          "model": "G7",
+          "bc_g1": 0.646,
+          "note": "140gr ELD-M — Hornady 81500",
+          "src": "hornady.com 6-5-creedmoor-140-gr-eld-match; hornady.com/bc"
+        },
+        {
+          "key": "65cm-143",
+          "gr": 143,
+          "mv": 2700,
+          "bc": 0.314,
+          "model": "G7",
+          "bc_g1": 0.623,
+          "note": "143gr ELD-X — Hornady Precision Hunter 81499",
+          "src": "Hornady 2022 Standard Ballistics Chart; hornady.com/bc"
+        },
+        {
+          "key": "65cm-147",
+          "gr": 147,
+          "mv": 2695,
+          "bc": 0.351,
+          "model": "G7",
+          "bc_g1": 0.697,
+          "note": "147gr ELD-M — Hornady 81501",
+          "src": "Hornady 2022 Standard Ballistics Chart; hornady.com/bc"
+        }
+      ]
+    },
+    "22lr": {
+      "name": ".22 LR",
+      "sight_height": 1.9,
+      "zero": 50,
+      "max": 200,
+      "step": 25,
+      "about": "Rimfire rifle. Neither Federal nor CCI states the test barrel on the product page; rimfire figures are conventionally from a 24\" rifle barrel. Expect 1000-1050 fps from a pistol with high-velocity loads.",
+      "dia": 0.223,
+      "barrel": 24,
+      "fps_per_in": 10,
+      "twist": "1:16",
+      "loads": [
+        {
+          "key": "22lr-40sv",
+          "gr": 40,
+          "mv": 1070,
+          "bc": 0.12,
+          "model": "G1",
+          "note": "Standard Velocity LRN — CCI 0035",
+          "card": true,
+          "src": "cci-ammunition.com rimfire/cci/standard-velocity/6-35 (barrel not stated; BC model not labelled, G1 assumed)"
+        },
+        {
+          "key": "22lr-40gm",
+          "gr": 40,
+          "mv": 1080,
+          "bc": 0.138,
+          "model": "G1",
+          "note": "Gold Medal Target LRN — Federal 711B",
+          "src": "federalpremium.com rimfire 11-711B (barrel not stated; BC model not labelled)"
+        },
+        {
+          "key": "22lr-40am",
+          "gr": 40,
+          "mv": 1200,
+          "bc": 0.138,
+          "model": "G1",
+          "note": "AutoMatch LRN — Federal Champion AM22",
+          "src": "federalpremium.com rimfire 11-AM22 (barrel not stated)"
+        },
+        {
+          "key": "22lr-40mm",
+          "gr": 40,
+          "mv": 1235,
+          "bc": 0.13,
+          "model": "G1",
+          "note": "Mini-Mag CPRN — CCI 0030",
+          "card": true,
+          "src": "cci-ammunition.com rimfire/cci/target-mini-mag/6-30 (barrel not stated)"
+        },
+        {
+          "key": "22lr-36hp",
+          "gr": 36,
+          "mv": 1260,
+          "bc": 0.125,
+          "model": "G1",
+          "note": "Mini-Mag CPHP — CCI 0031",
+          "src": "cci-ammunition.com rimfire/cci/mini-mag/6-31 (barrel not stated)"
+        },
+        {
+          "key": "22lr-32st",
+          "gr": 32,
+          "mv": 1640,
+          "bc": 0.084,
+          "model": "G1",
+          "note": "Stinger CPHP hyper-velocity — CCI 0050",
+          "src": "cci-ammunition.com rimfire/cci/stinger/6-50 (barrel not stated)"
+        }
+      ]
+    },
+    "380": {
+      "name": ".380 ACP",
+      "sight_height": 1.75,
+      "zero": 25,
+      "max": 100,
+      "step": 5,
+      "about": "Pocket pistol with a dot, 1.75\" over the bore. Federal and Speer numbers are from a 3.75\" test barrel.",
+      "dia": 0.355,
+      "barrel": 3.75,
+      "fps_per_in": 30,
+      "twist": "1:16",
+      "loads": [
+        {
+          "key": "380-95",
+          "gr": 95,
+          "mv": 980,
+          "bc": 0.1,
+          "model": "G1",
+          "note": "FMJ — Federal American Eagle AE380AP",
+          "card": true,
+          "src": "federalpremium.com 11-AE380AP (MV, 3.75\"); BC le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=79 (Federal rounds handgun BCs to 2 places, model not labelled)"
+        },
+        {
+          "key": "380-90hs",
+          "gr": 90,
+          "mv": 1000,
+          "bc": 0.1,
+          "model": "G1",
+          "note": "Hydra-Shok JHP — Federal P380HS1G",
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=558 (3.75\")"
+        },
+        {
+          "key": "380-90gd",
+          "gr": 90,
+          "mv": 1040,
+          "bc": 0.101,
+          "model": "G1",
+          "note": "Gold Dot GDHP — Speer 23606GD",
+          "card": true,
+          "src": "speer.com 19-23606GD (MV); BC speer.com SP157 2024 catalog p.9 handgun ballistics (3.75\")"
+        }
+      ]
+    },
+    "38spl": {
+      "name": ".38 Special",
+      "sight_height": 1.75,
+      "zero": 25,
+      "max": 100,
+      "step": 5,
+      "about": "Revolver. Federal numbers are from a 4\" vented test barrel; Speer's 135gr +P short-barrel load is from a 2\" vented barrel.",
+      "dia": 0.357,
+      "barrel": 4,
+      "fps_per_in": 30,
+      "twist": "1:18.75",
+      "loads": [
+        {
+          "key": "38-130",
+          "gr": 130,
+          "mv": 890,
+          "bc": 0.17,
+          "model": "G1",
+          "note": "FMJ — Federal American Eagle AE38K",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=81 (4\"); MV also federalpremium.com ae38k"
+        },
+        {
+          "key": "38-158lrn",
+          "gr": 158,
+          "mv": 770,
+          "bc": 0.2,
+          "model": "G1",
+          "note": "LRN — Federal American Eagle AE38B",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=80 (4\")"
+        },
+        {
+          "key": "38-129p",
+          "gr": 129,
+          "mv": 950,
+          "bc": 0.17,
+          "model": "G1",
+          "note": "+P Hydra-Shok JHP — Federal P38HS1G",
+          "tag": "+P",
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=559 (4\" vented)"
+        },
+        {
+          "key": "38-158p",
+          "gr": 158,
+          "mv": 900,
+          "bc": 0.2,
+          "model": "G1",
+          "note": "+P JHP — Federal Classic 38G",
+          "tag": "+P",
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=544 (4\" vented)"
+        },
+        {
+          "key": "38-135p",
+          "gr": 135,
+          "mv": 860,
+          "bc": 0.141,
+          "model": "G1",
+          "note": "+P Gold Dot Short Barrel GDHP — Speer 23921GD",
+          "tag": "+P",
+          "src": "speer.com SP157 2024 catalog p.9 handgun ballistics (2\" vented barrel)"
+        }
+      ]
+    },
+    "357": {
+      "name": ".357 Magnum",
+      "sight_height": 1.75,
+      "zero": 25,
+      "max": 150,
+      "step": 10,
+      "about": "Revolver. Federal and Speer numbers are from a 4\" vented test barrel; a 6\" gun runs 100-150 fps faster, a 2\" snub 200+ fps slower.",
+      "dia": 0.357,
+      "barrel": 4,
+      "fps_per_in": 50,
+      "twist": "1:18.75",
+      "loads": [
+        {
+          "key": "357-125gd",
+          "gr": 125,
+          "mv": 1450,
+          "bc": 0.14,
+          "model": "G1",
+          "note": "Gold Dot GDHP — Speer 23920GD",
+          "src": "speer.com 19-23920GD (MV, 4\" vented); BC speer.com SP157 2024 catalog p.9 handgun ballistics"
+        },
+        {
+          "key": "357-158jsp",
+          "gr": 158,
+          "mv": 1240,
+          "bc": 0.2,
+          "model": "G1",
+          "note": "JSP — Federal American Eagle AE357A",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=77 (4\")"
+        },
+        {
+          "key": "357-158gd",
+          "gr": 158,
+          "mv": 1235,
+          "bc": 0.164,
+          "model": "G1",
+          "note": "Gold Dot GDHP — Speer 23960GD",
+          "src": "speer.com 19-23960GD (MV, 4\" vented); BC speer.com SP157 2024 catalog p.9 handgun ballistics"
+        }
+      ]
+    },
+    "40sw": {
+      "name": ".40 S&W",
+      "sight_height": 1.75,
+      "zero": 25,
+      "max": 100,
+      "step": 5,
+      "about": "Pistol with a dot. Federal numbers are from a 4\" test barrel; Speer's 180gr Gold Dot is from 3.5\".",
+      "dia": 0.4,
+      "barrel": 4,
+      "fps_per_in": 30,
+      "twist": "1:16",
+      "loads": [
+        {
+          "key": "40-165",
+          "gr": 165,
+          "mv": 1130,
+          "bc": 0.15,
+          "model": "G1",
+          "note": "FMJ — Federal American Eagle AE40R3",
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=86 (4\")"
+        },
+        {
+          "key": "40-180",
+          "gr": 180,
+          "mv": 1000,
+          "bc": 0.17,
+          "model": "G1",
+          "note": "FMJ — Federal American Eagle AE40R1",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=84 (4\")"
+        },
+        {
+          "key": "40-165hst",
+          "gr": 165,
+          "mv": 1130,
+          "bc": 0.15,
+          "model": "G1",
+          "note": "HST JHP — Federal P40HST3",
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=568 (4\")"
+        },
+        {
+          "key": "40-180hst",
+          "gr": 180,
+          "mv": 1010,
+          "bc": 0.17,
+          "model": "G1",
+          "note": "HST JHP — Federal P40HST1",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=566 (4\")"
+        },
+        {
+          "key": "40-180gd",
+          "gr": 180,
+          "mv": 950,
+          "bc": 0.148,
+          "model": "G1",
+          "note": "Gold Dot GDHP — Speer 23974GD",
+          "src": "speer.com SP157 2024 catalog p.9 handgun ballistics (3.5\" barrel)"
+        }
+      ]
+    },
+    "45acp": {
+      "name": ".45 ACP",
+      "sight_height": 1.75,
+      "zero": 25,
+      "max": 100,
+      "step": 5,
+      "about": "Pistol with a dot. Federal and Speer numbers are from a 5\" test barrel; a 4\" commander loses ~30-50 fps.",
+      "dia": 0.451,
+      "barrel": 5,
+      "fps_per_in": 25,
+      "twist": "1:16",
+      "loads": [
+        {
+          "key": "45-230",
+          "gr": 230,
+          "mv": 890,
+          "bc": 0.19,
+          "model": "G1",
+          "note": "FMJ — Federal American Eagle AE45A",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=88 (5\"); MV also federalpremium.com 11-AE45A"
+        },
+        {
+          "key": "45-230hst",
+          "gr": 230,
+          "mv": 890,
+          "bc": 0.19,
+          "model": "G1",
+          "note": "HST JHP — Federal P45HST2",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=574 (5\")"
+        },
+        {
+          "key": "45-230hstp",
+          "gr": 230,
+          "mv": 950,
+          "bc": 0.19,
+          "model": "G1",
+          "note": "+P HST JHP — Federal P45HST1",
+          "tag": "+P",
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=573 (5\")"
+        },
+        {
+          "key": "45-185p",
+          "gr": 185,
+          "mv": 1130,
+          "bc": 0.15,
+          "model": "G1",
+          "note": "+P Hydra-Shok JHP — Federal P45HS2G",
+          "tag": "+P",
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=572 (5\")"
+        },
+        {
+          "key": "45-230gd",
+          "gr": 230,
+          "mv": 890,
+          "bc": 0.143,
+          "model": "G1",
+          "note": "Gold Dot GDHP — Speer 23966GD",
+          "src": "speer.com SP157 2024 catalog p.9 handgun ballistics (5\")"
+        }
+      ]
+    },
+    "10mm": {
+      "name": "10mm Auto",
+      "sight_height": 1.75,
+      "zero": 25,
+      "max": 150,
+      "step": 10,
+      "about": "Pistol with a dot. Federal and Speer numbers are from a 5\" test barrel; Sellier & Bellot's is from 6\". Full-power loads run 1200+ fps.",
+      "dia": 0.4,
+      "barrel": 5,
+      "fps_per_in": 35,
+      "twist": "1:16",
+      "loads": [
+        {
+          "key": "10mm-180",
+          "gr": 180,
+          "mv": 1030,
+          "bc": 0.17,
+          "model": "G1",
+          "note": "FMJ (mid-power) — Federal American Eagle AE10A",
+          "card": true,
+          "src": "le.vistaoutdoor.com/ammunition/federal/handgun/details.aspx?id=67 (5\")"
+        },
+        {
+          "key": "10mm-180sb",
+          "gr": 180,
+          "mv": 1165,
+          "bc": 0.191,
+          "model": "G1",
+          "note": "FMJ — Sellier & Bellot SB10A",
+          "src": "sellierbellot.us pistol detail/485 (6\" barrel; 355 m/s)"
+        },
+        {
+          "key": "10mm-200gd",
+          "gr": 200,
+          "mv": 1100,
+          "bc": 0.151,
+          "model": "G1",
+          "note": "Gold Dot GDHP — Speer 54000GD",
+          "card": true,
+          "src": "speer.com 19-54000GD (MV, 5\"); BC from the same bullet's component page speer.com 19-400200GDB (catalog table gives no BC for this load)"
+        }
+      ]
+    },
+    "223": {
+      "name": ".223 Rem",
+      "sight_height": 2.6,
+      "zero": 50,
+      "max": 500,
+      "step": 50,
+      "about": "Commercial .223 (not 5.56 NATO — see the 5.56 set for XM193/XM855). Maker numbers are from a 24\" barrel; knock off ~150-200 fps for a 16\" gun.",
+      "dia": 0.224,
+      "barrel": 24,
+      "fps_per_in": 30,
+      "twist": "1:8",
+      "loads": [
+        {
+          "key": "223-55fmj",
+          "gr": 55,
+          "mv": 3240,
+          "bc": 0.269,
+          "model": "G1",
+          "note": "55gr FMJ-BT — Federal American Eagle AE223",
+          "card": true,
+          "src": "federalpremium.com 11-AE223 (barrel not stated)"
+        },
+        {
+          "key": "223-55vmax",
+          "gr": 55,
+          "mv": 3240,
+          "bc": 0.255,
+          "model": "G1",
+          "note": "55gr V-MAX — Hornady Varmint Express 8327",
+          "src": "hornady.com 223-rem-55-gr-v-max (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "223-62fmj",
+          "gr": 62,
+          "mv": 3020,
+          "bc": 0.307,
+          "model": "G1",
+          "note": "62gr FMJ-BT — Federal American Eagle AE223N",
+          "src": "federalpremium.com 11-AE223N (barrel not stated)"
+        },
+        {
+          "key": "223-62fus",
+          "gr": 62,
+          "mv": 3000,
+          "bc": 0.31,
+          "model": "G1",
+          "note": "62gr Fusion bonded SP — Federal F223FS1",
+          "src": "federalpremium.com 11-F223FS1 (barrel not stated)"
+        },
+        {
+          "key": "223-75bthp",
+          "gr": 75,
+          "mv": 2790,
+          "bc": 0.395,
+          "model": "G1",
+          "note": "75gr BTHP Match — Hornady 8026",
+          "src": "hornady.com 223-rem-75-gr-bthp-match (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "223-75tmj",
+          "gr": 75,
+          "mv": 2775,
+          "bc": 0.4,
+          "model": "G1",
+          "note": "75gr TMJ — Federal American Eagle AE223T75",
+          "src": "federalpremium.com 11-AE223T75 (barrel not stated)"
+        }
+      ]
+    },
+    "762x39": {
+      "name": "7.62x39",
+      "sight_height": 2.6,
+      "zero": 50,
+      "max": 400,
+      "step": 50,
+      "about": "AK / AR-47. Hornady numbers are from a 20\" barrel; Federal doesn't state the barrel. A 16\" gun gives up roughly 50-100 fps.",
+      "dia": 0.31,
+      "barrel": 20,
+      "fps_per_in": 25,
+      "twist": "1:9.5",
+      "loads": [
+        {
+          "key": "762x39-123sst",
+          "gr": 123,
+          "mv": 2350,
+          "bc": 0.26,
+          "model": "G1",
+          "note": "123gr SST — Hornady BLACK 80784",
+          "card": true,
+          "src": "hornady.com 7.62x39-123-gr-sst-black (MV, 20\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "762x39-123hp",
+          "gr": 123,
+          "mv": 2350,
+          "bc": 0.272,
+          "model": "G1",
+          "note": "123gr HP Match — Hornady American Gunner 80786",
+          "src": "hornady.com 7.62-x-39mm-123-gr-hp-match-american-gunner (MV, 20\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "762x39-123sp",
+          "gr": 123,
+          "mv": 2350,
+          "bc": 0.274,
+          "model": "G1",
+          "note": "123gr JSP — Federal Power-Shok 76239B",
+          "src": "federalpremium.com 11-76239B (barrel not stated)"
+        },
+        {
+          "key": "762x39-124fmj",
+          "gr": 124,
+          "mv": 2350,
+          "bc": 0.298,
+          "model": "G1",
+          "note": "124gr FMJ — Federal American Eagle A76239A",
+          "card": true,
+          "src": "federalpremium.com 11-A76239A (barrel not stated)"
+        }
+      ]
+    },
+    "65grendel": {
+      "name": "6.5 Grendel",
+      "sight_height": 2.6,
+      "zero": 100,
+      "max": 800,
+      "step": 100,
+      "about": "AR-15 cartridge. Maker numbers are from a 24\" barrel (Federal says so explicitly); an 18\" AR loses ~150 fps, a 16\" ~200 fps.",
+      "dia": 0.264,
+      "barrel": 24,
+      "fps_per_in": 25,
+      "twist": "1:8",
+      "loads": [
+        {
+          "key": "65g-120otm",
+          "gr": 120,
+          "mv": 2610,
+          "bc": 0.421,
+          "model": "G1",
+          "note": "120gr OTM — Federal American Eagle AE65GDL1",
+          "src": "federalpremium.com 11-AE65GDL1 (barrel not stated)"
+        },
+        {
+          "key": "65g-120fus",
+          "gr": 120,
+          "mv": 2600,
+          "bc": 0.34,
+          "model": "G1",
+          "note": "120gr Fusion MSR bonded SP — Federal F65GDLMSR1",
+          "src": "federalpremium.com 11-F65GDLMSR1 (24\" stated on page)"
+        },
+        {
+          "key": "65g-123sst",
+          "gr": 123,
+          "mv": 2580,
+          "bc": 0.506,
+          "model": "G1",
+          "note": "123gr SST — Hornady Custom 8152",
+          "card": true,
+          "src": "hornady.com 6-5-grendel-123-gr-sst (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "65g-123eldm",
+          "gr": 123,
+          "mv": 2580,
+          "bc": 0.255,
+          "model": "G7",
+          "bc_g1": 0.506,
+          "note": "123gr ELD Match — Hornady BLACK 81528",
+          "card": true,
+          "src": "hornady.com 6.5-grendel-123-gr-eld-match-black (MV, 24\"); BC hornady.com/bc (Mach 2.25 value)"
+        }
+      ]
+    },
+    "6arc": {
+      "name": "6mm ARC",
+      "sight_height": 2.6,
+      "zero": 100,
+      "max": 1000,
+      "step": 100,
+      "about": "AR-15 cartridge. Hornady numbers are from a 24\" barrel; Hornady's own 18\" AR data runs ~100 fps slower, a 16\" ~150 fps.",
+      "dia": 0.243,
+      "barrel": 24,
+      "fps_per_in": 25,
+      "twist": "1:7.5",
+      "loads": [
+        {
+          "key": "6arc-103eldx",
+          "gr": 103,
+          "mv": 2800,
+          "bc": 0.258,
+          "model": "G7",
+          "bc_g1": 0.512,
+          "note": "103gr ELD-X — Hornady Precision Hunter 81602",
+          "src": "hornady.com 6mm-arc-103-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "6arc-105bthp",
+          "gr": 105,
+          "mv": 2750,
+          "bc": 0.53,
+          "model": "G1",
+          "note": "105gr BTHP — Hornady BLACK 81604",
+          "card": true,
+          "src": "hornady.com 6mm-arc-105-gr-bthp-hornady-black (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "6arc-108eldm",
+          "gr": 108,
+          "mv": 2750,
+          "bc": 0.27,
+          "model": "G7",
+          "bc_g1": 0.536,
+          "note": "108gr ELD Match — Hornady Match 81608",
+          "card": true,
+          "src": "hornady.com 6mm-arc-108-gr-eld-match (MV, 24\"); BC hornady.com/bc"
+        }
+      ]
+    },
+    "224valk": {
+      "name": ".224 Valkyrie",
+      "sight_height": 2.6,
+      "zero": 100,
+      "max": 1000,
+      "step": 100,
+      "about": "AR-15 cartridge. Hornady numbers are from a 24\" barrel; Federal doesn't state the barrel (their Valkyrie load data uses 24\"). Most guns are 18-22\".",
+      "dia": 0.224,
+      "barrel": 24,
+      "fps_per_in": 25,
+      "twist": "1:7",
+      "loads": [
+        {
+          "key": "224v-60vmax",
+          "gr": 60,
+          "mv": 3300,
+          "bc": 0.265,
+          "model": "G1",
+          "note": "60gr V-MAX — Hornady Varmint Express 81531",
+          "src": "MV and BC from Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf) (1006 m/s; 24\")"
+        },
+        {
+          "key": "224v-75fmj",
+          "gr": 75,
+          "mv": 3000,
+          "bc": 0.4,
+          "model": "G1",
+          "note": "75gr FMJ — Federal American Eagle AE224VLK1",
+          "card": true,
+          "src": "federalpremium.com 11-AE224VLK1 (barrel not stated)"
+        },
+        {
+          "key": "224v-75bthp",
+          "gr": 75,
+          "mv": 3000,
+          "bc": 0.395,
+          "model": "G1",
+          "note": "75gr BTHP — Hornady BLACK 81532",
+          "src": "hornady.com 224-valkyrie-75-gr-bthp-wc-hornady-black (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "224v-88eldm",
+          "gr": 88,
+          "mv": 2675,
+          "bc": 0.274,
+          "model": "G7",
+          "bc_g1": 0.545,
+          "note": "88gr ELD Match — Hornady 81534",
+          "card": true,
+          "src": "hornady.com 224-valkyrie-88-gr-eld-match (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "224v-90fus",
+          "gr": 90,
+          "mv": 2700,
+          "bc": 0.424,
+          "model": "G1",
+          "note": "90gr Fusion MSR bonded SP — Federal F224VLKMSR1",
+          "src": "federalpremium.com 11-F224VLKMSR1 (barrel not stated)"
+        },
+        {
+          "key": "224v-90smk",
+          "gr": 90,
+          "mv": 2700,
+          "bc": 0.274,
+          "model": "G7",
+          "bc_g1": 0.563,
+          "note": "90gr Sierra MatchKing — Federal Gold Medal GM224VLK1",
+          "card": true,
+          "src": "federalpremium.com 11-GM224VLK1 (barrel not stated)"
+        }
+      ]
+    },
+    "243": {
+      "name": ".243 Win",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 800,
+      "step": 100,
+      "about": "Bolt rifle. Maker numbers are from a 24\" barrel (Hornady states it; Federal doesn't). A 22\" gun loses ~50 fps.",
+      "dia": 0.243,
+      "barrel": 24,
+      "fps_per_in": 30,
+      "twist": "1:10",
+      "loads": [
+        {
+          "key": "243-87vmax",
+          "gr": 87,
+          "mv": 3240,
+          "bc": 0.4,
+          "model": "G1",
+          "note": "87gr V-MAX — Hornady Custom 80468",
+          "src": "hornady.com 243-win-87-gr-v-max-custom (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "243-95sst",
+          "gr": 95,
+          "mv": 3185,
+          "bc": 0.355,
+          "model": "G1",
+          "note": "95gr SST — Hornady Superformance 80463",
+          "card": true,
+          "src": "hornady.com 243-win-95-gr-sst-superformance (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "243-95fus",
+          "gr": 95,
+          "mv": 2980,
+          "bc": 0.376,
+          "model": "G1",
+          "note": "95gr Fusion bonded SP — Federal F243FS1",
+          "src": "federalpremium.com 11-F243FS1 (barrel not stated)"
+        },
+        {
+          "key": "243-100il",
+          "gr": 100,
+          "mv": 2960,
+          "bc": 0.405,
+          "model": "G1",
+          "note": "100gr InterLock BTSP — Hornady American Whitetail 8047",
+          "src": "hornady.com 243-win-100-gr-interlock-btsp-american-whitetail (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "243-100ps",
+          "gr": 100,
+          "mv": 2960,
+          "bc": 0.355,
+          "model": "G1",
+          "note": "100gr JSP — Federal Power-Shok 243B",
+          "card": true,
+          "src": "federalpremium.com 11-243B (barrel not stated)"
+        }
+      ]
+    },
+    "270": {
+      "name": ".270 Win",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 800,
+      "step": 100,
+      "about": "Bolt rifle. Maker numbers are from a 24\" barrel (Hornady states it; Federal doesn't). A 22\" gun loses ~50 fps.",
+      "dia": 0.277,
+      "barrel": 24,
+      "fps_per_in": 30,
+      "twist": "1:10",
+      "loads": [
+        {
+          "key": "270-130il",
+          "gr": 130,
+          "mv": 3060,
+          "bc": 0.462,
+          "model": "G1",
+          "note": "130gr InterLock SP — Hornady American Whitetail 8053",
+          "src": "hornady.com 270-win-130-gr-interlock-sp-american-whitetail (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "270-130ps",
+          "gr": 130,
+          "mv": 3060,
+          "bc": 0.372,
+          "model": "G1",
+          "note": "130gr JSP — Federal Power-Shok 270A",
+          "card": true,
+          "src": "federalpremium.com 11-270A (barrel not stated)"
+        },
+        {
+          "key": "270-130sst",
+          "gr": 130,
+          "mv": 3200,
+          "bc": 0.46,
+          "model": "G1",
+          "note": "130gr SST — Hornady Superformance 80543",
+          "card": true,
+          "src": "hornady.com 270-win-130-gr-sst-superformance (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "270-145eldx",
+          "gr": 145,
+          "mv": 2970,
+          "bc": 0.27,
+          "model": "G7",
+          "bc_g1": 0.536,
+          "note": "145gr ELD-X — Hornady Precision Hunter 80536",
+          "src": "hornady.com 270-win-145-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "270-150ps",
+          "gr": 150,
+          "mv": 2830,
+          "bc": 0.261,
+          "model": "G1",
+          "note": "150gr JSP round-nose profile — Federal Power-Shok 270B",
+          "src": "federalpremium.com 11-270B (barrel not stated)"
+        },
+        {
+          "key": "270-150fus",
+          "gr": 150,
+          "mv": 2850,
+          "bc": 0.471,
+          "model": "G1",
+          "note": "150gr Fusion bonded SP — Federal F270FS2",
+          "src": "federalpremium.com 11-F270FS2 (barrel not stated)"
+        }
+      ]
+    },
+    "7mm08": {
+      "name": "7mm-08 Rem",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 800,
+      "step": 100,
+      "about": "Bolt rifle. Maker numbers are from a 24\" barrel (Hornady states it; Federal doesn't). Many 7mm-08s are 20-22\" — expect 50-120 fps less.",
+      "dia": 0.284,
+      "barrel": 24,
+      "fps_per_in": 25,
+      "twist": "1:9.5",
+      "loads": [
+        {
+          "key": "708-139il",
+          "gr": 139,
+          "mv": 2840,
+          "bc": 0.392,
+          "model": "G1",
+          "note": "139gr InterLock SP — Hornady American Whitetail 8057",
+          "src": "hornady.com 7mm-08-rem-139-gr-interlock-sp-american-whitetail (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "708-139sst",
+          "gr": 139,
+          "mv": 2950,
+          "bc": 0.486,
+          "model": "G1",
+          "note": "139gr SST — Hornady Superformance 80573",
+          "card": true,
+          "src": "hornady.com 7mm-08-rem-139-gr-sst-superformance (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "708-140fus",
+          "gr": 140,
+          "mv": 2850,
+          "bc": 0.39,
+          "model": "G1",
+          "note": "140gr Fusion bonded SP — Federal F708FS1",
+          "card": true,
+          "src": "federalpremium.com 11-F708FS1 (barrel not stated)"
+        },
+        {
+          "key": "708-150eldx",
+          "gr": 150,
+          "mv": 2770,
+          "bc": 0.289,
+          "model": "G7",
+          "bc_g1": 0.574,
+          "note": "150gr ELD-X — Hornady Precision Hunter 85578",
+          "src": "hornady.com 7mm-08-rem-150-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        }
+      ]
+    },
+    "7rm": {
+      "name": "7mm Rem Mag",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 1000,
+      "step": 100,
+      "about": "Bolt rifle. Maker numbers are from a 24\" barrel (Hornady states it; Federal doesn't). 26\" magnums gain ~50-70 fps.",
+      "dia": 0.284,
+      "barrel": 24,
+      "fps_per_in": 35,
+      "twist": "1:9.5",
+      "loads": [
+        {
+          "key": "7rm-139sst",
+          "gr": 139,
+          "mv": 3240,
+          "bc": 0.486,
+          "model": "G1",
+          "note": "139gr SST — Hornady Superformance 80593",
+          "src": "hornady.com 7mm-rem-mag-139-gr-sst-superformance (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "7rm-154il",
+          "gr": 154,
+          "mv": 3035,
+          "bc": 0.433,
+          "model": "G1",
+          "note": "154gr InterLock SP — Hornady American Whitetail 80590",
+          "src": "hornady.com 7mm-rem-mag-154-gr-interlock-sp-american-whitetail (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "7rm-154sst",
+          "gr": 154,
+          "mv": 3100,
+          "bc": 0.525,
+          "model": "G1",
+          "note": "154gr SST — Hornady Superformance 8061",
+          "card": true,
+          "src": "hornady.com 7mm-rem-mag-154-gr-sst-superformance (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "7rm-162eldx",
+          "gr": 162,
+          "mv": 2975,
+          "bc": 0.318,
+          "model": "G7",
+          "bc_g1": 0.631,
+          "note": "162gr ELD-X — Hornady Precision Hunter 80636",
+          "card": true,
+          "src": "hornady.com 7mm-rem-mag-162-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "7rm-175fus",
+          "gr": 175,
+          "mv": 2760,
+          "bc": 0.537,
+          "model": "G1",
+          "note": "175gr Fusion bonded SP — Federal F7RFS2",
+          "src": "federalpremium.com 11-F7RFS2 (barrel not stated)"
+        }
+      ]
+    },
+    "3030": {
+      "name": ".30-30 Win",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 400,
+      "step": 50,
+      "about": "Lever gun. Maker numbers are from a 24\" barrel (Hornady states it; Federal doesn't). A 20\" carbine loses ~80-100 fps.",
+      "dia": 0.308,
+      "barrel": 24,
+      "fps_per_in": 20,
+      "twist": "1:12",
+      "loads": [
+        {
+          "key": "3030-140mf",
+          "gr": 140,
+          "mv": 2465,
+          "bc": 0.295,
+          "model": "G1",
+          "note": "140gr MonoFlex — Hornady LEVERevolution 82731",
+          "src": "hornady.com 30-30-win-140-gr-monoflex-leverevolution (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "3030-150rn",
+          "gr": 150,
+          "mv": 2390,
+          "bc": 0.186,
+          "model": "G1",
+          "note": "150gr InterLock RN — Hornady American Whitetail 80801",
+          "src": "hornady.com 30-30-win-150-gr-rn-interlock-american-whitetail (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "3030-150ps",
+          "gr": 150,
+          "mv": 2390,
+          "bc": 0.218,
+          "model": "G1",
+          "note": "150gr JSP flat-nose — Federal Power-Shok 3030A",
+          "card": true,
+          "src": "federalpremium.com 11-3030A (barrel not stated)"
+        },
+        {
+          "key": "3030-160ftx",
+          "gr": 160,
+          "mv": 2400,
+          "bc": 0.33,
+          "model": "G1",
+          "note": "160gr FTX — Hornady LEVERevolution 82730",
+          "card": true,
+          "src": "hornady.com 30-30-win-160-gr-ftx-leverevolution (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "3030-170ps",
+          "gr": 170,
+          "mv": 2200,
+          "bc": 0.254,
+          "model": "G1",
+          "note": "170gr JSP flat-nose — Federal Power-Shok 3030B",
+          "src": "federalpremium.com 11-3030B (barrel not stated)"
+        }
+      ]
+    },
+    "3006": {
+      "name": ".30-06",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 800,
+      "step": 100,
+      "about": "Bolt rifle. Maker numbers are from a 24\" barrel (Hornady states it; Federal doesn't). A 22\" gun loses ~50 fps.",
+      "dia": 0.308,
+      "barrel": 24,
+      "fps_per_in": 30,
+      "twist": "1:10",
+      "loads": [
+        {
+          "key": "3006-150il",
+          "gr": 150,
+          "mv": 2910,
+          "bc": 0.338,
+          "model": "G1",
+          "note": "150gr InterLock SP — Hornady American Whitetail 8108",
+          "card": true,
+          "src": "hornady.com 30-06-springfield-150-gr-interlock-sp-american-whitetail (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "3006-165sst",
+          "gr": 165,
+          "mv": 2960,
+          "bc": 0.447,
+          "model": "G1",
+          "note": "165gr SST — Hornady Superformance 81153",
+          "src": "hornady.com 30-06-springfield-165-gr-sst-superformance (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "3006-168eldm",
+          "gr": 168,
+          "mv": 2710,
+          "bc": 0.263,
+          "model": "G7",
+          "bc_g1": 0.523,
+          "note": "168gr ELD Match — Hornady Match 81171",
+          "src": "MV from Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf) (826 m/s, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "3006-178eldx",
+          "gr": 178,
+          "mv": 2750,
+          "bc": 0.278,
+          "model": "G7",
+          "bc_g1": 0.552,
+          "note": "178gr ELD-X — Hornady Precision Hunter 81174",
+          "card": true,
+          "src": "hornady.com 30-06-springfield-178-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "3006-180ps",
+          "gr": 180,
+          "mv": 2700,
+          "bc": 0.385,
+          "model": "G1",
+          "note": "180gr JSP — Federal Power-Shok 3006B",
+          "src": "federalpremium.com 11-3006B (barrel not stated)"
+        }
+      ]
+    },
+    "300wm": {
+      "name": ".300 Win Mag",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 1000,
+      "step": 100,
+      "about": "Bolt rifle. Maker numbers are from a 24\" barrel (Hornady states it; Federal doesn't). 26\" magnums gain ~50-70 fps.",
+      "dia": 0.308,
+      "barrel": 24,
+      "fps_per_in": 35,
+      "twist": "1:10",
+      "loads": [
+        {
+          "key": "300wm-180il",
+          "gr": 180,
+          "mv": 2960,
+          "bc": 0.425,
+          "model": "G1",
+          "note": "180gr InterLock SP — Hornady American Whitetail 82044",
+          "src": "hornady.com 300-win-mag-180-gr-interlock-sp-american-whitetail (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "300wm-180ps",
+          "gr": 180,
+          "mv": 2960,
+          "bc": 0.439,
+          "model": "G1",
+          "note": "180gr JSP — Federal Power-Shok 300WBS",
+          "card": true,
+          "src": "federalpremium.com 11-300WBS (barrel not stated)"
+        },
+        {
+          "key": "300wm-180sst",
+          "gr": 180,
+          "mv": 3130,
+          "bc": 0.48,
+          "model": "G1",
+          "note": "180gr SST — Hornady Superformance 82193",
+          "src": "hornady.com 300-win-mag-180-gr-sst-superformance (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "300wm-190smk",
+          "gr": 190,
+          "mv": 2900,
+          "bc": 0.275,
+          "model": "G7",
+          "bc_g1": 0.533,
+          "note": "190gr Sierra MatchKing — Federal Gold Medal GM300WM",
+          "src": "federalpremium.com 11-GM300WM (barrel not stated)"
+        },
+        {
+          "key": "300wm-200eldx",
+          "gr": 200,
+          "mv": 2860,
+          "bc": 0.301,
+          "model": "G7",
+          "bc_g1": 0.597,
+          "note": "200gr ELD-X — Hornady Precision Hunter 82002",
+          "card": true,
+          "src": "hornady.com 300-win-mag-200-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        }
+      ]
+    },
+    "300prc": {
+      "name": ".300 PRC",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 1200,
+      "step": 100,
+      "about": "Bolt rifle. Hornady numbers are from a 24\" barrel; most 300 PRC rifles are 24-26\".",
+      "dia": 0.308,
+      "barrel": 24,
+      "fps_per_in": 30,
+      "twist": "1:8.5",
+      "loads": [
+        {
+          "key": "300prc-190cx",
+          "gr": 190,
+          "mv": 3000,
+          "bc": 0.575,
+          "model": "G1",
+          "note": "190gr CX — Hornady Outfitter 82164",
+          "src": "hornady.com 300-prc-190-gr.-cx-outfitter (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "300prc-212eldx",
+          "gr": 212,
+          "mv": 2860,
+          "bc": 0.334,
+          "model": "G7",
+          "bc_g1": 0.663,
+          "note": "212gr ELD-X — Hornady Precision Hunter 82166",
+          "card": true,
+          "src": "hornady.com 300-prc-212-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "300prc-225eldm",
+          "gr": 225,
+          "mv": 2810,
+          "bc": 0.391,
+          "model": "G7",
+          "bc_g1": 0.777,
+          "note": "225gr ELD Match — Hornady Match 82162",
+          "card": true,
+          "src": "hornady.com 300-prc-225-gr-eld-match (MV, 24\"); BC hornady.com/bc"
+        }
+      ]
+    },
+    "338lm": {
+      "name": ".338 Lapua",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 1500,
+      "step": 100,
+      "about": "Bolt rifle. Hornady numbers are from a 24\" barrel; Federal doesn't state the barrel. Most 338 LM rifles are 26-27\" and gain ~50-80 fps.",
+      "dia": 0.338,
+      "barrel": 24,
+      "fps_per_in": 30,
+      "twist": "1:10",
+      "loads": [
+        {
+          "key": "338lm-250bthp",
+          "gr": 250,
+          "mv": 2860,
+          "bc": 0.67,
+          "model": "G1",
+          "note": "250gr BTHP — Hornady Match 8230",
+          "src": "hornady.com 338-lapua-250-gr-bthp-match (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "338lm-270eldx",
+          "gr": 270,
+          "mv": 2800,
+          "bc": 0.381,
+          "model": "G7",
+          "bc_g1": 0.757,
+          "note": "270gr ELD-X — Hornady Precision Hunter 82313",
+          "src": "hornady.com 338-lapua-magnum-270-gr-eld-x-precision-hunter (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "338lm-285eldm",
+          "gr": 285,
+          "mv": 2745,
+          "bc": 0.417,
+          "model": "G7",
+          "bc_g1": 0.829,
+          "note": "285gr ELD Match — Hornady Match 82300",
+          "card": true,
+          "src": "hornady.com 338-lapua-285-gr-eld-match (MV, 24\"); BC hornady.com/bc"
+        },
+        {
+          "key": "338lm-300smk",
+          "gr": 300,
+          "mv": 2580,
+          "bc": 0.387,
+          "model": "G7",
+          "bc_g1": 0.768,
+          "note": "300gr Sierra MatchKing — Federal Gold Medal GM338LM2",
+          "card": true,
+          "src": "federalpremium.com 11-GM338LM2 (barrel not stated)"
+        }
+      ]
+    },
+    "350legend": {
+      "name": ".350 Legend",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 300,
+      "step": 25,
+      "about": "Straight-wall deer cartridge. Hornady test barrels vary by load (20\" InterLock, 24\" FTX, 16\" Sub-X); Federal doesn't state the barrel. Typical rifles are 16-20\".",
+      "dia": 0.357,
+      "barrel": 20,
+      "fps_per_in": 25,
+      "twist": "1:16",
+      "loads": [
+        {
+          "key": "350-160fus",
+          "gr": 160,
+          "mv": 2300,
+          "bc": 0.259,
+          "model": "G1",
+          "note": "160gr Fusion bonded SP — Federal F350LFS1",
+          "card": true,
+          "src": "federalpremium.com 11-F350LFS1 (barrel not stated)"
+        },
+        {
+          "key": "350-165ftx",
+          "gr": 165,
+          "mv": 2200,
+          "bc": 0.25,
+          "model": "G1",
+          "note": "165gr FTX — Hornady American Whitetail 81197",
+          "src": "hornady.com 350-legend-165-gr-ftx-tipped (MV, 24\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "350-170il",
+          "gr": 170,
+          "mv": 2200,
+          "bc": 0.215,
+          "model": "G1",
+          "note": "170gr InterLock SP — Hornady American Whitetail 81196",
+          "card": true,
+          "src": "hornady.com 350-legend-170-gr-interlock-american-whitetail (MV, 20\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        },
+        {
+          "key": "350-180ps",
+          "gr": 180,
+          "mv": 2100,
+          "bc": 0.245,
+          "model": "G1",
+          "note": "180gr SP — Federal Power-Shok 350LA",
+          "src": "federalpremium.com 11-350LA (barrel not stated)"
+        },
+        {
+          "key": "350-250subx",
+          "gr": 250,
+          "mv": 1050,
+          "bc": 0.265,
+          "model": "G1",
+          "note": "250gr Sub-X subsonic — Hornady 81198",
+          "src": "hornady.com 350-legend-250-gr.-sub-x-subsonic (MV, 16\"); BC Hornady 2022 ballistics chart (static.hornady.media 1410998059-2022-Metric-Ballistics-Chart.pdf)"
+        }
+      ]
+    },
+    "4570": {
+      "name": ".45-70 Govt",
+      "sight_height": 1.9,
+      "zero": 100,
+      "max": 300,
+      "step": 25,
+      "about": "Lever gun. Federal and Remington don't state the barrel (24\" is the industry convention). Modern 300gr loads are Marlin/Henry-safe; nothing here is a hot Ruger-only load.",
+      "dia": 0.458,
+      "barrel": 24,
+      "fps_per_in": 25,
+      "twist": "1:20",
+      "loads": [
+        {
+          "key": "4570-300ps",
+          "gr": 300,
+          "mv": 1850,
+          "bc": 0.289,
+          "model": "G1",
+          "note": "300gr JSP — Federal Power-Shok 4570AS",
+          "card": true,
+          "src": "federalpremium.com 11-4570AS (barrel not stated)"
+        },
+        {
+          "key": "4570-300fus",
+          "gr": 300,
+          "mv": 1850,
+          "bc": 0.29,
+          "model": "G1",
+          "note": "300gr Fusion bonded SP — Federal F4570FS1",
+          "src": "federalpremium.com 11-F4570FS1 (barrel not stated)"
+        },
+        {
+          "key": "4570-300hd",
+          "gr": 300,
+          "mv": 1850,
+          "bc": 0.29,
+          "model": "G1",
+          "note": "300gr bonded SP — Federal HammerDown LG45701",
+          "src": "federalpremium.com 11-LG45701 (barrel not stated)"
+        },
+        {
+          "key": "4570-405cl",
+          "gr": 405,
+          "mv": 1330,
+          "bc": 0.281,
+          "model": "G1",
+          "note": "405gr Core-Lokt SP (trapdoor-level) — Remington 29473",
+          "card": true,
+          "src": "remington.com rifle/core-lokt/29-29473 (barrel not stated)"
+        }
+      ]
+    },
+    "12ga": {
+      "name": "12 ga slug",
+      "sight_height": 1.9,
+      "zero": 50,
+      "max": 200,
+      "step": 25,
+      "about": "Slug gun. Federal doesn't state the test barrel on shotshell pages. Foster slugs are for smoothbores; the sabot loads need a rifled barrel.",
+      "dia": 0.729,
+      "barrel": 24,
+      "fps_per_in": 10,
+      "twist": "1:35",
+      "loads": [
+        {
+          "key": "12ga-1oz-foster",
+          "gr": 438,
+          "mv": 1610,
+          "bc": 0.11,
+          "model": "G1",
+          "note": "1 oz Foster rifled slug, 2-3/4\" — Federal Power-Shok F127RS",
+          "card": true,
+          "src": "federalpremium.com products/shotshell/powershok/powershok-rifled-slug/f127-rs (barrel not stated)"
+        },
+        {
+          "key": "12ga-1.25oz-foster",
+          "gr": 547,
+          "mv": 1600,
+          "bc": 0.108,
+          "model": "G1",
+          "note": "1-1/4 oz Foster rifled slug, 3\" — Federal Power-Shok F131RS",
+          "src": "federalpremium.com 11-F131+RS (barrel not stated)"
+        },
+        {
+          "key": "12ga-1oz-sabot",
+          "gr": 438,
+          "mv": 1500,
+          "bc": 0.19,
+          "model": "G1",
+          "note": "1 oz lead sabot slug, 2-3/4\" (rifled barrel) — Federal Power-Shok F127SS2",
+          "src": "federalpremium.com 11-F127+SS2 (barrel not stated)"
+        },
+        {
+          "key": "12ga-300-sabot",
+          "gr": 300,
+          "mv": 1900,
+          "bc": 0.187,
+          "model": "G1",
+          "note": "300gr copper sabot slug, 2-3/4\" (rifled barrel) — Federal Freight Train P152FT (same projectile/data as Trophy Copper P152TC)",
+          "card": true,
+          "src": "federalpremium.com 11-P152+FT; also 11-P152+TC (barrel not stated)"
+        },
+        {
+          "key": "12ga-300-sabot3",
+          "gr": 300,
+          "mv": 2000,
+          "bc": 0.187,
+          "model": "G1",
+          "note": "300gr copper sabot slug, 3\" (rifled barrel) — Federal Trophy Copper P151TC (discontinued)",
+          "src": "federalpremium.com 11-P151+TC (barrel not stated; page marked discontinued)"
+        }
+      ]
+    }
+  }
+}
