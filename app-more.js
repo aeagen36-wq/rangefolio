@@ -49,9 +49,11 @@ document.addEventListener("click", e => {
 const HANDS = [["right", "Right-handed"], ["left", "Left-handed"]], EYES = [["right", "Right eye"], ["left", "Left eye"], ["cross", "Cross-dominant"]];
 const DISC = [["defensive", "Defensive / carry"], ["uspsa", "USPSA"], ["3gun", "3-Gun"], ["idpa", "IDPA"], ["precision", "Precision rifle"], ["hunting", "Hunting"], ["new", "New to it"]];
 const LEVELS = [["new", "New"], ["intermediate", "Intermediate"], ["advanced", "Advanced"], ["competitor", "Competitor"]];
-const chips = (id, opts, cur) => `<div class="chips" id="${id}">${opts.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${cur === v}">${l}</button>`).join("")}</div>`;
+const chips = (id, opts, cur) => { const set = new Set(String(cur || "").split(",").map(x => x.trim())); return `<div class="chips" id="${id}">${opts.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${set.has(v)}">${l}</button>`).join("")}</div>`; };
 const chipVal = id => (($(id) || { querySelector: () => null }).querySelector('[aria-pressed="true"]') || {}).dataset?.v || "";
-function chipWire(id) { const el = $(id); if (!el) return; el.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; const on = b.getAttribute("aria-pressed") === "true"; [...el.children].forEach(x => x.setAttribute("aria-pressed", false)); if (!on) b.setAttribute("aria-pressed", true); }); }
+const chipVals = id => [...($(id) || { querySelectorAll: () => [] }).querySelectorAll('[aria-pressed="true"]')].map(b => b.dataset.v);
+// single choice by default; multi = true lets several stay lit
+function chipWire(id, multi) { const el = $(id); if (!el) return; el.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; const on = b.getAttribute("aria-pressed") === "true"; if (!multi) [...el.children].forEach(x => x.setAttribute("aria-pressed", false)); b.setAttribute("aria-pressed", !on); }); }
 const coachOn = () => lget("range.coach", "0") === "1";
 
 async function openSettings() {
@@ -62,7 +64,7 @@ async function openSettings() {
     <div><label>Name (shown to a coach)</label><input id="pf_name" value="${esc(pr.name || "")}" placeholder="${who === "me" ? "your name" : cap(who)}"></div>
     <div><label>Handedness · sets which way the group read goes</label>${chips("pf_hand", HANDS, pr.hand || "")}</div>
     <div><label>Dominant eye</label>${chips("pf_eye", EYES, pr.eye || "")}</div>
-    <div><label>What you mostly shoot</label>${chips("pf_disc", DISC, pr.discipline || "")}</div>
+    <div><label>What you shoot · pick all that apply</label>${chips("pf_disc", DISC, pr.discipline || "")}</div>
     <div><label>Where you are</label>${chips("pf_level", LEVELS, pr.level || "")}</div>
     <div class="row"><button type="button" class="save" id="pf_save">Save profile</button></div>
 
@@ -80,9 +82,9 @@ async function openSettings() {
     <div class="build" style="padding:6px">Rangefolio · build ${BUILD.n}${BUILD.date ? " · " + esc(BUILD.date) : ""} · test</div>
     ${BUILD.show_changes ? `<div id="set_changes" class="build" style="padding:0 6px"></div>` : ""}
   </div>`);
-  ["pf_hand", "pf_eye", "pf_disc", "pf_level"].forEach(chipWire);
+  ["pf_hand", "pf_eye", "pf_level"].forEach(id => chipWire(id)); chipWire("pf_disc", true);
   $("pf_save").addEventListener("click", async () => {
-    const r = await post("/api/range/profile", { who, profile: { name: $("pf_name").value.trim(), hand: chipVal("pf_hand"), eye: chipVal("pf_eye"), discipline: chipVal("pf_disc"), level: chipVal("pf_level"), role: coachOn() ? "coach" : "shooter" } });
+    const r = await post("/api/range/profile", { who, profile: { name: $("pf_name").value.trim(), hand: chipVal("pf_hand"), eye: chipVal("pf_eye"), discipline: chipVals("pf_disc"), level: chipVal("pf_level"), role: coachOn() ? "coach" : "shooter" } });
     if (!r || !r.ok) return toast("didn't save");
     document.querySelector(".sheet")?.remove(); toast("profile saved"); await RF.load(); RF.loadWork();
   });

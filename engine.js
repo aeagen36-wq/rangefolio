@@ -520,7 +520,12 @@ async function api(path, body) {
     const b = body || {}; const sh = book.shooters[who] ||= { first_seen: nowIso(), profile: {} }; sh.profile ||= {};
     const pr = b.profile || {};
     const pick = (k, allowed, max) => { if (!(k in pr)) return; let v = pr[k]; if (allowed) v = allowed.includes(String(v)) ? String(v) : ""; else v = String(v || "").slice(0, max || 60); if (v) sh.profile[k] = v; else delete sh.profile[k]; };
-    pick("name"); pick("hand", ["right", "left"]); pick("eye", ["right", "left", "cross"]); pick("discipline", ["uspsa", "3gun", "idpa", "defensive", "precision", "hunting", "new"]);
+    pick("name"); pick("hand", ["right", "left"]); pick("eye", ["right", "left", "cross"]);
+    if ("discipline" in pr) {   // one or several, kept as a comma list
+      const ok = ["uspsa", "3gun", "idpa", "defensive", "precision", "hunting", "new"];
+      const list = (Array.isArray(pr.discipline) ? pr.discipline : String(pr.discipline || "").split(",")).map(x => String(x).trim()).filter(x => ok.includes(x));
+      if (list.length) sh.profile.discipline = list.join(","); else delete sh.profile.discipline;
+    }
     pick("level", ["new", "intermediate", "advanced", "competitor"]); pick("email", null, 80); pick("note", null, 200); pick("role", ["shooter", "coach"]);
     sh.profile.updated = nowIso(); await saveBook(book);
     return { ok: true, said: "Profile saved.", profile: sh.profile };
