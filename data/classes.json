@@ -1,0 +1,1840 @@
+{
+ "about": "Class templates a coach starts from. Structure and drill selections modelled on public course outlines; no provider's copyrighted material. `drills` are the class-specific drills added to the coach's drill list when a template is used.",
+ "coming_later": [
+  "Precision Rifle / long range fundamentals",
+  "Low light / flashlight handgun",
+  "Vehicle tactics",
+  "Home defence handgun",
+  "Intermediate and advanced carbine",
+  "Shotgun 2: competition and 3-gun",
+  "Pistol-mounted optics transition",
+  "Instructor development",
+  "Women's introductory pistol",
+  "Youth / new-shooter safety",
+  "3-Gun match prep",
+  "IDPA match prep",
+  "Steel Challenge",
+  "Medical for shooters (stop the bleed)",
+  "Force-on-force intro",
+  "Hunting rifle sight-in and ethics"
+ ],
+ "drills": [
+  {
+   "key": "cls-admin",
+   "name": "Load, unload, show clear",
+   "weapon": "pistol",
+   "rounds": 1,
+   "par": 0,
+   "dist": null,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Dry. Load a magazine, chamber, unload, lock the slide back, show clear to the line. Repeat until it is boring. No live rounds on the line for this block.",
+   "skills": [
+    "safety",
+    "manipulation"
+   ],
+   "why": "Every other skill sits on top of this one."
+  },
+  {
+   "key": "cls-dry-press",
+   "name": "Dry press, 5 reps",
+   "weapon": "pistol",
+   "rounds": 5,
+   "par": 0,
+   "dist": 5,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Dry, on a target. Sights on the A, press until the click without the sights moving. Reset, repeat. The wall drill (muzzle an inch from a blank wall) is the same thing with nothing to look at but the sights.",
+   "skills": [
+    "trigger press",
+    "sight alignment"
+   ],
+   "why": "Trigger control is learned dry and confirmed live."
+  },
+  {
+   "key": "cls-slow-5-5",
+   "name": "Slow fire, 5 rounds, 5 yd",
+   "weapon": "pistol",
+   "rounds": 5,
+   "par": 0,
+   "dist": 5,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "No timer. Five rounds, one at a time, from the ready. Call each shot before looking. Group, not speed.",
+   "skills": [
+    "sight alignment",
+    "trigger press",
+    "follow-through"
+   ],
+   "why": "Builds the picture of what a clean press looks like on paper."
+  },
+  {
+   "key": "cls-slow-10-7",
+   "name": "Slow fire, 10 rounds, 7 yd",
+   "weapon": "pistol",
+   "rounds": 10,
+   "par": 0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "No timer. Ten rounds from the ready, sights and press, reset between shots. Paste and read the group with the coach.",
+   "skills": [
+    "sight alignment",
+    "trigger press"
+   ],
+   "why": "Ten rounds is enough to read a group."
+  },
+  {
+   "key": "cls-slow-10-25",
+   "name": "Slow fire, 10 rounds, 25 yd",
+   "weapon": "pistol",
+   "rounds": 10,
+   "par": 0,
+   "dist": 25,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "No timer, from the ready or a rest. Ten rounds on a B-8. Everything the shooter does wrong shows up at 25.",
+   "skills": [
+    "sight alignment",
+    "trigger press",
+    "follow-through"
+   ],
+   "why": "Distance is the honest teacher."
+  },
+  {
+   "key": "cls-ball-dummy",
+   "name": "Ball and dummy",
+   "weapon": "pistol",
+   "rounds": 5,
+   "par": 0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "A partner loads the magazine with live rounds and dummies mixed. Shooter fires five. On a dummy the sights either stay still (good) or dip (anticipation). Say what you saw.",
+   "skills": [
+    "trigger press",
+    "recoil anticipation"
+   ],
+   "why": "The only drill that shows a flinch to the shooter who has one."
+  },
+  {
+   "key": "cls-pairs-7",
+   "name": "Controlled pairs, 7 yd",
+   "weapon": "pistol",
+   "rounds": 2,
+   "par": 2.0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "From the ready. Two rounds, two sight pictures. Sights back on target before the second press. Time it once the pairs are clean.",
+   "skills": [
+    "recoil control",
+    "sight tracking"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-pairs-15",
+   "name": "Controlled pairs, 15 yd",
+   "weapon": "pistol",
+   "rounds": 2,
+   "par": 3.0,
+   "dist": 15,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "From the ready. Two rounds, both in the A. Slower than 7 - the sights have further to settle.",
+   "skills": [
+    "recoil control",
+    "sight alignment"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-one-hand-strong",
+   "name": "Strong hand only, 5 rounds",
+   "weapon": "pistol",
+   "rounds": 5,
+   "par": 0,
+   "dist": 5,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "From the ready, strong hand only. Cant the gun slightly, lock the wrist, press straight back. Five rounds, no timer.",
+   "skills": [
+    "one-handed shooting",
+    "grip"
+   ],
+   "why": "Defensive shootings often happen with one hand busy."
+  },
+  {
+   "key": "cls-one-hand-support",
+   "name": "Support hand only, 5 rounds",
+   "weapon": "pistol",
+   "rounds": 5,
+   "par": 0,
+   "dist": 5,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Transfer to the support hand at the ready, five rounds, no timer. Expect the group to open up; that's the point.",
+   "skills": [
+    "one-handed shooting",
+    "grip"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-malf",
+   "name": "Malfunction clearance (tap, rack)",
+   "weapon": "pistol",
+   "rounds": 2,
+   "par": 4.0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "A dummy round set up by a partner. On the click: tap the magazine, rack, back on target, two rounds. Then the double-feed: lock back, strip, rack rack rack, reload.",
+   "skills": [
+    "malfunction clearance",
+    "manipulation"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-move-shoot",
+   "name": "Shoot on the move, 7 to 3 yd",
+   "weapon": "pistol",
+   "rounds": 6,
+   "par": 6.0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Start at 7. On the buzzer, walk toward the target firing six rounds, all in the A, finish by 3 yd. Heel-toe, knees bent, gun steady. Never shoot faster than you can keep them in the A.",
+   "skills": [
+    "movement",
+    "recoil control"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-turn-draw",
+   "name": "Turn and draw, 7 yd",
+   "weapon": "pistol",
+   "rounds": 2,
+   "par": 3.0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Start facing up-range, hands relaxed. On the buzzer turn, draw, two rounds. Look before the gun comes up. Muzzle stays downrange through the turn.",
+   "skills": [
+    "draw",
+    "turning"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-qual-50",
+   "name": "50-round handgun qualification (3 / 7 / 15 yd)",
+   "weapon": "pistol",
+   "rounds": 50,
+   "par": 0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Modelled on the common state carry-permit courses of fire; adjust to your state. 3 yd: 20 rounds - five 1-shot strings in 2 s, one 2-shot string in 3 s, one 5-shot string in 10 s, then repeat for the second ten. 7 yd: 20 rounds - one 5-shot string in 10 s, one 2-shot in 4 s, one 3-shot in 6 s, then a 1-shot in 3 s, 2 in 4 s, 5 in 10 s, 2 in 4 s. 15 yd: 10 rounds - 2 in 6 s, 3 in 9 s, 5 in 15 s. Score on the silhouette; set your pass mark (70 percent is typical).",
+   "skills": [
+    "fundamentals under time",
+    "reloads"
+   ],
+   "why": "A pass here is the licence standard in many states. It is a floor, not a ceiling."
+  },
+  {
+   "key": "cls-dot-torture",
+   "name": "Dot Torture (50 rounds, 3 yd)",
+   "weapon": "pistol",
+   "rounds": 50,
+   "par": 0,
+   "dist": 3,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Ten 2-inch dots, 3 yd, 50 rounds, untimed: dot 1 five slow fire; dot 2 five draw-and-one; dots 3 and 4 draw, one on each, four times; dot 5 five strong hand; dots 6 and 7 draw, two and two, four times; dot 8 five support hand; dots 9 and 10 draw, one each, reload, one each, three times. Score is dots hit; 50 is the goal. Move back a yard when you clean it.",
+   "skills": [
+    "trigger press",
+    "draw",
+    "transitions",
+    "reloads",
+    "one-handed shooting"
+   ],
+   "why": "A whole pistol curriculum on one sheet of paper."
+  },
+  {
+   "key": "cls-transitions-3",
+   "name": "Three-target transitions, 7 yd",
+   "weapon": "pistol",
+   "rounds": 6,
+   "par": 4.0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Three targets a yard apart, 7 yd. Draw, two on each. Eyes first, then the gun; the sights should arrive on the next target already aligned.",
+   "skills": [
+    "transitions",
+    "draw"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-reload-two",
+   "name": "Reload between targets",
+   "weapon": "pistol",
+   "rounds": 4,
+   "par": 6.0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": true,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Two targets. Draw, two on the first, slide-lock reload, two on the second. Watch the magazine well, not the ground.",
+   "skills": [
+    "reloads",
+    "draw"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-standards-strong-weak",
+   "name": "Standards: freestyle, strong, support",
+   "weapon": "pistol",
+   "rounds": 18,
+   "par": 15.0,
+   "dist": 10,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "One target at 10 yd, three strings of six: freestyle from the draw, strong hand only from the ready, support hand only from the ready. Score all 18. Classifier-style: the hit factor is what matters.",
+   "skills": [
+    "one-handed shooting",
+    "draw",
+    "accuracy at speed"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-barricade-pistol",
+   "name": "Barricade, both sides, 10 yd",
+   "weapon": "pistol",
+   "rounds": 8,
+   "par": 10.0,
+   "dist": 10,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Two targets behind a barricade at 10 yd. Two on each from the right side, move, two on each from the left. Lean, don't step out; feet stay behind cover.",
+   "skills": [
+    "use of cover",
+    "positions"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-25-pairs",
+   "name": "Pairs at 25 yd",
+   "weapon": "pistol",
+   "rounds": 4,
+   "par": 8.0,
+   "dist": 25,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Two targets, 25 yd, from the ready. Two on each, all in the C or better. The gun does not need to move fast here - the trigger does not either.",
+   "skills": [
+    "accuracy at distance"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-admin",
+   "name": "Rifle: load, unload, show clear, condition checks",
+   "weapon": "rifle",
+   "rounds": 1,
+   "par": 0,
+   "dist": null,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Dry. Magazine in, charge, safe on; then mag out, lock back, clear, show. Safety on every time the sights leave the target. Sling on, sling off, muzzle discipline through all of it.",
+   "skills": [
+    "safety",
+    "manipulation"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-zero-50",
+   "name": "Zero confirmation, 50 yd, 5-round groups",
+   "weapon": "rifle",
+   "rounds": 5,
+   "par": 0,
+   "dist": 50,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Prone or off a bag. Five rounds, one aiming point. Measure the group centre from the aiming point, adjust, confirm with a second group. Log the zero and the day's temperature under Ballistics.",
+   "skills": [
+    "zeroing",
+    "prone"
+   ],
+   "why": "An unzeroed rifle wastes the rest of the day."
+  },
+  {
+   "key": "cls-rifle-slow-100",
+   "name": "Slow fire prone, 100 yd, 10 rounds",
+   "weapon": "rifle",
+   "rounds": 10,
+   "par": 0,
+   "dist": 100,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Prone, sling or bipod. Ten rounds, natural point of aim, breathe, press at the bottom of the exhale. Read the group: vertical is breathing, horizontal is trigger or NPA.",
+   "skills": [
+    "prone",
+    "breathing",
+    "trigger press"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-positions",
+   "name": "Standing, kneeling, prone, 25 yd",
+   "weapon": "rifle",
+   "rounds": 9,
+   "par": 45.0,
+   "dist": 25,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Three rounds from each: standing, kneeling, prone. Same aiming point. Compare the groups; the shooter learns what each position gives up.",
+   "skills": [
+    "positions"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-ready-up",
+   "name": "Ready-up, 25 yd",
+   "weapon": "rifle",
+   "rounds": 1,
+   "par": 1.5,
+   "dist": 25,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Low ready, safety on. Buzzer: up, safety off, one round in the A. Safety back on before coming down.",
+   "skills": [
+    "presentation",
+    "safety manipulation"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-pairs-50",
+   "name": "Controlled pairs, 50 yd",
+   "weapon": "rifle",
+   "rounds": 2,
+   "par": 2.5,
+   "dist": 50,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Standing, from the ready. Two rounds in the A. Let the sights settle before the second press.",
+   "skills": [
+    "recoil control",
+    "sight tracking"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-transitions",
+   "name": "Three-target transitions, 25 yd",
+   "weapon": "rifle",
+   "rounds": 6,
+   "par": 4.0,
+   "dist": 25,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Three targets, 25 yd, from the ready. Two on each. Drive with the eyes, the muzzle follows.",
+   "skills": [
+    "transitions"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-move",
+   "name": "Move to cover and engage, 50 yd",
+   "weapon": "rifle",
+   "rounds": 4,
+   "par": 12.0,
+   "dist": 50,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Start in the open. Buzzer: move 5 yd to a barricade, two rounds on each of two targets from behind it. Muzzle downrange, finger off the trigger, safety on while moving.",
+   "skills": [
+    "movement",
+    "use of cover"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-rifle-malf",
+   "name": "Rifle malfunctions: tap-rack and bolt-override",
+   "weapon": "rifle",
+   "rounds": 2,
+   "par": 0,
+   "dist": 25,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Set up by a partner. Failure to fire: tap the mag, rack, reassess, two rounds. Then a stovepipe and a bolt-override walked through dry before it goes live.",
+   "skills": [
+    "malfunction clearance"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-sg-admin",
+   "name": "Shotgun: load, unload, show clear",
+   "weapon": "shotgun",
+   "rounds": 1,
+   "par": 0,
+   "dist": null,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": true,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Dry. Tube load, chamber, unload through the ejection port, show clear. Then the same with the gun cruiser-ready (tube loaded, chamber empty) and the difference explained.",
+   "skills": [
+    "safety",
+    "manipulation"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-sg-pattern",
+   "name": "Pattern the gun, 7 / 15 / 25 yd",
+   "weapon": "shotgun",
+   "rounds": 3,
+   "par": 0,
+   "dist": 15,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "One round of the defensive load at each distance on a fresh silhouette. Draw around the pattern. The shooter now knows where every pellet goes at the distances that matter.",
+   "skills": [
+    "patterning"
+   ],
+   "why": "A shotgun has no 'spread' until you have seen yours."
+  },
+  {
+   "key": "cls-sg-mount",
+   "name": "Mount and fire, 7 yd",
+   "weapon": "shotgun",
+   "rounds": 1,
+   "par": 1.75,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "From low ready. Buzzer: mount, cheek weld, one round centre-mass. The stock into the shoulder pocket every time; a loose mount hurts and misses.",
+   "skills": [
+    "mount",
+    "presentation"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-sg-pairs",
+   "name": "Pairs, 10 yd",
+   "weapon": "shotgun",
+   "rounds": 2,
+   "par": 2.5,
+   "dist": 10,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "From low ready. Two rounds, run the action (pump) or ride the recoil (semi), sights back before the second press.",
+   "skills": [
+    "recoil control"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-sg-load",
+   "name": "Load under time: port and tube",
+   "weapon": "shotgun",
+   "rounds": 2,
+   "par": 8.0,
+   "dist": 7,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": true,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Gun empty, bolt open. Buzzer: port-load one, fire, tube-load one, fire. Shells from a side-saddle or belt caddy. Then the same with the tube feed only.",
+   "skills": [
+    "loading"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-sg-slug",
+   "name": "Slug select, 25 yd",
+   "weapon": "shotgun",
+   "rounds": 2,
+   "par": 8.0,
+   "dist": 25,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Buckshot in the tube. Buzzer: eject the chambered round, port-load a slug, one round on a 25 yd target; second slug from the tube. Sights, not the bead, at this distance.",
+   "skills": [
+    "slug select",
+    "accuracy"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-sg-transitions",
+   "name": "Transitions, three targets, 10 yd",
+   "weapon": "shotgun",
+   "rounds": 3,
+   "par": 3.5,
+   "dist": 10,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "From low ready. One round on each of three targets. Move the eyes, then the gun; keep the mount.",
+   "skills": [
+    "transitions"
+   ],
+   "why": ""
+  },
+  {
+   "key": "cls-sg-move",
+   "name": "Move and shoot, 15 to 7 yd",
+   "weapon": "shotgun",
+   "rounds": 4,
+   "par": 8.0,
+   "dist": 15,
+   "section": "Class drills",
+   "targets": 1,
+   "reload": false,
+   "dry": false,
+   "also": [],
+   "head": 0,
+   "source": "class",
+   "how": "Advance from 15 to 7 firing four rounds on two targets. Short steps, gun mounted, muzzle never crosses your own feet.",
+   "skills": [
+    "movement"
+   ],
+   "why": ""
+  }
+ ],
+ "templates": [
+  {
+   "key": "ccw",
+   "name": "Concealed Carry / Licence to Carry",
+   "discipline": "defensive",
+   "level": "new",
+   "hours": 6,
+   "about": "A one-day carry class shaped like the ones most states require: safety and handling, the legal frame (the instructor supplies their state's law), fundamentals, then the qualification. Built from public course outlines, not anyone's copyrighted material - the words, handouts and legal content are yours to add.",
+   "prereq": "None. Eye and ear protection, a serviceable handgun, a holster that covers the trigger, 3 magazines, 150 rounds.",
+   "gear": "Silhouette targets (USPSA or IDPA), pasters, a shot timer, dummy rounds, first-aid kit, printed state-law summary and use-of-force handout (instructor's own).",
+   "rounds_note": "About 120 live rounds plus the 50-round qualification.",
+   "modules": [
+    {
+     "title": "Safety, range rules, medical",
+     "minutes": 30,
+     "live": false,
+     "about": "The four rules, the range's own rules, where the trauma kit is and who runs it. Muzzle, trigger, target and beyond. How the line is run: commands, cease-fire, what to do when the instructor says stop.",
+     "items": [
+      {
+       "drill": "cls-admin",
+       "reps": 3,
+       "dry": true
+      }
+     ],
+     "notes": "Say the rules; then make every student say them. Check every holster covers the trigger before the first live round. Nobody handles a gun off the line."
+    },
+    {
+     "title": "Law: carrying, use of force, after the shot",
+     "minutes": 75,
+     "live": false,
+     "about": "Placeholder for your state's material: where you can and cannot carry, duty to inform, the elements of a lawful use of force, castle and stand-your-ground provisions as they exist locally, what to do and say afterwards, and what a lawyer costs. Fill this from the statute and your own handout.",
+     "items": [],
+     "notes": "Do not use another provider's slides. Cite the statute sections directly; students photograph them."
+    },
+    {
+     "title": "Handgun fundamentals",
+     "minutes": 60,
+     "live": true,
+     "about": "Stance, grip (high on the backstrap, support hand filling the gap, thumbs forward), sight alignment and sight picture, the trigger press straight to the rear, follow-through. Dry first, then slow fire close.",
+     "items": [
+      {
+       "drill": "cls-dry-press",
+       "reps": 2,
+       "dry": true
+      },
+      {
+       "drill": "cls-slow-5-5",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-slow-10-7",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "Watch the support hand: most new shooters cup or teacup. Fix the grip before the trigger; a bad grip makes the trigger look worse than it is."
+    },
+    {
+     "title": "Diagnosing the press",
+     "minutes": 30,
+     "live": true,
+     "about": "Ball and dummy shows the shooter their own anticipation. Read the group with the placement tool: low-left for a right-hander is the trigger; low is the flinch. Fix it dry, confirm live.",
+     "items": [
+      {
+       "drill": "cls-ball-dummy",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-slow-10-7",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "Log every student's ten-round group in the app so the class has a before-and-after."
+    },
+    {
+     "title": "Manipulations",
+     "minutes": 45,
+     "live": true,
+     "about": "Loading and reloading, slide-lock reload, tap-rack on a click, the double-feed. Dry, then live with dummies. Holster work: the draw from concealment in four counts, and re-holstering slowly with a look.",
+     "items": [
+      {
+       "drill": "cls-malf",
+       "reps": 2,
+       "dry": true
+      },
+      {
+       "drill": "speed-reload",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "concealed-draw-7",
+       "reps": 5,
+       "dry": false
+      }
+     ],
+     "notes": "The draw is where people get hurt. Four counts, dry, twenty reps before one live. Garment clears first every time."
+    },
+    {
+     "title": "Pairs and distance",
+     "minutes": 45,
+     "live": true,
+     "about": "Controlled pairs at 7 and 15: two sight pictures, not one and a hope. Then a move toward the target, because a fight is not static. Strong hand only, because the other hand may be busy.",
+     "items": [
+      {
+       "drill": "cls-pairs-7",
+       "reps": 4,
+       "dry": false
+      },
+      {
+       "drill": "cls-pairs-15",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-one-hand-strong",
+       "reps": 1,
+       "dry": false
+      },
+      {
+       "drill": "cls-move-shoot",
+       "reps": 2,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Qualification",
+     "minutes": 45,
+     "live": true,
+     "about": "The 50-round course of fire at 3, 7 and 15. Score on the silhouette, set the pass mark to your state's standard. Anyone under the mark shoots it again after a coaching block.",
+     "items": [
+      {
+       "drill": "cls-qual-50",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "Run the timer honestly. A pass here is a licence standard, not a skill standard - say so."
+    },
+    {
+     "title": "Debrief and next steps",
+     "minutes": 15,
+     "live": false,
+     "about": "What the group looked like, what each student should dry-fire this week, and where they go next: the Basic and Intermediate Pistol classes, and how to log their own range days.",
+     "items": [],
+     "notes": "Hand out the app link and their invite code. Their runs from today are already in it."
+    }
+   ]
+  },
+  {
+   "key": "pistol-1",
+   "name": "Basic Pistol",
+   "discipline": "defensive",
+   "level": "new",
+   "hours": 4,
+   "about": "Half a day for someone who has never shot, or shoots badly and knows it. Safety, the parts of the gun, how it works, the fundamentals dry and then live, and enough repetition to leave with a clean 10-round group at 7 yards.",
+   "prereq": "None. Rental or own handgun, 100 rounds, eye and ear protection.",
+   "gear": "Silhouette or bullseye targets, pasters, dummy rounds, a blank wall or backer for dry work.",
+   "rounds_note": "About 100 rounds.",
+   "modules": [
+    {
+     "title": "Safety and how it works",
+     "minutes": 30,
+     "live": false,
+     "about": "The four rules. Semi-auto vs revolver, the parts, the cycle of operation, how a magazine feeds. Ammunition: what the headstamp means, what a squib sounds like.",
+     "items": [
+      {
+       "drill": "cls-admin",
+       "reps": 3,
+       "dry": true
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Dry fundamentals",
+     "minutes": 40,
+     "live": true,
+     "about": "Stance, grip, sight alignment, sight picture, trigger press, follow-through. On a blank wall first (nothing to look at but the sights), then on a target.",
+     "items": [
+      {
+       "drill": "cls-dry-press",
+       "reps": 3,
+       "dry": true
+      }
+     ],
+     "notes": "Wall drill until the sights do not move on the click. Do not go live until they don't."
+    },
+    {
+     "title": "First live rounds",
+     "minutes": 45,
+     "live": true,
+     "about": "Five rounds at 5 yards, one at a time, from the ready. Call the shot, then look. Then ten at 7. Paste and read the group together.",
+     "items": [
+      {
+       "drill": "cls-slow-5-5",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-slow-10-7",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "Have the student say where the shot went before the target is checked. Calling shots is the skill."
+    },
+    {
+     "title": "The flinch",
+     "minutes": 30,
+     "live": true,
+     "about": "Ball and dummy. Everyone has one at first; showing it to them is how it goes away.",
+     "items": [
+      {
+       "drill": "cls-ball-dummy",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-slow-10-7",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Loading, reloading, clearing",
+     "minutes": 30,
+     "live": true,
+     "about": "Administrative loading and unloading, the slide-lock reload, tap-rack. Live with dummy rounds mixed in.",
+     "items": [
+      {
+       "drill": "cls-malf",
+       "reps": 2,
+       "dry": true
+      },
+      {
+       "drill": "speed-reload",
+       "reps": 2,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Pairs and a finish",
+     "minutes": 30,
+     "live": true,
+     "about": "Controlled pairs at 7 to feel recoil management, then a final ten-round group to compare with the first.",
+     "items": [
+      {
+       "drill": "cls-pairs-7",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-slow-10-7",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "The two ten-round groups, logged in the app, are the student's proof they got better."
+    },
+    {
+     "title": "Cleaning, storage, what next",
+     "minutes": 15,
+     "live": false,
+     "about": "Field strip, clean, lube, reassemble. Safe storage at home. Dry-fire homework: ten minutes, three times a week, and what it should look like.",
+     "items": [],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "key": "pistol-2",
+   "name": "Intermediate Pistol",
+   "discipline": "defensive",
+   "level": "intermediate",
+   "hours": 6,
+   "about": "For a shooter who is safe and can group. Now the timer comes out: the draw, reloads, multiple targets, moving, one-handed shooting, and the first honest look at speed against accuracy.",
+   "prereq": "Basic Pistol or equivalent. A belt holster (outside or inside the waistband), 3 magazines and pouches, 250 rounds.",
+   "gear": "Silhouettes, shot timer per relay, barricade or wall section, dummy rounds.",
+   "rounds_note": "About 250 rounds.",
+   "modules": [
+    {
+     "title": "Safety and the draw",
+     "minutes": 45,
+     "live": true,
+     "about": "Range rules and medical. The four-count draw, dry, twenty reps; then live from the holster at 7. Re-holster reluctantly and with a look.",
+     "items": [
+      {
+       "drill": "cls-admin",
+       "reps": 1,
+       "dry": true
+      },
+      {
+       "drill": "draw-7",
+       "reps": 8,
+       "dry": false
+      },
+      {
+       "drill": "draw-15",
+       "reps": 4,
+       "dry": false
+      }
+     ],
+     "notes": "Anyone whose finger touches the trigger before the gun is at extension goes back to dry work. No exceptions on day one of holster work."
+    },
+    {
+     "title": "Recoil control",
+     "minutes": 45,
+     "live": true,
+     "about": "Bill drills at 7: six rounds, all A, as fast as the sights allow. Then broken up so the shooter feels the difference between the first shot (a draw problem) and the splits (a grip problem).",
+     "items": [
+      {
+       "drill": "pistol-bill",
+       "reps": 5,
+       "dry": false
+      },
+      {
+       "drill": "broken-bill",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": "Log every Bill drill. The Review tab shows whether they are losing hits or time."
+    },
+    {
+     "title": "Reloads",
+     "minutes": 30,
+     "live": true,
+     "about": "Slide-lock reload and the speed reload, dry and live. Eyes on the magazine well. Then the reload inside a string.",
+     "items": [
+      {
+       "drill": "speed-reload",
+       "reps": 5,
+       "dry": false
+      },
+      {
+       "drill": "cls-reload-two",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Transitions",
+     "minutes": 45,
+     "live": true,
+     "about": "Three targets at 7. Eyes drive the gun; the sights should arrive aligned. El Prez ties draw, transitions and the reload together.",
+     "items": [
+      {
+       "drill": "cls-transitions-3",
+       "reps": 4,
+       "dry": false
+      },
+      {
+       "drill": "pistol-el-prez",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "One hand, and moving",
+     "minutes": 45,
+     "live": true,
+     "about": "Strong hand only, support hand only, then shooting while advancing. The standard: still in the A.",
+     "items": [
+      {
+       "drill": "cls-one-hand-strong",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-one-hand-support",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-move-shoot",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "weak-hand",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Cover and distance",
+     "minutes": 45,
+     "live": true,
+     "about": "The barricade at 10, then pairs at 25. The lesson is what changes: nothing about the trigger, everything about patience.",
+     "items": [
+      {
+       "drill": "cls-barricade-pistol",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-25-pairs",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-slow-10-25",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Standards and debrief",
+     "minutes": 45,
+     "live": true,
+     "about": "Freestyle, strong, support at 10 yd for score. FAST drill as the send-off. Then each student's Review tab: what the numbers say to work on.",
+     "items": [
+      {
+       "drill": "cls-standards-strong-weak",
+       "reps": 1,
+       "dry": false
+      },
+      {
+       "drill": "fast-drill",
+       "reps": 2,
+       "dry": false
+      }
+     ],
+     "notes": "Set a goal on two drills for every student before they leave. That is what brings them back to the app."
+    }
+   ]
+  },
+  {
+   "key": "pistol-3",
+   "name": "Advanced Pistol",
+   "discipline": "uspsa",
+   "level": "advanced",
+   "hours": 8,
+   "about": "A full day for the shooter who already shoots a clean Bill drill under three seconds and wants to be faster without losing it. Everything is on the timer, everything is scored, and the day ends on stages.",
+   "prereq": "Intermediate Pistol or an active competitor. Competition or duty belt, 4 magazines, 400 rounds.",
+   "gear": "Silhouettes, no-shoots, steel if you have it, timer per shooter, barricades, a stage or two built in the Comp tab beforehand.",
+   "rounds_note": "About 400 rounds.",
+   "modules": [
+    {
+     "title": "Baseline",
+     "minutes": 45,
+     "live": true,
+     "about": "Cold, no warm-up, for score: draw at 7, Bill drill, El Prez, FAST. These are the day's before numbers.",
+     "items": [
+      {
+       "drill": "draw-7",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "pistol-bill",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "pistol-el-prez",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "fast-drill",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "Log all of it before any coaching. The after numbers at the end of the day are the class."
+    },
+    {
+     "title": "The draw at speed",
+     "minutes": 45,
+     "live": true,
+     "about": "Sub-second draws at 7, then concealed. The grip is built in the holster; the gun goes straight to the target; the first shot breaks as the sights arrive, not after.",
+     "items": [
+      {
+       "drill": "draw-7",
+       "reps": 10,
+       "dry": false
+      },
+      {
+       "drill": "concealed-draw-7",
+       "reps": 5,
+       "dry": false
+      },
+      {
+       "drill": "headshot-7",
+       "reps": 5,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Splits and grip",
+     "minutes": 45,
+     "live": true,
+     "about": "Bill drills, triple Bill, then 4x4. The split is a grip problem; if the group opens up at speed, the grip is the fix, not the trigger.",
+     "items": [
+      {
+       "drill": "pistol-bill",
+       "reps": 4,
+       "dry": false
+      },
+      {
+       "drill": "triple-bill",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "4x4",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": "Use the placement plot: a group that walks up and right on a right-hander at speed is the support hand giving up."
+    },
+    {
+     "title": "Transitions and the reload",
+     "minutes": 60,
+     "live": true,
+     "about": "El Prez variations: standard, 1-5, body/head. Transition speed comes from the eyes leaving early. The reload is invisible when it is done right.",
+     "items": [
+      {
+       "drill": "pistol-el-prez",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "1-5-el-prez",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "2-body-1-head",
+       "reps": 4,
+       "dry": false
+      },
+      {
+       "drill": "cls-reload-two",
+       "reps": 4,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Positions, cover, movement",
+     "minutes": 60,
+     "live": true,
+     "about": "Barricade both sides, kneeling at 15, shooting on the move, turn and draw. Efficiency of movement: fewer steps, gun up early, shooting as soon as the sights settle.",
+     "items": [
+      {
+       "drill": "cls-barricade-pistol",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "kneeling-15",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-move-shoot",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-turn-draw",
+       "reps": 4,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Distance",
+     "minutes": 30,
+     "live": true,
+     "about": "10-yard standards and 25-yard pairs. Speed at distance is the slowest thing to build and the first thing to show on a classifier.",
+     "items": [
+      {
+       "drill": "10-yard",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-25-pairs",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Stages",
+     "minutes": 90,
+     "live": true,
+     "about": "Two or three stages from the Comp tab, scored per target on hit factor. Walk it, plan it, shoot it, then shoot it again with the plan changed. Talk through the hit factor: where the points went and where the time went.",
+     "items": [
+      {
+       "drill": "stage:demo-uspsa",
+       "reps": 2,
+       "dry": false
+      }
+     ],
+     "notes": "Build the day's stages in the app before class and start them from the Comp tab; every student's run is scored the same way."
+    },
+    {
+     "title": "After numbers and plan",
+     "minutes": 30,
+     "live": true,
+     "about": "The baseline drills again, for score. Compare on the Review tab. Every student leaves with goals set and a session built for their next range day.",
+     "items": [
+      {
+       "drill": "draw-7",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "pistol-bill",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "pistol-el-prez",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "fast-drill",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "key": "rifle-1",
+   "name": "Carbine / Rifle Fundamentals",
+   "discipline": "defensive",
+   "level": "new",
+   "hours": 6,
+   "about": "A day on the AR-pattern rifle (or any semi-auto carbine): safe handling, zero, the positions, the ready-up, pairs and transitions, a reload, and a move to cover. Ends with the rifle zeroed and logged.",
+   "prereq": "A rifle in working order with a sling and at least 3 magazines; an optic or irons the student can adjust; 250 rounds; eye and ear protection.",
+   "gear": "50 and 100 yd lines, zeroing targets, silhouettes, bags or bipods, a barricade, timer.",
+   "rounds_note": "About 250 rounds. Zeroing is where most of the spare ammunition goes.",
+   "modules": [
+    {
+     "title": "Safety, the rifle, conditions",
+     "minutes": 30,
+     "live": false,
+     "about": "The four rules with a long gun: where the muzzle goes when you turn around. Safety on/off as a habit. Load, unload, clear, the sling, carrying conditions. Cycle of operation and what a short-stroke looks like.",
+     "items": [
+      {
+       "drill": "cls-rifle-admin",
+       "reps": 3,
+       "dry": true
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Zero",
+     "minutes": 60,
+     "live": true,
+     "about": "Prone, off a bag, 5-round groups at 50. Adjust off the group centre, not the last shot. Confirm at 100 if the range allows. Log the zero and the day's temperature under Ballistics so the app can correct for a cold day.",
+     "items": [
+      {
+       "drill": "cls-rifle-zero-50",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-rifle-slow-100",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "Have every student enter their gun under Ballistics with the zero distance and today's temperature. It is the one app feature they will use most."
+    },
+    {
+     "title": "Positions",
+     "minutes": 45,
+     "live": true,
+     "about": "Standing, kneeling, prone, sitting if there is time. Same aiming point, three rounds each. Natural point of aim: close the eyes, breathe, open them - where is the sight?",
+     "items": [
+      {
+       "drill": "cls-rifle-positions",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "kneeling-50",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "prone-100",
+       "reps": 2,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Ready-up and pairs",
+     "minutes": 45,
+     "live": true,
+     "about": "Low ready to a shot at 25, then pairs at 50. Safety off on the way up, on on the way down. The second shot waits for the sight.",
+     "items": [
+      {
+       "drill": "cls-rifle-ready-up",
+       "reps": 8,
+       "dry": false
+      },
+      {
+       "drill": "cls-rifle-pairs-50",
+       "reps": 5,
+       "dry": false
+      },
+      {
+       "drill": "first-hit-25",
+       "reps": 4,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Transitions and the reload",
+     "minutes": 45,
+     "live": true,
+     "about": "Three targets at 25. Then the combat reload: bolt locked back, magazine in, bolt release, back on target.",
+     "items": [
+      {
+       "drill": "cls-rifle-transitions",
+       "reps": 4,
+       "dry": false
+      },
+      {
+       "drill": "combat-reload-rifle",
+       "reps": 5,
+       "dry": false
+      },
+      {
+       "drill": "rifle-bill",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Malfunctions",
+     "minutes": 30,
+     "live": true,
+     "about": "Tap-rack on a click; the stovepipe; the bolt-override walked through dry. Then live with dummies mixed in.",
+     "items": [
+      {
+       "drill": "cls-rifle-malf",
+       "reps": 3,
+       "dry": true
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Cover and movement",
+     "minutes": 45,
+     "live": true,
+     "about": "Move to a barricade and engage. Safety on while moving, finger straight, muzzle downrange. Strong and support side barricade work.",
+     "items": [
+      {
+       "drill": "cls-rifle-move",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "barricade-strong",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "barricade-weak",
+       "reps": 2,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Debrief",
+     "minutes": 15,
+     "live": false,
+     "about": "What each rifle is zeroed at and in what conditions, what to dry-practise (ready-ups, reloads, positions), and the next class.",
+     "items": [],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "key": "shotgun-1",
+   "name": "Defensive Shotgun",
+   "discipline": "defensive",
+   "level": "new",
+   "hours": 5,
+   "about": "The shotgun as a defensive tool: patterning so the shooter knows what their gun actually does, the mount, running the action, loading under pressure, slug select, and a little movement. Pump or semi-auto.",
+   "prereq": "A shotgun with a sling or side-saddle, 75 rounds of buckshot, 10 slugs, 50 birdshot for the mount work. Eye and ear protection and a shoulder that is ready for it.",
+   "gear": "Silhouettes and fresh backers for patterning, a marker, shell caddies to lend, 25 yd line, timer.",
+   "rounds_note": "About 75 buckshot, 10 slugs, 50 birdshot.",
+   "modules": [
+    {
+     "title": "Safety and the gun",
+     "minutes": 30,
+     "live": false,
+     "about": "Rules, muzzle, the action type, how the tube feeds, cruiser-ready vs chamber-loaded, and why the safety on a shotgun is not a trigger guard.",
+     "items": [
+      {
+       "drill": "cls-sg-admin",
+       "reps": 3,
+       "dry": true
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Pattern",
+     "minutes": 30,
+     "live": true,
+     "about": "One round at 7, 15 and 25 on fresh paper. Draw around the pattern. Students photograph it. This is the lesson most people never get.",
+     "items": [
+      {
+       "drill": "cls-sg-pattern",
+       "reps": 1,
+       "dry": false
+      }
+     ],
+     "notes": "Do this before the mount work. A student who has seen a 25-yard pattern stops thinking of the shotgun as a room-broom."
+    },
+    {
+     "title": "The mount",
+     "minutes": 45,
+     "live": true,
+     "about": "Stock in the pocket, cheek down, eye over the rib, push-pull to manage recoil. Birdshot for volume. Mount from low ready to a single shot until it is one motion.",
+     "items": [
+      {
+       "drill": "cls-sg-mount",
+       "reps": 10,
+       "dry": false
+      }
+     ],
+     "notes": "Bruises come from a loose mount. Fix it early and say why."
+    },
+    {
+     "title": "Pairs and transitions",
+     "minutes": 45,
+     "live": true,
+     "about": "Pairs at 10, running the action between; then three targets. On a pump the action is run as the gun comes out of recoil, not after.",
+     "items": [
+      {
+       "drill": "cls-sg-pairs",
+       "reps": 5,
+       "dry": false
+      },
+      {
+       "drill": "cls-sg-transitions",
+       "reps": 4,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Loading",
+     "minutes": 45,
+     "live": true,
+     "about": "Port load and tube load, dry then under time. Where the shells live on the body and on the gun. Keep the gun up and the eyes on the threat while loading.",
+     "items": [
+      {
+       "drill": "cls-sg-load",
+       "reps": 6,
+       "dry": false
+      }
+     ],
+     "notes": "Lend caddies to anyone without one. Loading is the whole shotgun game."
+    },
+    {
+     "title": "Slugs",
+     "minutes": 30,
+     "live": true,
+     "about": "Slug select: eject, port-load a slug, fire at 25. Then the second slug from the tube. Sights, not the bead.",
+     "items": [
+      {
+       "drill": "cls-sg-slug",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Movement and finish",
+     "minutes": 30,
+     "live": true,
+     "about": "Advance from 15 to 7 on two targets. Then a last string of pairs for score.",
+     "items": [
+      {
+       "drill": "cls-sg-move",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-sg-pairs",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "key": "uspsa-classifier",
+   "name": "USPSA Classifier Day",
+   "discipline": "uspsa",
+   "level": "intermediate",
+   "hours": 5,
+   "about": "A practice day built like a classifier match: check-in and the safety brief, walkthroughs, range commands, then classifier-style standards and short courses scored on hit factor. For the shooter getting ready for their first match or trying to move up a class. Uses classifier-style drills of our own; the official classifier courses of fire come from USPSA.",
+   "prereq": "Safe holster work from a belt, 4 magazines, 200 rounds. A USPSA membership is not required for practice.",
+   "gear": "Silhouettes and no-shoots, timer per bay, tape, the day's stages built in the Comp tab, a printed range-commands card.",
+   "rounds_note": "About 200 rounds.",
+   "modules": [
+    {
+     "title": "Match brief",
+     "minutes": 30,
+     "live": false,
+     "about": "How a match day runs: check-in, squads, the safety area (the only place to handle the gun), the walkthrough, range commands from 'make ready' to 'range is clear', 180 rule, DQ-able offences, how a stage is scored. Nothing here is a rulebook quote; point students to the current USPSA rules for the text.",
+     "items": [],
+     "notes": "Run the range commands exactly as a match does, every string, all day. That is the practice."
+    },
+    {
+     "title": "Warm-up standards",
+     "minutes": 45,
+     "live": true,
+     "about": "Draw at 7, Bill drill, El Prez, headshots. Everything from the holster, with commands.",
+     "items": [
+      {
+       "drill": "draw-7",
+       "reps": 5,
+       "dry": false
+      },
+      {
+       "drill": "pistol-bill",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "pistol-el-prez",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "headshot-7",
+       "reps": 4,
+       "dry": false
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "title": "Classifier-style standards",
+     "minutes": 60,
+     "live": true,
+     "about": "Freestyle, strong hand, support hand at 10; three-target transitions with a reload; pairs at 25. Scored on hit factor, and the app tells each shooter what the points and the time cost them.",
+     "items": [
+      {
+       "drill": "cls-standards-strong-weak",
+       "reps": 2,
+       "dry": false
+      },
+      {
+       "drill": "cls-reload-two",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-transitions-3",
+       "reps": 3,
+       "dry": false
+      },
+      {
+       "drill": "cls-25-pairs",
+       "reps": 2,
+       "dry": false
+      }
+     ],
+     "notes": "Hit factor, not raw time. Have them read the HF line in the app after every string."
+    },
+    {
+     "title": "Short courses",
+     "minutes": 90,
+     "live": true,
+     "about": "Two or three short stages built in the Comp tab: 8 to 12 rounds, a reload, one position change. Walkthrough, plan, shoot, review per target. Then shoot it again with a different plan and compare hit factors.",
+     "items": [
+      {
+       "drill": "stage:demo-uspsa",
+       "reps": 3,
+       "dry": false
+      }
+     ],
+     "notes": "Build the stages before class. Run them per target so the review is honest about which target cost the points."
+    },
+    {
+     "title": "Debrief",
+     "minutes": 30,
+     "live": false,
+     "about": "Each shooter's Review tab: the drills flagged accuracy vs speed, the stage per-target reads, and what a realistic goal for the next month looks like. Set two goals each.",
+     "items": [],
+     "notes": ""
+    }
+   ]
+  }
+ ]
+}

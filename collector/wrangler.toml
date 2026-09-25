@@ -1,0 +1,12 @@
+name = "rangefolio-collector"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# Created with: npx wrangler kv namespace create BOOKS  (paste the id it prints)
+[[kv_namespaces]]
+binding = "BOOKS"
+id = "PASTE_KV_ID_HERE"
+
+# Set these as secrets, not here:
+#   npx wrangler secret put APP_KEY       (any long random string; also goes in build.js RF_CONFIG.collect_key)
+#   npx wrangler secret put ADMIN_TOKEN   (another long random string; only pull.py needs it)

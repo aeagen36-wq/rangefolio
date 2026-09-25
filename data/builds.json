@@ -1,0 +1,25 @@
+{
+  "about": "Internal change log, newest first. Testers see only the build number (RF_BUILD.show_changes in build.js turns the list on in the app).",
+  "builds": [
+    {
+      "n": 4,
+      "date": "2026-09-25",
+      "changes": [
+        "Build stamp and update notice: one number in build.js drives the cache and the 'updated to build N' toast; the app reloads itself when a new build lands.",
+        "Book schema v2 with a migration step; shooter profiles (name, handedness, dominant eye, discipline).",
+        "Shot placement: every tap on the target is stored as a coordinate in shot order, with the target type and a point of aim (always recorded; defaults to the A-zone centre, tap ⌖ to move it).",
+        "Placement analytics on the Review tab: group centre vs point of aim, group size, vertical/horizontal stringing, and a 'consistent with…' read keyed to handedness.",
+        "Target types: USPSA metric, IDPA, B-8, 8-inch plate; switchable on the target pane and the camera overlay.",
+        "Photo scoring: camera screen with a target outline overlay and a level, tap holes on the photo (hold for a double), photo kept with the run; scorer plug-point (RangefolioScorer) for a model later.",
+        "Coach tab renamed Review. Coach mode (Settings toggle) adds a Coach tab: roster, class builder with seven templates, events.",
+        "Events on the Comp tab: group stages into a match or class day.",
+        "Coming-soon cards on every button that needs accounts or a server, a Roadmap screen under Settings, and tap counts on those cards so we learn what people want.",
+        "Settings sheet: profile, coach mode, theme, build number, roadmap, backup/restore, send-my-data (coming soon until the collector is up).",
+        "Fixed leftover assistant wording ('asking her') in the UI."
+      ]
+    },
+    { "n": 3, "date": "2026-09-24", "changes": ["Ten more invite codes."] },
+    { "n": 2, "date": "2026-09-24", "changes": ["Invite-code gate for the tester build."] },
+    { "n": 1, "date": "2026-09-24", "changes": ["First standalone PWA cut from the assistant project."] }
+  ]
+}

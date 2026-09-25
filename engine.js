@@ -15,16 +15,46 @@
 "use strict";
 
 // ---------------------------------------------------------------- storage
-const DB_NAME = "rangefolio", STORE = "book", KEY = "book";
+const DB_NAME = "rangefolio", STORE = "book", KEY = "book", PHOTOS = "photos";
+const SCHEMA = 2;   // bump with a migration below when the book's shape changes
 let memBook = null;
 function idb() {
   return new Promise((ok, no) => {
     if (!window.indexedDB) return ok(null);
-    const r = indexedDB.open(DB_NAME, 1);
-    r.onupgradeneeded = () => r.result.createObjectStore(STORE);
+    const r = indexedDB.open(DB_NAME, 2);
+    r.onupgradeneeded = () => { const db = r.result; if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE); if (!db.objectStoreNames.contains(PHOTOS)) db.createObjectStore(PHOTOS); };
     r.onsuccess = () => ok(r.result);
     r.onerror = () => ok(null);
   });
+}
+// Photos live in their own store, keyed by run id, so the book itself
+// (and its JSON backup) stays small. A run keeps `photo: true` as a flag.
+async function photoPut(id, dataUrl) { try { const db = await idb(); if (!db) return false; await new Promise(ok => { const t = db.transaction(PHOTOS, "readwrite").objectStore(PHOTOS).put(dataUrl, id); t.onsuccess = ok; t.onerror = ok; }); return true; } catch { return false; } }
+async function photoGet(id) { try { const db = await idb(); if (!db) return null; return await new Promise(ok => { const t = db.transaction(PHOTOS).objectStore(PHOTOS).get(id); t.onsuccess = () => ok(t.result || null); t.onerror = () => ok(null); }); } catch { return null; } }
+async function photoDel(id) { try { const db = await idb(); if (!db) return; await new Promise(ok => { const t = db.transaction(PHOTOS, "readwrite").objectStore(PHOTOS).delete(id); t.onsuccess = ok; t.onerror = ok; }); } catch {} }
+async function photoCount() { try { const db = await idb(); if (!db) return 0; return await new Promise(ok => { const t = db.transaction(PHOTOS).objectStore(PHOTOS).count(); t.onsuccess = () => ok(t.result || 0); t.onerror = () => ok(0); }); } catch { return 0; } }
+
+// ---------------------------------------------------------------- migrations
+// Each step takes the book from schema n to n+1. Never delete a field a
+// user typed; add, rename, or default. `schema` is written on every save.
+const MIGRATIONS = {
+  1: d => {   // -> 2: profiles, classes, events, meta
+    for (const s of Object.values(d.shooters || {})) s.profile ||= {};
+    d.classes ||= []; d.events ||= []; d.meta ||= {};
+    d.runs.forEach(r => { if (r.placement && !r.placement.target) r.placement.target = "uspsa"; });
+  },
+};
+function migrate(d) {
+  let v = +d.schema || 1, changed = false;
+  while (v < SCHEMA) { if (MIGRATIONS[v]) MIGRATIONS[v](d); v++; changed = true; }
+  if (d.schema !== SCHEMA) { d.schema = SCHEMA; changed = true; }
+  return changed;
+}
+function defaults(d) {
+  d = d || {};
+  d.runs ||= []; d.shooters ||= {}; d.programs ||= []; d.stages ||= []; d.guns ||= [];
+  d.custom_drills ||= []; d.classes ||= []; d.events ||= []; d.meta ||= {};
+  return d;
 }
 async function loadBook() {
   if (memBook) return memBook;
@@ -34,10 +64,11 @@ async function loadBook() {
     if (db) d = await new Promise(ok => { const t = db.transaction(STORE).objectStore(STORE).get(KEY); t.onsuccess = () => ok(t.result || null); t.onerror = () => ok(null); });
   } catch {}
   if (!d) { try { d = JSON.parse(localStorage.getItem("rangefolio.book") || "null"); } catch {} }
-  d = d || {};
-  d.runs ||= []; d.shooters ||= {}; d.programs ||= []; d.stages ||= []; d.guns ||= [];
-  d.custom_drills ||= [];
+  d = defaults(d);
+  const was = d.schema || (d.runs.length || Object.keys(d.shooters).length ? 1 : SCHEMA);
+  d.schema = was;
   memBook = d;
+  if (migrate(d)) await saveBook(d);
   return d;
 }
 async function saveBook(d) {
@@ -171,7 +202,18 @@ function normHits(h) {
 function headCount(h) { let n = 0, seen = false; for (const [k, v] of Object.entries(h || {})) if (D.head_words.includes(String(k).toLowerCase())) { seen = true; n += Math.max(0, parseInt(v) || 0); } return seen ? n : null; }
 function parFor(book, who, d) { const p = ((book.shooters[who] || {}).par || {})[d.key]; return p != null ? +p : d.par; }
 function goalFor(book, who, key) { return ((book.shooters[who] || {}).goals || {})[key] || null; }
-function buildRow(book, who, d, secsIn, hitsIn, note, gun, load, headHits, shots, dry, penalties, targets) {
+// Where the rounds went, if the target pane or a photo was used. Normalised
+// to the target's viewBox (0..1), in shot order, with the point of aim.
+function normPlacement(p) {
+  if (!p || !Array.isArray(p.shots)) return null;
+  const clamp = v => Math.min(1, Math.max(0, +v || 0));
+  const shots = p.shots.slice(0, 60).map(s => { const o = { x: Math.round(clamp(s.x) * 1000) / 1000, y: Math.round(clamp(s.y) * 1000) / 1000, z: String(s.z || "miss") }; if (s.head) o.head = true; if (s.dbl) o.dbl = true; return o; });
+  if (!shots.length) return null;
+  const t = String(p.target || "uspsa").slice(0, 12);
+  const poa = p.poa && isFinite(+p.poa.x) ? { x: Math.round(clamp(p.poa.x) * 1000) / 1000, y: Math.round(clamp(p.poa.y) * 1000) / 1000 } : (window.RF_TARGETS ? window.RF_TARGETS.defaultPoa(t) : { x: .5, y: .45 });
+  return { target: t, poa, shots, source: p.source === "photo" ? "photo" : "tap" };
+}
+function buildRow(book, who, d, secsIn, hitsIn, note, gun, load, headHits, shots, dry, penalties, targets, placement) {
   let spokenHead = headCount(hitsIn); if (headHits != null && headHits !== "") spokenHead = parseInt(headHits);
   let hits = normHits(hitsIn), fired = Object.values(hits).reduce((a, b) => a + b, 0);
   let shotsL = (shots || []).map(Number).filter(x => isFinite(x) && x > 0).slice(0, 60).map(r2);
@@ -213,9 +255,11 @@ function buildRow(book, who, d, secsIn, hitsIn, note, gun, load, headHits, shots
     clean = missesAll === 0 && !pen.noshoot && !pen.procedural && fired > 0;
     if (secs) { hitFactor = Math.round(Math.max(points, 0) / secs * 1000) / 1000; timePlus = r2(secs + 5 * ((scored.miss || 0) + pen.noshoot + pen.procedural)); } else { hitFactor = null; timePlus = null; }
   }
-  return { id: uid(10), who, drill: d.key, name: d.name, at: nowIso(), secs, hits, scored, fired, misses: missesAll, head_short: short,
+  const row = { id: uid(10), who, drill: d.key, name: d.name, at: nowIso(), secs, hits, scored, fired, misses: missesAll, head_short: short,
     head_hits: spokenHead, shots: shotsL, splits, par, clean, made, dry, stage: pen, goal: g ? +g.secs : null, goal_all_a: g ? g.all_a !== false : null, goal_met: goalMet,
     time_plus: timePlus, hit_factor: hitFactor, points, gun: String(gun || "").slice(0, 40), load: String(load || "").slice(0, 40), note: String(note || "").slice(0, 300) };
+  const pl = normPlacement(placement); if (pl && !dry) row.placement = pl;
+  return row;
 }
 function sayRun(row, d, best, priorCount) {
   const counted = Object.entries(row.hits).filter(([z]) => z !== "miss").map(([z, n]) => `${n} ${z}`).join(", ");
@@ -260,11 +304,12 @@ async function logRun(b) {
   const d = findDrill(book, b.drill);
   if (d && d.ambiguous) return { ok: false, said: "Which one - " + d.ambiguous.join(", ") + "?", error: "ambiguous" };
   if (!d) return { ok: false, said: `I don't know a drill called '${b.drill}'.`, error: "unknown" };
-  const row = buildRow(book, who, d, b.seconds, b.hits, b.note, b.gun, b.load, b.head_hits, b.shots, b.dry, b.penalties, b.targets);
+  const row = buildRow(book, who, d, b.seconds, b.hits, b.note, b.gun, b.load, b.head_hits, b.shots, b.dry, b.penalties, b.targets, b.placement);
   const prior = book.runs.filter(r => r.who === who && r.drill === d.key && r.secs != null && r.clean);
   const best = prior.length ? Math.min(...prior.map(r => r.secs)) : null;
+  if (b.photo && typeof b.photo === "string" && b.photo.startsWith("data:image/")) { if (await photoPut(row.id, b.photo)) row.photo = true; }
   book.runs.unshift(row); book.runs = book.runs.slice(0, 4000);
-  book.shooters[who] ||= { first_seen: row.at };
+  book.shooters[who] ||= { first_seen: row.at, profile: {} };
   await saveBook(book);
   return { ok: true, said: sayRun(row, d, best, prior.length), run: row };
 }
@@ -273,15 +318,75 @@ async function editRun(b) {
   const i = book.runs.findIndex(r => r.id === b.id);
   if (i < 0) return { ok: false, said: "I can't find that run." };
   const r = book.runs[i];
-  if (b.delete) { book.runs.splice(i, 1); await saveBook(book); return { ok: true, said: `Took ${r.name} (${r.secs ?? "no time"}) off the book.` }; }
+  if (b.delete) { book.runs.splice(i, 1); await saveBook(book); if (r.photo) photoDel(r.id); return { ok: true, said: `Took ${r.name} (${r.secs ?? "no time"}) off the book.` }; }
   const d = byKey(book, r.drill); if (!d) return { ok: false, said: "That drill isn't on the list any more." };
   const hits = "hits" in b ? b.hits : r.hits, shots = "shots" in b ? b.shots : r.shots;
   let secs = "seconds" in b ? b.seconds : r.secs; if (shots && shots.length && "shots" in b && !("seconds" in b)) secs = null;
+  // Editing the counts by hand invalidates the tap-by-tap placement unless the edit came with new placement.
+  const keepPlacement = "placement" in b ? b.placement : (("hits" in b && JSON.stringify(normHits(b.hits)) !== JSON.stringify(normHits(r.hits))) ? null : r.placement);
   const row = buildRow(book, r.who, d, secs, hits, "note" in b ? b.note : r.note, r.gun, r.load, "head_hits" in b ? b.head_hits : r.head_hits, shots,
-    "dry" in b ? b.dry : r.dry, "penalties" in b ? b.penalties : r.stage, "targets" in b ? b.targets : ((r.stage || {}).per_target ? r.stage.targets : null));
-  row.id = r.id; row.at = r.at; row.edited = nowIso();
+    "dry" in b ? b.dry : r.dry, "penalties" in b ? b.penalties : r.stage, "targets" in b ? b.targets : ((r.stage || {}).per_target ? r.stage.targets : null), keepPlacement);
+  row.id = r.id; row.at = r.at; row.edited = nowIso(); if (r.photo) row.photo = true;
+  if (b.drop_photo && r.photo) { delete row.photo; photoDel(r.id); }
   book.runs[i] = row; await saveBook(book);
   return { ok: true, said: "Updated.", run: row };
+}
+
+// ---------------------------------------------------------------- placement
+// Group maths on the stored taps. Everything is in inches from the point of
+// aim (x right, y up). The "read" is the classic diagnostic chart, keyed to
+// handedness and phrased as "consistent with" - a place to start, not a
+// verdict. n counts shots on the card (misses off the card carry no position).
+const DIAG = {
+  center: "Group is centred on the point of aim. The fundamentals are holding - the work now is speed.",
+  low_left: "consistent with jerking the trigger or anticipating recoil: the whole hand tightens as the shot breaks.",
+  low: "consistent with anticipating recoil - pushing down into the shot, or breaking the wrist.",
+  left: "consistent with too much trigger finger, or squeezing with the fingers instead of pressing straight back.",
+  right: "consistent with too little trigger finger (pushing the trigger sideways) or thumb pressure on the frame.",
+  high: "consistent with heeling - pushing with the heel of the hand as the shot breaks - or lifting the head to watch the hit.",
+  low_right: "consistent with tightening the fingers of the strong hand as the shot breaks.",
+  high_left: "consistent with anticipating recoil and pushing with the support hand.",
+  high_right: "consistent with heeling and thumb pressure together.",
+  v_string: "Vertical stringing: consistent with grip pressure or breathing changing shot to shot; on fast strings, recoil control.",
+  h_string: "Horizontal stringing: consistent with trigger-finger pressure varying shot to shot, or eye dominance pulling the sights.",
+};
+function placementStats(runs, target, dist, hand) {
+  const T = window.RF_TARGETS; if (!T) return null;
+  const pts = []; let n_runs = 0, first = [];
+  for (const r of runs) {
+    const p = r.placement; if (!p || !p.shots || !p.shots.length) continue;
+    if (target && p.target !== target) continue;
+    n_runs++;
+    p.shots.forEach((s, i) => { if (s.z === "miss") return; const q = T.toInches(p.target, s.x, s.y, p.poa); pts.push(q); if (i === 0) first.push(q); });
+  }
+  if (pts.length < 3) return { n: pts.length, n_runs, enough: false };
+  const mean = xs => xs.reduce((a, b) => a + b, 0) / xs.length;
+  const mx = mean(pts.map(p => p.x)), my = mean(pts.map(p => p.y));
+  const sd = (xs, m) => Math.sqrt(mean(xs.map(v => (v - m) * (v - m))));
+  const sdx = sd(pts.map(p => p.x), mx), sdy = sd(pts.map(p => p.y), my);
+  const radius = mean(pts.map(p => Math.hypot(p.x - mx, p.y - my)));
+  let spread = 0; for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) spread = Math.max(spread, Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y));
+  const yd = dist || 7, tol = Math.max(1, 0.25 * yd);            // how far off centre matters, scaled with distance
+  const hx = hand === "left" ? -mx : mx;                          // mirror for a left-hander so the chart reads the same
+  const off = Math.hypot(mx, my);
+  let dir = "center";
+  if (off >= tol) {
+    const L = hx < -tol * 0.6, R = hx > tol * 0.6, D = my < -tol * 0.6, U = my > tol * 0.6;
+    dir = D && L ? "low_left" : D && R ? "low_right" : U && L ? "high_left" : U && R ? "high_right" : D ? "low" : U ? "high" : L ? "left" : "right";
+  }
+  const reads = [];
+  if (dir === "center") reads.push(DIAG.center);
+  else reads.push(`Group centre is ${Math.abs(mx).toFixed(1)}" ${mx < 0 ? "left" : "right"}, ${Math.abs(my).toFixed(1)}" ${my < 0 ? "low" : "high"} of the point of aim - ${DIAG[dir]}`);
+  if (sdy > 1.6 * sdx && sdy > tol * 0.8) reads.push(DIAG.v_string);
+  else if (sdx > 1.6 * sdy && sdx > tol * 0.8) reads.push(DIAG.h_string);
+  let firstRead = null;
+  if (first.length >= 3 && pts.length >= 8) {
+    const fx = mean(first.map(p => p.x)), fy = mean(first.map(p => p.y)), d1 = Math.hypot(fx - mx, fy - my);
+    if (d1 >= tol) firstRead = `First shot of each string lands ${d1.toFixed(1)}" from the rest of the group (${Math.abs(fy - my).toFixed(1)}" ${fy < my ? "lower" : "higher"}) - that's the draw or the presentation, not the trigger.`;
+  }
+  const solid = pts.length >= 15;
+  return { n: pts.length, n_runs, enough: true, solid, mx: r2(mx), my: r2(my), sdx: r2(sdx), sdy: r2(sdy), radius: r2(radius), spread: r2(spread), dir, tol: r2(tol), hand: hand || "right",
+    reads, first: firstRead, pts: pts.slice(0, 120).map(p => ({ x: r2(p.x), y: r2(p.y) })), target: target || (runs.find(r => r.placement) || { placement: {} }).placement.target };
 }
 
 // ---------------------------------------------------------------- goals + coach
@@ -327,7 +432,23 @@ function analyse(book, who, d, runs) {
     both: "Split it: one block slow and clean, one block at goal pace and count the hits. Don't mix them in a string. Add: " + D.focus.both.filter(k => k !== d.key).slice(0, 2).map(nm).filter(Boolean).join(", ") + ".",
     hold: `Keep it warm once a session and raise the goal to ${(gsecs * 0.93).toFixed(2)}.`,
   }[focus];
-  return { focus, why, a_pct, miss_pct, best, last3: rs.slice(0, 3).map(r => r.secs).filter(Boolean), goal, plan, n: rs.length, window: WINDOW, trend, skills: d.skills || [], drill_why: d.why || "" };
+  const hand = ((book.shooters[who] || {}).profile || {}).hand || "right";
+  const placement = placementStats(rs, null, d.dist, hand);
+  return { focus, why, a_pct, miss_pct, best, last3: rs.slice(0, 3).map(r => r.secs).filter(Boolean), goal, plan, n: rs.length, window: WINDOW, trend, skills: d.skills || [], drill_why: d.why || "", placement: placement && placement.enough ? placement : null };
+}
+// The whole pistol book at once: the same read over every pistol drill's
+// last runs, so a shooter with a few taps on each still gets a picture.
+function placementOverall(book, who) {
+  const hand = ((book.shooters[who] || {}).profile || {}).hand || "right";
+  const runs = book.runs.filter(r => r.who === who && r.placement && !r.dry).slice(0, 60);
+  const byT = {}; runs.forEach(r => (byT[r.placement.target] ||= []).push(r));
+  const out = [];
+  for (const [t, rs] of Object.entries(byT)) {
+    const dists = rs.map(r => (byKey(book, r.drill) || {}).dist).filter(Boolean);
+    const dist = dists.length ? dists.reduce((a, b) => a + b, 0) / dists.length : 7;
+    const s = placementStats(rs, t, dist, hand); if (s && s.enough) out.push(s);
+  }
+  return out.sort((a, b) => b.n - a.n);
 }
 async function coach(who) {
   const book = await loadBook(); who = String(who || "me").toLowerCase();
@@ -345,7 +466,8 @@ async function coach(who) {
   const head = `${pl(runs.length, "run")} across ${shot.size} of ${drillsAll(book).length} drills` + (todays.length ? ` · today ${pl(todays.length, "run")}, ${pl(todays.filter(r => r.made).length, "pass").replace("passs", "passes")}` : "") + ".";
   const verdict = { accuracy: "Overall: accuracy first. You're fast enough on most of these - the hits aren't holding.", speed: "Overall: you're accurate. The work now is speed - accept a few C's while you push.",
     both: "Overall: mixed - split sessions into a slow-clean block and a fast block.", new: "Nothing on the book yet. Shoot a Bill Drill and a draw and come back." }[lean];
-  return { head, lean, verdict, drills: rows, suggest, never: drillsAll(book).filter(d => !shot.has(d.key)).map(d => d.name).slice(0, 8), matches: coachMatches(book, who) };
+  return { head, lean, verdict, drills: rows, suggest, never: drillsAll(book).filter(d => !shot.has(d.key)).map(d => d.name).slice(0, 8), matches: coachMatches(book, who),
+    placement: placementOverall(book, who), profile: (book.shooters[who] || {}).profile || {} };
 }
 function coachMatches(book, who) {
   const runs = book.runs.filter(r => r.who === who && String(r.drill).startsWith("stage:") && r.secs);
@@ -370,11 +492,11 @@ function coachMatches(book, who) {
 
 // ---------------------------------------------------------------- sessions, shooters, guns, goals
 function programAmmo(book, items) {
-  const out = { pistol: 0, rifle: 0 };
+  const out = { pistol: 0, rifle: 0, shotgun: 0 };
   for (const it of items || []) {
     const d = byKey(book, it.drill); if (!d) continue; const reps = Math.max(1, +it.reps || 1); if (it.dry) continue;
     if (d.stage) { for (const [g, n] of Object.entries(stageAmmo(stageById(book, d.key.slice(6)) || {}))) out[g] = (out[g] || 0) + n * reps; continue; }
-    if (d.weapon === "pistol") out.pistol += d.rounds * reps; else if (d.weapon === "rifle") out.rifle += d.rounds * reps;
+    if (d.weapon === "pistol") out.pistol += d.rounds * reps; else if (d.weapon === "rifle") out.rifle += d.rounds * reps; else if (d.weapon === "shotgun") out.shotgun += d.rounds * reps;
     else { const [rf, pi] = D.both_split[d.key] || [Math.floor(d.rounds / 2), d.rounds - Math.floor(d.rounds / 2)]; out.rifle += rf * reps; out.pistol += pi * reps; }
   }
   out.total = Object.values(out).reduce((a, b) => a + b, 0); return out;
@@ -389,7 +511,66 @@ async function api(path, body) {
   const who = String(q.get("who") || (body && body.who) || "me").toLowerCase();
   if (p === "/" || p === "") {
     return { who, shooters: Object.keys(book.shooters), drills: drillsAll(book), holds: D.holds, loads: L.calibres, programs: programsOut(book), stages: stagesOut(book),
-      guns: book.guns, goals: (book.shooters[who] || {}).goals || {}, warmups: D.warmups, runs: book.runs.filter(r => r.who === who).slice(0, 200) };
+      guns: book.guns, goals: (book.shooters[who] || {}).goals || {}, warmups: D.warmups, runs: book.runs.filter(r => r.who === who).slice(0, 200),
+      profile: (book.shooters[who] || {}).profile || {}, profiles: Object.fromEntries(Object.entries(book.shooters).map(([k, v]) => [k, v.profile || {}])),
+      classes: classesOut(book), events: eventsOut(book), meta: book.meta || {}, schema: book.schema };
+  }
+  // ---- profile: who this shooter is, for the coaching maths and the roster
+  if (p === "/profile") {
+    const b = body || {}; const sh = book.shooters[who] ||= { first_seen: nowIso(), profile: {} }; sh.profile ||= {};
+    const pr = b.profile || {};
+    const pick = (k, allowed, max) => { if (!(k in pr)) return; let v = pr[k]; if (allowed) v = allowed.includes(String(v)) ? String(v) : ""; else v = String(v || "").slice(0, max || 60); if (v) sh.profile[k] = v; else delete sh.profile[k]; };
+    pick("name"); pick("hand", ["right", "left"]); pick("eye", ["right", "left", "cross"]); pick("discipline", ["uspsa", "3gun", "idpa", "defensive", "precision", "hunting", "new"]);
+    pick("level", ["new", "intermediate", "advanced", "competitor"]); pick("email", null, 80); pick("note", null, 200); pick("role", ["shooter", "coach"]);
+    sh.profile.updated = nowIso(); await saveBook(book);
+    return { ok: true, said: "Profile saved.", profile: sh.profile };
+  }
+  // ---- classes: what a coach builds for a course. Local only until accounts.
+  if (p === "/class/templates") return { ok: true, templates: await classTemplates() };
+  if (p === "/class") {
+    const b = body || {};
+    if (b.delete) { book.classes = book.classes.filter(x => x.id !== b.id); await saveBook(book); return { ok: true, classes: classesOut(book) }; }
+    if (b.from_template) {
+      const tpl = (await classTemplates()).find(t => t.key === b.from_template); if (!tpl) return { ok: false, said: "No such template." };
+      // the class-specific drills it refers to come along, once, into the coach's own drill list
+      const need = new Set(); (tpl.modules || []).forEach(m => (m.items || []).forEach(it => need.add(it.drill)));
+      for (const dr of CD || []) if (need.has(dr.key) && !drillsAll(book).some(x => x.key === dr.key)) book.custom_drills.push({ ...dr, section: dr.section || "Class drills", mine: true, also: dr.also || [] });
+      const cls = { id: uid(8), name: tpl.name, discipline: tpl.discipline, level: tpl.level, about: tpl.about, hours: tpl.hours, rounds_note: tpl.rounds_note,
+        prereq: tpl.prereq || "", gear: tpl.gear || "", modules: JSON.parse(JSON.stringify(tpl.modules || [])), template: tpl.key, made: nowIso() };
+      book.classes.unshift(cls); await saveBook(book);
+      return { ok: true, said: `${cls.name} is yours to edit.`, cls, classes: classesOut(book) };
+    }
+    const name = String(b.name || "").trim().slice(0, 80); if (!name) return { ok: false, said: "A class needs a name." };
+    const modules = (b.modules || []).slice(0, 40).map(m => ({ title: String(m.title || "").slice(0, 80), about: String(m.about || "").slice(0, 1200), minutes: Math.max(0, Math.min(600, parseInt(m.minutes) || 0)),
+      live: m.live !== false, items: (m.items || []).slice(0, 40).map(it => ({ drill: String(it.drill || ""), reps: Math.max(1, Math.min(50, +it.reps || 1)), dry: !!it.dry, note: String(it.note || "").slice(0, 200) })).filter(it => byKey(book, it.drill)),
+      notes: String(m.notes || "").slice(0, 1200) }));
+    const row = { name, discipline: String(b.discipline || "").slice(0, 20), level: String(b.level || "").slice(0, 20), about: String(b.about || "").slice(0, 1200), hours: +b.hours || 0,
+      prereq: String(b.prereq || "").slice(0, 300), gear: String(b.gear || "").slice(0, 600), modules, updated: nowIso() };
+    let ex = book.classes.find(x => x.id === b.id);
+    if (ex) Object.assign(ex, row); else { ex = { ...row, id: uid(8), made: nowIso() }; book.classes.unshift(ex); book.classes = book.classes.slice(0, 60); }
+    await saveBook(book); return { ok: true, said: `Saved ${name}.`, cls: ex, classes: classesOut(book) };
+  }
+  // ---- events: a match or a class day - stages grouped, with a date and a place
+  if (p === "/event") {
+    const b = body || {};
+    if (b.delete) { book.events = book.events.filter(x => x.id !== b.id); await saveBook(book); return { ok: true, events: eventsOut(book) }; }
+    const name = String(b.name || "").trim().slice(0, 80); if (!name) return { ok: false, said: "An event needs a name." };
+    const row = { name, date: String(b.date || "").slice(0, 10), where: String(b.where || "").slice(0, 80), format: /3.?gun/i.test(String(b.format || "")) ? "3gun" : /class|course/i.test(String(b.format || "")) ? "class" : "uspsa",
+      stages: (b.stages || []).map(String).filter(id => stageById(book, id)).slice(0, 40), notes: String(b.notes || "").slice(0, 1200), updated: nowIso() };
+    let ex = book.events.find(x => x.id === b.id);
+    if (ex) Object.assign(ex, row); else { ex = { ...row, id: uid(8), made: nowIso() }; book.events.unshift(ex); book.events = book.events.slice(0, 60); }
+    await saveBook(book); return { ok: true, said: `Saved ${name}.`, event: ex, events: eventsOut(book) };
+  }
+  // ---- photos, kept outside the book
+  if (p === "/photo") { const id = q.get("id") || (body || {}).id; const dataUrl = await photoGet(id); return { ok: !!dataUrl, photo: dataUrl }; }
+  if (p === "/photos/count") return { ok: true, count: await photoCount() };
+  // ---- meta: tester signals (which coming-soon cards get tapped) and the build stamp
+  if (p === "/meta") {
+    const b = body || {}; book.meta ||= {};
+    if (b.soon) { book.meta.soon ||= {}; book.meta.soon[String(b.soon).slice(0, 40)] = (book.meta.soon[String(b.soon).slice(0, 40)] || 0) + 1; }
+    if (b.build) book.meta.build = +b.build;
+    if (b.set && typeof b.set === "object") for (const [k, v] of Object.entries(b.set)) book.meta[String(k).slice(0, 40)] = v;
+    await saveBook(book); return { ok: true, meta: book.meta };
   }
   if (p === "/run") return logRun(body || {});
   if (p === "/run/edit") return editRun(body || {});
@@ -445,15 +626,40 @@ async function api(path, body) {
     if (b.delete) { book.custom_drills = (book.custom_drills || []).filter(x => x.key !== b.key); await saveBook(book); return { ok: true, drills: drillsAll(book) }; }
     const name = String(b.name || "").trim().slice(0, 60); if (!name) return { ok: false, said: "A drill needs a name." };
     const key = b.key && String(b.key).startsWith("my-") ? b.key : "my-" + name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30) + "-" + uid(3);
-    const d = { key, name, weapon: ["pistol", "rifle", "both"].includes(b.weapon) ? b.weapon : "pistol", rounds: Math.max(1, Math.min(60, parseInt(b.rounds) || 1)), par: Math.max(0, +b.par || 0),
+    const d = { key, name, weapon: ["pistol", "rifle", "shotgun", "both"].includes(b.weapon) ? b.weapon : "pistol", rounds: Math.max(1, Math.min(60, parseInt(b.rounds) || 1)), par: Math.max(0, +b.par || 0),
       dist: b.dist === "" || b.dist == null ? null : +b.dist, section: "Mine", targets: Math.max(1, parseInt(b.targets) || 1), reload: !!b.reload, dry: !!b.dry, also: [], head: Math.max(0, parseInt(b.head) || 0),
       source: "mine", how: String(b.how || "").slice(0, 400), skills: String(b.skills || "").split(",").map(s => s.trim()).filter(Boolean).slice(0, 8), why: String(b.why || "").slice(0, 200), mine: true };
     const ex = (book.custom_drills || []).find(x => x.key === key); if (ex) Object.assign(ex, d); else book.custom_drills.push(d);
     await saveBook(book); return { ok: true, said: `Saved ${name}.`, drill: d, drills: drillsAll(book) };
   }
-  if (p === "/export") return { ok: true, book };
-  if (p === "/import") { const inc = (body || {}).book; if (!inc || !Array.isArray(inc.runs)) return { ok: false, said: "That isn't a Rangefolio backup." }; await saveBook({ ...book, ...inc }); return { ok: true, said: `Imported ${inc.runs.length} runs.` }; }
+  if (p === "/export") return { ok: true, book: { ...book, exported: nowIso(), build: window.RF_BUILD ? window.RF_BUILD.n : null } };
+  if (p === "/import") {
+    const inc = (body || {}).book; if (!inc || !Array.isArray(inc.runs)) return { ok: false, said: "That isn't a Rangefolio backup." };
+    const merged = defaults({ ...book, ...inc }); merged.schema = inc.schema || 1; migrate(merged);
+    await saveBook(merged); return { ok: true, said: `Imported ${inc.runs.length} runs.` };
+  }
   return { ok: false, error: "no such path " + p };
+}
+
+// ---------------------------------------------------------------- classes + events helpers
+let CT = null, CD = null;
+async function classTemplates() {
+  if (!CT) { try { const j = await fetch("data/classes.json").then(r => r.json()); CT = j.templates || []; CD = j.drills || []; } catch { CT = []; CD = []; } }
+  return CT;
+}
+function classAmmo(book, cls) {
+  const out = { pistol: 0, rifle: 0, shotgun: 0 };
+  for (const m of cls.modules || []) { const a = programAmmo(book, m.items); out.pistol += a.pistol || 0; out.rifle += a.rifle || 0; out.shotgun += a.shotgun || 0; }
+  out.total = out.pistol + out.rifle + out.shotgun; return out;
+}
+function classesOut(book) {
+  return (book.classes || []).map(c => ({ ...c, ammo: classAmmo(book, c), minutes: (c.modules || []).reduce((n, m) => n + (+m.minutes || 0), 0),
+    modules: (c.modules || []).map(m => ({ ...m, ammo: programAmmo(book, m.items), drills: (m.items || []).map(it => ({ ...it, name: (byKey(book, it.drill) || {}).name || it.drill })) })) }));
+}
+function eventsOut(book) {
+  return (book.events || []).map(e => { const sts = (e.stages || []).map(id => stageById(book, id)).filter(Boolean).map(st => ({ ...st, ammo: stageAmmo(st) }));
+    const ammo = {}; sts.forEach(st => { for (const [g, n] of Object.entries(st.ammo)) ammo[g] = (ammo[g] || 0) + n; });
+    return { ...e, stage_list: sts, ammo, rounds: Object.values(ammo).reduce((a, b) => a + b, 0) }; });
 }
 
 // CSV of the book, since a spreadsheet writer isn't in the browser.
@@ -466,5 +672,5 @@ async function csv(who) {
   return rows.map(r => r.map(v => { v = String(v ?? ""); return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v; }).join(",")).join("\n");
 }
 
-window.RangefolioEngine = { api, csv, loadBook, saveBook, data };
+window.RangefolioEngine = { api, csv, loadBook, saveBook, data, placementStats, photoGet, SCHEMA };
 })();

@@ -11,11 +11,19 @@ product.
 
 | File | What it is |
 |---|---|
-| `index.html` | The whole UI. One file: CSS, markup, JS. Six tabs — Log, Book, Coach, Session, Comp, Ballistics. |
-| `engine.js` | The data layer and all scoring. Answers the same `/api/range/...` request shapes the UI already spoke, from IndexedDB (localStorage fallback). |
-| `data/drills.json` | 42 built-in drills (name, weapon, rounds, par, distance, procedure, what it trains), 3 warm-up sessions, 2 built-in stages, expert benchmark times, drill groupings by skill, time-plus rule schedules, zone maps. |
+| `index.html` | The core UI: CSS, markup, and the main script (Log, Book, Review, Session, Comp, Ballistics). Exposes `window.RF` hooks at the end for the second file. |
+| `app-more.js` | The rest of the UI: Settings (profile, coach mode, roadmap, data), the coming-soon cards, the camera / photo scorer, Coach mode (roster, class builder, templates), Events. |
+| `targets.js` | The target registry: USPSA metric, IDPA, B-8, 8" plate. One geometry drives the log pane, the camera overlay and the scorer. |
+| `engine.js` | The data layer and all scoring. Answers `/api/range/...` request shapes from IndexedDB (localStorage fallback). Schema versioning and migrations live here. |
+| `build.js` | `RF_BUILD.n` — the build number, the ONE thing to bump per deploy — and `RF_CONFIG` (collector URL/key). |
+| `data/drills.json` | 42 built-in drills, 3 warm-up sessions, 2 built-in stages, expert benchmark times, drill groupings by skill, time-plus rule schedules, zone maps. |
+| `data/classes.json` | 7 class templates (CCW, Basic/Intermediate/Advanced Pistol, Carbine, Defensive Shotgun, USPSA Classifier Day), 37 class-specific drills, and the list of classes to add later. |
+| `data/roadmap.json` | The coming-soon features: key, title, blurb, what unblocks each. |
+| `data/builds.json` | Internal change log per build. Testers only see the number. |
 | `data/loads.json` | 29 calibres, 134 factory loads with maker MV/BC and a source string each. |
-| `manifest.webmanifest`, `sw.js`, `icons/` | PWA install and offline shell. |
+| `manifest.webmanifest`, `sw.js`, `icons/` | PWA install and offline shell. `sw.js` derives its cache name from `build.js`. |
+| `collector/` | The Cloudflare Worker that receives "Send my data", plus `pull.py` for titan. Setup in `docs/CLOUDFLARE.md`. |
+| `docs/PRICING-AND-COSTS.md` | Tiering, store cuts, per-user cost estimates, how to job-cost it. |
 | `docs/BALLISTICS-DATA.md` | The physics the solver implements, its validation against maker tables, and the source of every load number. Read before touching the solver. |
 | `docs/SCORING.md` | USPSA / USPSA Multigun / UML / outlaw / IDPA scoring rules with rule numbers, and what an app must capture. The stage scorer is built from this. |
 | `docs/DRILLS.md` | Origin, procedure and published expert tiers for the drills, how coaches diagnose accuracy vs speed, GM benchmarks. The Coach's goal suggestions come from this. |
@@ -29,6 +37,53 @@ loosely coupled and the engine can later be moved behind a real API without
 rewriting the page. The one network call left is the weather strip on the
 Ballistics tab (Open-Meteo, keyless, direct from the browser). The service
 worker caches the shell so the app opens with no signal.
+
+## Build 4 additions (September 2026)
+
+- **Build/update system.** `build.js` holds the number; `sw.js` imports it
+  for the cache name; the page reloads itself once when a new worker takes
+  over and toasts "Updated to build N". `data/builds.json` is the change log.
+- **Schema v2 + migrations.** `engine.js` `MIGRATIONS` table; `book.schema`
+  written on every save; imports are migrated too. Adds `profile` per
+  shooter, `classes`, `events`, `meta`.
+- **Profiles.** name, hand, eye, discipline, level, role. Handedness drives
+  the placement read. Settings → Profile.
+- **Shot placement.** Every tap on the target pane is stored on the run as
+  `placement: { target, poa:{x,y}, source: tap|photo, shots:[{x,y,z,head?,dbl?}] }`,
+  normalised 0..1 to the target's viewBox, in shot order. Point of aim is
+  always recorded: it defaults to the target's centre mark and is remembered
+  per drill+target in localStorage (`range.poa`); ⌖ moves it. Hand-editing
+  the hit counts on a run drops its placement (the taps no longer match).
+- **Placement analytics.** `placementStats()` in the engine: mean offset
+  from POA in inches, mean radius, extreme spread, x/y standard deviation,
+  first-shot vs rest, and a "consistent with…" read keyed to handedness.
+  Thresholds scale with distance (`tol = max(1", 0.25 × yards)`). Shown per
+  drill and overall on Review. Deliberately phrased as a place to start.
+- **Target types.** `targets.js`. Zones always map to A/C/D/miss: IDPA
+  −0/−1/−3 → A/C/D; B-8 X-9 → A, 8-7 → C, rest → D; plate on/off.
+- **Photo scoring.** `RF.openCamera()` in app-more.js. Camera with the
+  target outline overlay and a roll/tilt readout; file-input fallback;
+  photo downsized to ≤1280 px JPEG and stored in a separate IndexedDB store
+  (`photos`, keyed by run id; `run.photo = true`). Tap holes on the photo,
+  tap again to remove, hold for a double. **Scorer plug-point:**
+  `window.RangefolioScorer = { available, name, async score(dataUrl, targetKey) → { holes:[{x,y,z?,head?,conf?}] } }`.
+  When `available` is true its proposals pre-fill and the shooter corrects.
+  Photos are never in the JSON backup or the data send.
+- **Review** (was Coach). Same analysis plus placement.
+- **Coach mode** (Settings toggle, `range.coach` in localStorage). Adds the
+  Coach tab: roster (shooters on this phone), classes with a builder and
+  templates, publish/share as coming-soon. A class:
+  `{ name, discipline, level, hours, about, prereq, gear, modules:[{ title, minutes, live, about, items:[{drill,reps,dry}], notes }] }`.
+  Using a template copies it and adds its class drills to `custom_drills`.
+- **Events** (Comp tab): `{ name, date, where, format, stages:[ids], notes }`.
+  Start walks the stages on Log. Join/share by code are coming-soon.
+- **Coming-soon system.** Any element with `data-soon="key"` opens the card
+  from `data/roadmap.json`; taps are counted in `book.meta.soon`. Roadmap
+  screen under Settings.
+- **Send my data.** Consent card, then POST to `RF_CONFIG.collect_url` with
+  `x-rf-key`. Coming-soon until the URL is set.
+- Pages are addressed by name (`data-page`), not index, because the Coach
+  page comes and goes.
 
 ## What it does today
 
@@ -72,7 +127,8 @@ Ordered roughly by how much they block a real product.
 - **No accounts, no sync, no cloud.** Data lives in one browser. Clearing site
   data deletes the book. Backup is a manual JSON download. A product needs an
   account, a backend, and sync across devices. The engine's `api()` boundary is
-  where that goes: keep the request shapes, swap the storage.
+  where that goes: keep the request shapes, swap the storage. The collector
+  Worker is the first sliver of that backend.
 - **No sharing.** Drills, sessions and stages can't be sent to anyone. The
   coach → student loop (the distribution story) needs: share a drill/session/
   stage by link or code, a student's book visible to their coach, and an
@@ -81,9 +137,8 @@ Ordered roughly by how much they block a real product.
   Firearms apps face extra review friction on both stores — plan for it early.
 - **Storage caps.** IndexedDB is fine for thousands of runs; photos/video (see
   below) will not fit. Any media needs the backend.
-- **No migrations.** `engine.js` tolerates missing fields but there is no
-  versioned schema. Add a `schema` field to the book and a migration step
-  before the first public build.
+- **Migrations exist now** (`schema` = 2). Add a step to `MIGRATIONS` for
+  every shape change; never remove a user-typed field.
 
 ### 2. Missing features (were in the assistant, or on the list)
 
@@ -101,14 +156,15 @@ Ordered roughly by how much they block a real product.
 - **Spreadsheet export** is CSV only; the original produced an .xlsx with
   Runs / Standards / Holds sheets. Add a client-side xlsx writer or do it
   server-side.
-- **Photo → stage** (photograph a stage brief or bay, get a stage), top-down
-  stage sketch with a travel path, and **camera hit detection** (before/after
-  photo of a target → holes → zones) are on the roadmap and need the backend
-  plus a vision model. The stage data model is ready for them.
+- **Photo → stage** (photograph a stage brief or bay, get a stage) and a
+  top-down stage sketch with a travel path are on the roadmap. **Camera hit
+  detection** has its UI and plug-point built (build 4); the model itself
+  needs the backend. Every tapped photo is training data for it.
 - **Drill sharing / coach authoring.** Custom drills exist locally; nothing to
   publish a set.
-- **Trend charts.** Coach gives words and arrows; there are no graphs. A
-  sparkline per drill (time and A% over the window) is the obvious add.
+- **Trend charts.** Review gives words, arrows and now a group plot; there
+  are no time-series graphs. A sparkline per drill (time and A% over the
+  window) is the obvious add.
 - **Multiple shooters share one device's book** ("+ someone" adds a name).
   With accounts, that becomes real profiles.
 
@@ -158,19 +214,22 @@ Ordered roughly by how much they block a real product.
 - No haptics beyond `navigator.vibrate` (Android only).
 - Accessibility: buttons are labelled, contrast is fine in both themes, but
   nothing has been tested with a screen reader.
-- Copy still says "her" in one or two comments in the source; no user-facing
-  text refers to the assistant.
+- Coach mode is a toggle anyone can flip. With accounts it becomes a role.
+  Other options considered: an instructor invite code at the gate, or asking
+  "shooter or instructor?" at profile setup.
+- Video to coach is deliberately coming-soon with no local capture: video
+  would blow through phone storage and give a bad first impression.
 
 ### 6. Engineering
 
-- `index.html` is ~2,000 lines in one file. Fine for a PWA, wrong for a team.
-  Split into modules when there's more than one contributor.
+- `index.html` is ~2,300 lines plus `app-more.js` ~500. Fine for a PWA; split
+  further into modules when there's more than one contributor.
 - No tests. The engine's scoring was checked by hand against the rulebook
   and against the original Python implementation; write unit tests for
   `scoreStage`, `buildRow`, `analyse` first — they are pure functions.
 - No build step, no bundler, no TypeScript. Deliberate for now.
-- Service worker is cache-first with background refresh; bump `VERSION` in
-  `sw.js` on every deploy or users keep the old shell.
+- Service worker is cache-first with background refresh; bump `RF_BUILD.n`
+  in `build.js` on every deploy or users keep the old shell.
 
 ## Decisions already made (don't relitigate without a reason)
 
@@ -190,8 +249,10 @@ Ordered roughly by how much they block a real product.
 
 ## Next three things I'd build
 
-1. A backend with accounts and the same `api()` contract, so the book syncs
-   and a coach can see a student's runs.
-2. The AMG/SG timer link (BLE) in a native shell, so time and splits arrive
-   without typing.
-3. Drill/session/stage sharing by link.
+1. The collector Worker live (docs/CLOUDFLARE.md), then a backend with
+   accounts and the same `api()` contract, so the book syncs and a coach can
+   see a student's runs. Every coming-soon card lights up off that one build.
+2. The hole-detection model behind `RangefolioScorer`, trained on the tapped
+   photos the collector brings in.
+3. Capacitor wrap for the App Store / Play Store, which also unlocks the
+   AMG/SG timer link on iPhone.

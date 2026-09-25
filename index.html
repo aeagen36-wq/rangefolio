@@ -11,6 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Rangefolio">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+<script src="build.js"></script>
+<script src="targets.js"></script>
 <script src="engine.js"></script>
 <!--
   RANGEFOLIO
@@ -62,8 +64,6 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
   border:1.5px solid var(--hair);font-weight:700;font-size:15px;min-height:44px}
 .whoBtn[aria-pressed="true"]{background:var(--hot);color:#1A1204;border-color:var(--hot)}
 .whoBtn.add{color:var(--dim);border-style:dashed}
-/* her, from here. Same server, same mic pipeline as the main app - this
-   is a second door into the same room, not a second room. */
 .themeBtn{flex:none;width:40px;height:40px;min-height:40px;border-radius:50%;background:var(--card);border:1.5px solid var(--hair);color:var(--dim);font-size:18px}
 .brand{font:800 12px var(--mono);letter-spacing:.18em;color:var(--hot);padding:0 4px 0 2px;flex:none}
 
@@ -136,7 +136,7 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
 .exportRow span button,.exportRow button{min-height:38px;border-radius:12px;border:1.5px solid var(--hair);background:var(--sunk);
   color:var(--dim);font-weight:700;font-size:13px;padding:0 14px}
 .work{white-space:pre-wrap;font:15px/1.55 var(--sans);color:var(--ink);margin:0}
-.work:empty::before{content:"Asking her…";color:var(--faint)}
+.work:empty::before{content:"Reading the book…";color:var(--faint)}
 .verd{background:var(--sunk);border:1.5px solid var(--hot);border-radius:14px;padding:10px 12px;font-size:14.5px;line-height:1.4;margin-bottom:10px}
 .verd small{display:block;color:var(--faint);font-family:var(--mono);font-size:11px;margin-top:4px}
 .cd{background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
@@ -480,6 +480,94 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
 .row2 button{background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;
   font-weight:700;color:var(--dim);font-size:14px;min-height:48px;white-space:nowrap}
 
+/* ---------- target types, point of aim, photo ----------------------- */
+.tchips{display:flex;gap:4px;margin:0 0 6px;overflow-x:auto;scrollbar-width:none}
+.tchips::-webkit-scrollbar{display:none}
+.tchips button{flex:1 0 auto;min-height:32px;padding:0 12px;border-radius:999px;background:var(--sunk);border:1.5px solid var(--hair);font:700 11px var(--mono);letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.tchips button[aria-pressed="true"]{color:var(--hot);border-color:var(--hot)}
+.tgtTools{display:flex;gap:6px;margin-top:6px}
+.tgtTools button{flex:1;min-height:38px;border-radius:12px;background:var(--sunk);border:1.5px solid var(--hair);color:var(--dim);font-weight:700;font-size:13px}
+.tgtTools button[aria-pressed="true"]{color:var(--hot);border-color:var(--hot);background:var(--card)}
+.tgt .poa circle,.tgt .poa line,.plMini .poa circle,.plMini .poa line{stroke:#fff;stroke-width:2.2;paint-order:stroke;filter:drop-shadow(0 0 2px rgba(0,0,0,.8))}
+.tgt .poa.arm circle,.tgt .poa.arm line{stroke:var(--hot)}
+.tgt .hole.dbl{stroke:var(--hot);stroke-width:2.4}
+.plMini svg{width:100%;max-width:220px;height:auto;display:block;margin:0 auto}
+.plMini .hole{fill:#0B0D10;stroke:#fff;stroke-width:1.8}.plMini .hole.dbl{stroke:var(--hot);stroke-width:2.4}
+.plMini .lab{font:700 16px var(--mono);fill:#fff;pointer-events:none;letter-spacing:.06em;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px}
+.plMini .lab.card{font-size:11px;fill:rgba(0,0,0,.55);stroke:none}
+.ephoto img{width:100%;border-radius:12px;display:block}
+.ephoto .mini{display:inline-block;width:auto;margin-top:6px;min-height:30px;padding:0 10px;border-radius:8px;background:var(--card);border:1px solid var(--hair);color:var(--dim);font:700 11px var(--mono)}
+.soonRow button{background:var(--sunk);border:1.5px dashed var(--hair);color:var(--dim);font-size:13px;font-weight:700}
+/* the group plot on Review */
+.pl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;align-items:start;margin-top:8px}
+.pl.wide{grid-template-columns:150px minmax(0,1fr);background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px;margin-bottom:8px}
+.pl .gplot{width:100%;height:auto}
+.pl .plt .why.mono{font-family:var(--mono);font-size:12px}
+.pl .plt .plan{margin-top:4px;font-size:13px}
+.grp{margin-bottom:8px}
+@media (max-width:380px){.pl,.pl.wide{grid-template-columns:1fr}}
+/* comp: stages / events switch */
+.compSeg{display:flex;gap:4px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:3px;margin-bottom:10px}
+.compSeg button{flex:1;min-height:36px;border-radius:9px;font:700 11px var(--mono);letter-spacing:.12em;color:var(--dim)}
+.compSeg button[aria-pressed="true"]{background:var(--card);color:var(--hot)}
+/* anything that needs a server: looks live, slightly muted, opens a card */
+[data-soon]{opacity:.72;border-style:dashed !important}
+.soon{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px}
+.soon .box{width:min(420px,100%);background:var(--card);border:1.5px solid var(--hot);border-radius:20px;padding:18px 18px 14px}
+.soon .tag{font:700 9.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--hot)}
+.soon h3{margin:6px 0 6px;font-size:19px}
+.soon p{margin:0 0 8px;color:var(--dim);font-size:14px;line-height:1.45}
+.soon .needs{font:700 11px var(--mono);color:var(--faint);letter-spacing:.06em}
+.soon .ok{width:100%;margin-top:10px;min-height:46px;border-radius:12px;background:var(--hot);color:#1A1204;font-weight:800}
+/* settings + coach + camera live in app-more.js; shared bits */
+.setRow{display:flex;align-items:center;gap:10px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px 12px;min-height:56px;width:100%;text-align:left}
+.setRow b{flex:1;font-size:15px}.setRow small{display:block;color:var(--faint);font-size:12px;font-weight:500;margin-top:2px}
+.setRow .sw{width:46px;height:26px;border-radius:999px;background:var(--hair);position:relative;flex:none;transition:.15s}
+.setRow .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--dim);transition:.15s}
+.setRow[aria-pressed="true"] .sw{background:var(--hot)}.setRow[aria-pressed="true"] .sw::after{left:23px;background:#1A1204}
+.setH{font:700 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:12px 4px 4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-height:36px;padding:0 12px;border-radius:999px;background:var(--sunk);border:1.5px solid var(--hair);font-size:13px;font-weight:600;color:var(--dim)}
+.chips button[aria-pressed="true"]{color:var(--hot);border-color:var(--hot)}
+.build{font:700 12px var(--mono);color:var(--dim);letter-spacing:.06em}
+.rm-list{display:flex;flex-direction:column;gap:6px}
+.cam{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
+.cam .view{position:relative;flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cam video,.cam img.shot{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.cam .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;padding:6%}
+.cam .ov svg{max-width:100%;max-height:100%;width:auto;height:100%}
+.cam .ov.live svg{pointer-events:none}
+.cam .ov.score{pointer-events:auto}
+.cam .ov.score svg [data-z]{pointer-events:auto;fill-opacity:.001;stroke:rgba(255,255,255,.75);stroke-width:2;stroke-dasharray:6 4}
+.cam .ov.score svg [data-z]:active{fill-opacity:.15;fill:#fff}
+.cam .ov.score .lab{display:none}
+.cam .ov.score .hole{fill:rgba(232,163,61,.85);stroke:#fff;stroke-width:2;pointer-events:none}
+.cam .ov.score .hole.dbl{fill:rgba(232,86,79,.9);r:9}
+.cam .bar{flex:none;display:flex;gap:6px;padding:10px 12px calc(10px + var(--sab));background:#0B0D10;align-items:center}
+.cam .bar button{min-height:46px;border-radius:12px;background:#14181E;border:1.5px solid rgba(255,255,255,.12);color:#F2F4F7;font-weight:700;font-size:13px;padding:0 12px}
+.cam .bar button.snap{flex:1;background:var(--hot);color:#1A1204;font-size:16px;border-color:var(--hot)}
+.cam .bar button.ghost{color:#9AA5B4}
+.cam .topbar{flex:none;display:flex;gap:6px;padding:calc(8px + var(--sat)) 12px 8px;background:#0B0D10;align-items:center;overflow-x:auto;scrollbar-width:none}
+.cam .topbar .tchips{margin:0;flex:1}
+.cam .lvl{flex:none;font:700 11px var(--mono);color:#9AA5B4;letter-spacing:.06em;min-width:74px;text-align:right}
+.cam .lvl.ok{color:var(--pass)}
+.cam .hint2{position:absolute;left:0;right:0;bottom:8px;text-align:center;color:#fff;font:600 12.5px var(--sans);text-shadow:0 1px 3px #000;pointer-events:none;padding:0 16px}
+.cam .tallyLine{position:absolute;top:8px;left:0;right:0;text-align:center;color:#fff;font:700 13px var(--mono);text-shadow:0 1px 3px #000;pointer-events:none}
+.cam input[type=file]{display:none}
+.cls{background:var(--sunk);border:1.5px solid var(--hair);border-radius:16px;padding:12px 14px;margin-bottom:8px}
+.cls h3{margin:0;font-size:17px}.cls .meta{font:700 12px var(--mono);color:var(--dim);margin-top:4px}
+.cls .meta b{color:var(--hot)}.cls .about{color:var(--faint);font-size:12.5px;line-height:1.45;margin-top:6px}
+.cls .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.cls .acts button{min-height:40px;border-radius:11px;padding:0 14px;font-weight:700;font-size:13px;background:var(--card);border:1.5px solid var(--hair);color:var(--dim)}
+.cls .acts button.go2{background:var(--hot);color:#1A1204;border-color:var(--hot)}
+.mod{background:var(--card);border:1.5px solid var(--hair);border-radius:14px;padding:10px 12px;margin-top:8px}
+.mod .mh{display:flex;align-items:center;gap:8px}.mod .mh b{flex:1;font-size:15px}.mod .mh small{font:700 11px var(--mono);color:var(--faint)}
+.mod .ma{color:var(--dim);font-size:13px;line-height:1.45;margin-top:4px;white-space:pre-line}
+.mod .mi{margin-top:6px;font-size:13px;color:var(--ink)}.mod .mi small{color:var(--faint);font-family:var(--mono);font-size:11px}
+.mod .mn{margin-top:6px;color:var(--faint);font-size:12.5px;line-height:1.4;white-space:pre-line;border-left:2px solid var(--hair);padding-left:8px}
+.roster{display:flex;flex-direction:column;gap:6px}
+.roster .st{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--sunk);border:1.5px solid var(--hair);border-radius:14px;padding:10px 12px}
+.roster .st b{font-size:15px}.roster .st small{display:block;color:var(--faint);font-size:12px;font-family:var(--mono)}
 /* ---------- tester gate (invite code) --------------------------------- */
 .gate{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:14px;text-align:center}
 .gate[hidden]{display:none}
@@ -504,18 +592,20 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
   <span class="brand">RANGEFOLIO</span>
   <div class="who" id="who"></div>
   <button class="themeBtn" id="themeBtn" type="button" aria-label="Light or dark" title="Light or dark">☼</button>
+  <button class="themeBtn" id="settingsBtn" type="button" aria-label="Settings" title="Settings">⚙</button>
 </div>
 
 <div class="tabs" id="tabs" role="tablist">
-  <button role="tab" data-p="0" aria-selected="true">Log</button>
-  <button role="tab" data-p="1" aria-selected="false">Book</button>
-  <button role="tab" data-p="2" aria-selected="false">Coach</button>
-  <button role="tab" data-p="3" aria-selected="false">Session</button>
-  <button role="tab" data-p="4" aria-selected="false">Comp</button>
-  <button role="tab" data-p="5" aria-selected="false">Ballistics</button>
+  <button role="tab" data-page="log" aria-selected="true">Log</button>
+  <button role="tab" data-page="book" aria-selected="false">Book</button>
+  <button role="tab" data-page="review" aria-selected="false">Review</button>
+  <button role="tab" data-page="session" aria-selected="false">Session</button>
+  <button role="tab" data-page="comp" aria-selected="false">Comp</button>
+  <button role="tab" data-page="ball" aria-selected="false">Ballistics</button>
+  <button role="tab" data-page="coach" aria-selected="false" hidden>Coach</button>
 </div>
 <div class="pages" id="pages">
-  <div class="page">
+  <div class="page" data-page="log">
     <section class="card">
     <button class="drillPick" id="drillPick" type="button" aria-haspopup="dialog">
       <b id="drillName">Pick a drill</b>
@@ -539,45 +629,12 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
         <div class="zoneFoot"><span id="zoneSum"></span><button type="button" class="clr" id="clearHits">clear hits</button></div>
       </div>
       <div class="pane">
+        <div class="tchips" id="tchips" role="group" aria-label="Target type"></div>
         <div class="tgt" id="tgt" aria-label="Target - tap where the round went">
-          <!--
-            A USPSA/IPSC-style metric silhouette, because that's the one
-            whose zones are literally called A, C and D and a head box. It
-            is drawn, not photographed: a photo of a cardboard target reads
-            as brown mush at arm's length in sunlight. This reads.
-            Card = miss. Everything inside the silhouette is a hit somewhere.
-          -->
-          <svg viewBox="0 0 300 460" role="img">
-            <!-- the card: a miss -->
-            <rect data-z="miss" x="0" y="0" width="300" height="460" rx="14" fill="#B58F63"/>
-            <rect x="0" y="0" width="300" height="460" rx="14" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="2"/>
-            <text class="lab card" x="18" y="446">MISS · TAP OFF THE TARGET</text>
-
-            <!-- D: the whole body, octagonal shoulders, tapered bottom -->
-            <path data-z="d" fill="#8E3B31" stroke="#1E1414" stroke-width="2"
-              d="M113 74 H187 V98 H216 L246 122 V300 L232 434 H68 L54 300 V122 L84 98 H113 Z"/>
-            <!-- C -->
-            <path data-z="c" fill="#3E4358" stroke="#1E1414" stroke-width="1.5" stroke-dasharray="4 3"
-              d="M113 74 H187 V112 H208 L226 140 V318 L212 370 H88 L74 318 V140 L92 112 H113 Z"/>
-            <!-- A: chest -->
-            <rect data-z="a" x="120" y="150" width="60" height="118" rx="5" fill="#4E7A34" stroke="#1E1414" stroke-width="1.5" stroke-dasharray="4 3"/>
-
-            <!-- head: scores like the body - the head's A box is an A, the rest of the head is a C.
-                 data-head marks it so a drill that called for a head shot knows one arrived. -->
-            <rect data-z="c" data-head="1" x="113" y="14" width="74" height="62" rx="4" fill="#3E4358" stroke="#1E1414" stroke-width="2"/>
-            <rect data-z="a" data-head="1" x="128" y="24" width="44" height="26" rx="3" fill="#4E7A34" stroke="#1E1414" stroke-width="1.2" stroke-dasharray="3 2"/>
-
-            <!-- labels, the way the real one is printed -->
-            <text class="lab" x="146" y="42">A</text>
-            <text class="lab" x="146" y="215">A</text>
-            <text class="lab" x="98" y="215">C</text>
-            <text class="lab" x="194" y="215">C</text>
-            <text class="lab" x="60" y="215">D</text>
-            <text class="lab" x="232" y="215">D</text>
-
-            <g id="holes"></g>
-          </svg>
+          <!-- Drawn from targets.js so the log pane, the camera overlay and the
+               photo scorer share one geometry. Card = miss. -->
         </div>
+        <div class="tgtTools"><button type="button" id="poaBtn" aria-pressed="false" title="Move the point of aim">⌖ point of aim</button><button type="button" id="photoBtn">📷 score a photo</button></div>
         <div class="tally" id="tally"></div>
       </div>
       <div class="pane dryPane"><b>Dry rep.</b> No hits to count - just the time against par. LOG IT works with no rounds, and with no time if there wasn't a timer.</div>
@@ -616,7 +673,7 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
     <p class="hint">Counters, the target, or dry. Shot by shot keeps your splits. Hold LOG IT.</p>
   </section>
   </div>
-  <div class="page">
+  <div class="page" data-page="book">
     <section class="card book">
     <div class="exportRow"><h2 id="bookTitle">My book</h2>
       <span style="display:flex;gap:6px"><button type="button" id="sheetBtn">CSV ↓</button><button type="button" id="backupBtn">Backup</button><label class="restore" style="position:relative"><button type="button" tabindex="-1">Restore</button><input id="restoreIn" type="file" accept="application/json" style="position:absolute;inset:0;opacity:0"></label></span></div>
@@ -629,28 +686,36 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
     <p class="hint"><b>GOAL ✓</b> hit your goal · <b>PASS</b> every round on target and inside par · <b>CLEAN</b> all on target, over par · <b>2 MISS</b> rounds off the target · <b>DRY</b> no rounds, time only · <b>HF</b> a USPSA stage, hit factor · <b>T+</b> a 3-gun stage, time plus penalties. Tap a run to edit it or add a note.</p>
   </section>
   </div>
-  <div class="page">
+  <div class="page" data-page="review">
     <section class="card" id="workCard">
-      <h2 style="margin:0 0 10px;font:700 15px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Coach</h2>
+      <h2 style="margin:0 0 10px;font:700 15px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Review</h2>
       <div id="workBody"><div class="empty">Reading the book…</div></div>
       <pre class="work" id="workText" hidden></pre>
-      <p class="hint">Every drill you've shot, read over your last 12 live runs of it: whether the problem is hits or time, the trend, a goal (yours, or a suggested one built on what good shooters do), and what to do next. Tap a drill to open it.</p>
+      <p class="hint">Every drill you've shot, read over your last 12 live runs of it: whether the problem is hits or time, the trend, a goal (yours, or a suggested one built on what good shooters do), and what to do next. Where you tapped hits on the target, the group is read too. Tap a drill to open it.</p>
     </section>
   </div>
-  <div class="page">
+  <div class="page" data-page="session">
     <section class="card" id="planCard">
       <button type="button" class="newPlan" id="newPlan">+ New session</button>
       <div class="plans" id="plans"><div class="empty">No sessions yet. Build one: pick the drills for the day and it counts the ammo.</div></div>
     </section>
   </div>
-  <div class="page">
+  <div class="page" data-page="comp">
     <section class="card" id="compCard">
-      <button type="button" class="newPlan" id="newStage">+ New stage</button>
-      <div class="plans" id="stagesList"></div>
-      <p class="hint">A stage is positions in order - targets, rounds, reloads, movement - scored on hit factor (USPSA) or time-plus (3-gun). The two built-ins use every mechanic once; <b>Copy</b> one to start from it.</p>
+      <div class="seg2 compSeg" id="compSeg"><button type="button" data-v="stages" aria-pressed="true">STAGES</button><button type="button" data-v="events" aria-pressed="false">EVENTS</button></div>
+      <div id="compStages">
+        <button type="button" class="newPlan" id="newStage">+ New stage</button>
+        <div class="plans" id="stagesList"></div>
+        <p class="hint">A stage is positions in order - targets, rounds, reloads, movement - scored on hit factor (USPSA) or time-plus (3-gun). The two built-ins use every mechanic once; <b>Copy</b> one to start from it.</p>
+      </div>
+      <div id="compEvents" hidden>
+        <div class="addRow" style="display:flex;gap:6px;margin-bottom:10px"><button type="button" class="newPlan" id="newEvent" style="margin:0;flex:1">+ New event</button><button type="button" class="newPlan" id="joinEvent" style="margin:0;flex:1" data-soon="event_join">Join with a code</button></div>
+        <div class="plans" id="eventsList"></div>
+        <p class="hint">An event is a match or a class day: its stages in order, a date and a place. Start it and the Log page walks the stages. Sharing a code so squad-mates pull the same stages is coming with accounts.</p>
+      </div>
     </section>
   </div>
-  <div class="page">
+  <div class="page" data-page="ball">
     <section class="card" id="ballCard">
       <div class="cond" id="cond">
         <button type="button" class="cmp" id="cmp" title="Compass - tap to enable">
@@ -709,6 +774,9 @@ button:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
         Rows in blue are transonic - trust them less.</p>
     </section>
   </div>
+  <div class="page" data-page="coach">
+    <section class="card" id="coachCard"><div class="empty">Coach mode is off. Turn it on under Settings.</div></section>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -747,7 +815,19 @@ window.fetch = (u, o) => {
   }
   return _fetch(u, o);
 };
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+// Service worker: caches the shell. When a new build's worker takes over
+// (bump RF_BUILD.n in build.js) the page reloads itself once so the new
+// files are what's running, and the build notice fires on the way back in.
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+  let hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController) { hadController = true; return; }     // first install, nothing to swap
+    if (sessionStorage.getItem("range.reloaded")) return;
+    sessionStorage.setItem("range.reloaded", "1"); location.reload();
+  });
+  setTimeout(() => sessionStorage.removeItem("range.reloaded"), 15000);
+}
 // Light or dark. Dark is the range default - it's what you want at 6 am
 // and it's easier on a phone in the sun than white glare; light is there
 // for the kitchen table.
@@ -767,7 +847,12 @@ let hits = { a: 0, c: 0, d: 0, miss: 0 };
 let headHits = 0;      // taps on the head box (target pane only)
 let shots = [];        // shot times off the timer, cumulative
 let time = "";
-let lastSeen = null;      // newest run id we've shown, to flag voice arrivals
+let lastSeen = null;      // newest run id we've shown, to flag new arrivals
+let tgtType = "uspsa";    // which target is drawn on the target pane
+let poa = null;           // point of aim, normalised to the target's viewBox
+let poaMode = false;      // next tap moves the point of aim instead of adding a hole
+let photoPending = null;  // a scored photo waiting to be logged with the run
+try { tgtType = RF_TARGETS.get(localStorage.getItem("range.target") || "uspsa").key; } catch {}
 
 const ZONE_ORDER = [["a","ALPHA"],["c","CHARLIE"],["d","DELTA"],["miss","MISS"]];
 
@@ -794,7 +879,7 @@ async function load(silent) {
     }
     lastSeen = newest || lastSeen;
   } catch (e) {
-    toast("can't reach her");
+    toast("couldn't load the book");
   }
 }
 
@@ -984,7 +1069,7 @@ function renderZones() {
   $("clearHits").disabled = !n;
 }
 function clearHits() {
-  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; holes = [];
+  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; holes = []; photoPending = null;
   if (drill && drill.stage) buildTargets();
   redrawHoles(); renderZones(); renderTally(); updateGo();
 }
@@ -1002,18 +1087,47 @@ $("zones").addEventListener("click", e => {
 // ---- the target -----------------------------------------------------------
 // Each tap is one round, drawn where it landed. `holes` is the order they
 // went in, so undo takes back the last one and only the last one.
-let holes = [];   // [{z, x, y}]
-const svg = $("tgt").querySelector("svg");
+let holes = [];   // [{z, head, x, y, dbl}] in the target's viewBox units, in shot order
+function tgtSvg() { return $("tgt").querySelector("svg"); }
 function svgPoint(e) {
+  const svg = tgtSvg();
   const pt = svg.createSVGPoint();
   pt.x = e.clientX; pt.y = e.clientY;
   return pt.matrixTransform(svg.getScreenCTM().inverse());
 }
+// Point of aim is always recorded with a run: it's what turns taps into a
+// group. It defaults to the target's centre-mass mark and is remembered per
+// drill and target, so it costs nothing unless you move it.
+function poaKey() { return `${drill ? drill.key : "-"}|${tgtType}`; }
+function loadPoa() {
+  let saved = null; try { saved = JSON.parse(localStorage.getItem("range.poa") || "{}")[poaKey()]; } catch {}
+  poa = saved && isFinite(saved.x) ? saved : RF_TARGETS.defaultPoa(tgtType);
+}
+function savePoa() { try { const m = JSON.parse(localStorage.getItem("range.poa") || "{}"); m[poaKey()] = poa; localStorage.setItem("range.poa", JSON.stringify(m)); } catch {} }
+function drawTarget() {
+  $("tgt").innerHTML = RF_TARGETS.svgMarkup(tgtType);
+  $("tchips").innerHTML = RF_TARGETS.list().map(t => `<button type="button" data-t="${t.key}" aria-pressed="${t.key === tgtType}" title="${esc(t.zones)}">${esc(t.short)}</button>`).join("");
+  loadPoa(); redrawHoles(); drawPoa();
+}
+function drawPoa() {
+  const svg = tgtSvg(); if (!svg) return;
+  const t = RF_TARGETS.get(tgtType), x = poa.x * t.vb[0], y = poa.y * t.vb[1];
+  svg.querySelector(".poaMark").innerHTML = `<g class="poa${poaMode ? " arm" : ""}" pointer-events="none"><circle cx="${x}" cy="${y}" r="11" fill="none"/><line x1="${x - 17}" y1="${y}" x2="${x + 17}" y2="${y}"/><line x1="${x}" y1="${y - 17}" x2="${x}" y2="${y + 17}"/></g>`;
+  $("poaBtn").setAttribute("aria-pressed", poaMode);
+}
+$("tchips").addEventListener("click", e => {
+  const b = e.target.closest("button[data-t]"); if (!b || b.dataset.t === tgtType) return;
+  if (holes.length) { hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; holes = []; photoPending = null; toast("target changed - hits cleared"); }
+  tgtType = b.dataset.t; try { localStorage.setItem("range.target", tgtType); } catch {}
+  drawTarget(); renderZones(); renderTally(); updateGo();
+});
+$("poaBtn").addEventListener("click", () => { poaMode = !poaMode; drawPoa(); if (poaMode) toast("tap the target where you were aiming"); });
 $("tgt").addEventListener("pointerdown", e => {
   const el = e.target.closest("[data-z]"); if (!el) return;
+  const p = svgPoint(e), t = RF_TARGETS.get(tgtType);
+  if (poaMode) { poa = { x: Math.min(1, Math.max(0, p.x / t.vb[0])), y: Math.min(1, Math.max(0, p.y / t.vb[1])) }; poaMode = false; savePoa(); drawPoa(); if (navigator.vibrate) navigator.vibrate(20); return; }
   const z = el.dataset.z;
   if (capHit()) return;
-  const p = svgPoint(e);
   const head = !!el.dataset.head;
   hits[z] = (hits[z] || 0) + 1;
   if (head) headHits++;
@@ -1022,16 +1136,36 @@ $("tgt").addEventListener("pointerdown", e => {
   if (navigator.vibrate) navigator.vibrate(12);
   renderZones(); renderTally(); updateGo();
 });
-function drawHole(x, y, fresh) {
+function drawHole(x, y, fresh, dbl) {
+  const g = tgtSvg() && tgtSvg().querySelector(".holes"); if (!g) return;
   const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 6);
-  c.setAttribute("class", "hole" + (fresh ? " fresh" : ""));
-  $("holes").appendChild(c);
+  c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", dbl ? 8 : 6);
+  c.setAttribute("class", "hole" + (fresh ? " fresh" : "") + (dbl ? " dbl" : ""));
+  g.appendChild(c);
 }
 function redrawHoles() {
-  $("holes").innerHTML = "";
-  holes.forEach(h => drawHole(h.x, h.y, false));
+  const g = tgtSvg() && tgtSvg().querySelector(".holes"); if (!g) return;
+  g.innerHTML = "";
+  holes.forEach(h => drawHole(h.x, h.y, false, h.dbl));
 }
+// What goes on the run: every tap, normalised, plus the point of aim.
+function placementOut() {
+  if (!holes.length) return undefined;
+  const t = RF_TARGETS.get(tgtType);
+  return { target: tgtType, poa, source: photoPending ? "photo" : "tap", shots: holes.map(h => ({ x: h.x / t.vb[0], y: h.y / t.vb[1], z: h.z, head: h.head || undefined, dbl: h.dbl || undefined })) };
+}
+// A scored photo comes back as holes in the target's own coordinates.
+function takeScoredPhoto(res) {
+  if (!res || !res.holes) return;
+  if (res.target && res.target !== tgtType) { tgtType = res.target; try { localStorage.setItem("range.target", tgtType); } catch {} drawTarget(); }
+  const t = RF_TARGETS.get(tgtType);
+  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; holes = [];
+  res.holes.forEach(h => { const cap = roundCap(); if (fired() >= cap) return; hits[h.z] = (hits[h.z] || 0) + 1; if (h.head) headHits++; holes.push({ z: h.z, head: !!h.head, x: h.x * t.vb[0], y: h.y * t.vb[1], dbl: !!h.dbl }); });
+  photoPending = res.photo || null;
+  showPane(1); redrawHoles(); renderZones(); renderTally(); updateGo();
+  toast(`${fired()} hit${fired() === 1 ? "" : "s"} from the photo - check them, then log`);
+}
+$("photoBtn").addEventListener("click", () => { if (!drill) return toast("pick a drill first"); if (window.RF && RF.openCamera) RF.openCamera({ target: tgtType, drill, cap: roundCap() }, takeScoredPhoto); });
 function undoLast() {
   const h = holes.pop();
   if (h) { hits[h.z] = Math.max(0, hits[h.z] - 1); if (h.head) headHits = Math.max(0, headHits - 1); }
@@ -1083,21 +1217,33 @@ function fitPages() {
 }
 window.addEventListener("resize", fitPages);
 if (window.visualViewport) window.visualViewport.addEventListener("resize", fitPages);
+// Pages are addressed by name; the Coach page only exists while coach mode
+// is on, so indexes shift and nothing may assume them.
+function pageEls() { return [...$("pages").querySelectorAll(".page")].filter(p => !p.hidden); }
+function pageIndex(name) { return pageEls().findIndex(p => p.dataset.page === name); }
 function goPage(i, smooth = true) {
+  if (typeof i === "string") i = Math.max(0, pageIndex(i));
   $("pages").scrollTo({ left: i * $("pages").clientWidth, behavior: smooth ? "smooth" : "auto" });
 }
 function markPage() {
   const i = Math.round($("pages").scrollLeft / Math.max(1, $("pages").clientWidth));
-  [...$("tabs").children].forEach((b, n) => b.setAttribute("aria-selected", n === i));
-  if (i === 2) loadWork(true);
-  if (i === 3) renderPlans();
-  if (i === 4) renderStages();
-  if (i === 5 && !ballReady) { ballReady = true; renderGuns(); pickCal(curCal, true); }
+  const name = (pageEls()[i] || {}).dataset?.page;
+  [...$("tabs").children].forEach(b => b.setAttribute("aria-selected", b.dataset.page === name));
+  if (name === "review") loadWork(true);
+  if (name === "session") renderPlans();
+  if (name === "comp") { renderStages(); if (window.RF && RF.renderEvents) RF.renderEvents(); }
+  if (name === "ball" && !ballReady) { ballReady = true; renderGuns(); pickCal(curCal, true); }
+  if (name === "coach" && window.RF && RF.renderCoach) RF.renderCoach();
 }
 let ballReady = false, wuReady = false, workAt = 0;
 $("pages").addEventListener("scroll", markPage, { passive: true });
-$("tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) goPage(+b.dataset.p); });
+$("tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) goPage(b.dataset.page); });
 window.addEventListener("resize", () => { const i = Math.round($("pages").scrollLeft / Math.max(1, $("pages").clientWidth)); goPage(i, false); });
+function setCoachMode(on) {
+  $("tabs").querySelector('[data-page="coach"]').hidden = !on;
+  $("pages").querySelector('[data-page="coach"]').hidden = !on;
+  const i = Math.round($("pages").scrollLeft / Math.max(1, $("pages").clientWidth)); goPage(Math.min(i, pageEls().length - 1), false); markPage();
+}
 
 // ---- time -----------------------------------------------------------------
 // Two ways to put a time in. Total: type the timer's final. Shot by shot:
@@ -1168,7 +1314,7 @@ function showTime() {
 function fired() { return Object.values(hits).reduce((a, b) => a + b, 0); }
 function updateGo() { $("go").disabled = !(drill && (fired() > 0 || paneNo === 2 || (paneNo === 3 && tgtHits.some(h => h.a || h.c || h.d || h.down || h.engaged === false)))); }
 function resetEntry() {
-  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; shots = []; time = ""; holes = [];
+  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; shots = []; time = ""; holes = []; photoPending = null; poaMode = false; loadPoa(); drawPoa();
   pens = { noshoot: 0, procedural: 0 }; $("pen_ns").textContent = 0; $("pen_pr").textContent = 0;
   if (drill && drill.stage) buildTargets();
   redrawHoles(); renderZones(); renderTally(); renderShots(); showTime(); updateGo();
@@ -1203,7 +1349,8 @@ async function logIt() {
                  targets: drill.stage ? tgtHits.map(h => ({ ...h })) : undefined,
                  shots: shots.length ? shots : undefined,
                  // Only the target pane knows whether a round was a head shot.
-                 head_hits: paneNo === 1 || holes.length ? headHits : undefined };
+                 head_hits: paneNo === 1 || holes.length ? headHits : undefined,
+                 placement: dryRun ? undefined : placementOut(), photo: dryRun ? undefined : photoPending || undefined };
   if (!dryRun) for (const [k, n] of Object.entries(hits)) if (n > 0) body.hits[k] = n;
   $("go").disabled = true;
   const r = await post("/api/range/run", body);
@@ -1217,7 +1364,7 @@ async function logIt() {
               + `hit factor ${r.run.hit_factor != null ? r.run.hit_factor.toFixed(2) : "—"}`
               + (sp.length ? ` · splits ${sp.map(x => x.toFixed(2)).join(" ")}` : "") + `</small>`;
   if (navigator.vibrate) navigator.vibrate(r.run.made ? [30, 40, 30] : 60);
-  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; shots = []; time = ""; holes = [];
+  hits = { a: 0, c: 0, d: 0, miss: 0 }; headHits = 0; shots = []; time = ""; holes = []; photoPending = null;
   pens = { noshoot: 0, procedural: 0 }; $("pen_ns").textContent = 0; $("pen_pr").textContent = 0;
   if (drill && drill.stage) buildTargets();
   redrawHoles(); renderZones(); renderTally(); renderShots(); showTime(); updateGo();
@@ -1273,8 +1420,15 @@ function editRun(r) {
       <div><input id="e_pr" inputmode="numeric" value="${r.stage.procedural || 0}"><label style="text-align:center;margin-top:3px">proced.</label></div>
       <div style="grid-column:span 2"><select id="e_pw" style="width:100%;min-height:44px;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;color:var(--ink);font:inherit;padding:0 10px"><option value="minor"${r.stage.power !== "major" ? " selected" : ""}>minor</option><option value="major"${r.stage.power === "major" ? " selected" : ""}>major</option></select><label style="text-align:center;margin-top:3px">power</label></div></div>` : ""}
     <div><label>Note</label><textarea id="e_note" placeholder="What happened. The good. The bad. The ugly. Write it here.">${esc(r.note || "")}</textarea></div>
+    ${r.placement ? `<div><label>Where they landed · ${esc(RF_TARGETS.get(r.placement.target).short)}${r.placement.source === "photo" ? " · from a photo" : ""}</label><div class="plMini" id="e_pl"></div></div>` : ""}
+    ${r.photo ? `<div><label>Photo</label><div class="ephoto" id="e_photo"><span class="empty">loading…</span></div></div>` : ""}
+    <div class="row soonRow"><button type="button" data-soon="video">🎥 Send video to coach</button><button type="button" data-soon="share_run">Share this run</button></div>
     <div class="row"><button type="button" class="del" id="e_del">Delete</button><button type="button" class="save" id="e_save">Save</button></div>
   </div>`);
+  if (r.placement) { const pl = r.placement, t = RF_TARGETS.get(pl.target); $("e_pl").innerHTML = RF_TARGETS.svgMarkup(pl.target); const g = $("e_pl").querySelector(".holes"); pl.shots.forEach(h => { if (h.z === "miss") return; const c = document.createElementNS("http://www.w3.org/2000/svg", "circle"); c.setAttribute("cx", h.x * t.vb[0]); c.setAttribute("cy", h.y * t.vb[1]); c.setAttribute("r", h.dbl ? 8 : 6); c.setAttribute("class", "hole" + (h.dbl ? " dbl" : "")); g.appendChild(c); });
+    const pm = $("e_pl").querySelector(".poaMark"), px = pl.poa.x * t.vb[0], py = pl.poa.y * t.vb[1]; pm.innerHTML = `<g class="poa"><circle cx="${px}" cy="${py}" r="11" fill="none"/><line x1="${px - 17}" y1="${py}" x2="${px + 17}" y2="${py}"/><line x1="${px}" y1="${py - 17}" x2="${px}" y2="${py + 17}"/></g>`; }
+  if (r.photo) fetch(`/api/range/photo?id=${r.id}`).then(x => x.json()).then(x => { $("e_photo").innerHTML = x.photo ? `<img src="${x.photo}" alt="target photo"><button type="button" class="mini" id="e_dropPhoto">remove photo</button>` : `<span class="empty">photo missing</span>`;
+    if ($("e_dropPhoto")) $("e_dropPhoto").addEventListener("click", async () => { await post("/api/range/run/edit", { id: r.id, drop_photo: true }); $("e_photo").innerHTML = `<span class="empty">removed</span>`; lastSeen = null; await load(true); }); });
   const drawSlots = n => {
     const cur = [...document.querySelectorAll("#e_slots input")].map(i => i.value);
     $("e_slots").innerHTML = Array.from({ length: n }, (_, i) =>
@@ -1696,10 +1850,12 @@ async function loadWork(force) {
   if (!force && Date.now() - workAt < 3000) return;
   workAt = Date.now();
   const r = await fetch(`/api/range/work?who=${encodeURIComponent(who)}`).then(r => r.json()).catch(() => null);
-  if (!r || !r.coach) { $("workBody").innerHTML = `<div class="empty">${esc(r && r.text || "couldn't ask her")}</div>`; return; }
+  if (!r || !r.coach) { $("workBody").innerHTML = `<div class="empty">${esc(r && r.text || "couldn't read the book")}</div>`; return; }
   const c = r.coach;
   const goalTxt = a => a.goal_set ? `goal <b>${a.goal.secs.toFixed(2)}</b>${a.goal.all_a ? " all A" : " clean"}` : `suggested <b>${a.goal.secs.toFixed(2)}</b> all A <span>· pro ~${(a.goal.pro || 0).toFixed(2)}</span>`;
-  $("workBody").innerHTML = `<div class="verd">${esc(c.verdict)}<small>${esc(c.head)}</small></div>`
+  const overall = (c.placement || []).length ? `<div class="grp"><h4 class="planH" style="margin:4px 4px 6px">Where your hits land · ${esc((c.profile || {}).hand || "right")}-handed read</h4>` + c.placement.map(pl => placementHtml(pl, true)).join("")
+    + `<p class="hint" style="margin-top:6px">Built from every hit you tapped on the target (or scored from a photo), measured from the point of aim. Set handedness under Settings → Profile so the read is the right way round.</p></div>` : "";
+  $("workBody").innerHTML = `<div class="verd">${esc(c.verdict)}<small>${esc(c.head)}</small></div>` + overall
     + (c.drills.length ? c.drills.map(a => `<div class="cd" data-key="${a.key}">
         <div class="hd"><b>${esc(a.name)}</b>${a.trend ? `<span class="tr ${a.trend[0]}">${a.trend[0] === "up" ? "↑" : a.trend[0] === "down" ? "↓" : "→"}</span>` : ""}<span class="fo ${a.focus}">${a.focus}</span></div>
         <div class="why">${esc(a.why)}${a.n ? ` · last ${a.n} run${a.n === 1 ? "" : "s"}` : ""}${a.goal_set && a.n ? ` · goal hit ${a.goal_hits}/${a.n}` : ""}</div>
@@ -1708,6 +1864,7 @@ async function loadWork(force) {
           <div class="goal">${goalTxt(a)}<button type="button" data-goal="${a.key}">${a.goal_set ? "edit goal" : "set goal"}</button></div>
           <div class="plan">${esc(a.plan)}</div>
           ${a.drill_why ? `<div class="dw">${esc(a.drill_why)}${a.skills && a.skills.length ? ` Trains ${esc(a.skills.join(", "))}.` : ""}</div>` : ""}
+          ${a.placement ? placementHtml(a.placement, false) : ""}
           <div class="goal" style="margin-top:8px"><button type="button" data-load="${esc(a.name)}" style="margin-left:0">shoot it now</button></div>
         </div></div>`).join("")
       : `<div class="empty">Nothing live on the book yet.</div>`)
@@ -1718,11 +1875,32 @@ async function loadWork(force) {
     + `<div class="sugg">${["accuracy", "speed", "both"].map(k => c.suggest[k] && c.suggest[k].length ? `<h4>add for ${k}</h4><div class="row">${c.suggest[k].map(n => `<button type="button" data-load="${esc(n)}">${esc(n)}</button>`).join("")}</div>` : "").join("")}
        ${c.never.length ? `<h4>never shot</h4><div class="row">${c.never.map(n => `<button type="button" data-load="${esc(n)}">${esc(n)}</button>`).join("")}</div>` : ""}</div>`;
 }
+// A group plot: inches from the point of aim, dots for hits, a ring for the
+// mean radius, a mark for the centre. Square, scaled to the spread.
+function groupPlot(pl, size) {
+  size = size || 150;
+  const R = Math.max(4, (pl.spread || 0) * 0.6, Math.abs(pl.mx) + 2, Math.abs(pl.my) + 2), k = (size / 2 - 8) / R, c = size / 2;
+  const X = x => (c + x * k).toFixed(1), Y = y => (c - y * k).toFixed(1);
+  const ring = [1, 2, 4, 8].filter(r => r < R * 1.05).map(r => `<circle cx="${c}" cy="${c}" r="${(r * k).toFixed(1)}" fill="none" stroke="var(--hair)" stroke-width="1"/>`).join("");
+  return `<svg class="gplot" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="group plot">
+    <rect x="0" y="0" width="${size}" height="${size}" rx="12" fill="var(--sunk)"/>${ring}
+    <line x1="${c}" y1="6" x2="${c}" y2="${size - 6}" stroke="var(--hair)"/><line x1="6" y1="${c}" x2="${size - 6}" y2="${c}" stroke="var(--hair)"/>
+    ${(pl.pts || []).map(q => `<circle cx="${X(q.x)}" cy="${Y(q.y)}" r="3.2" fill="var(--ink)" fill-opacity=".75"/>`).join("")}
+    <circle cx="${X(pl.mx)}" cy="${Y(pl.my)}" r="${(pl.radius * k).toFixed(1)}" fill="none" stroke="var(--hot)" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <circle cx="${X(pl.mx)}" cy="${Y(pl.my)}" r="4" fill="var(--hot)"/>
+    <text x="${size - 6}" y="${size - 6}" text-anchor="end" font-size="9" fill="var(--faint)" font-family="var(--mono)">${R.toFixed(0)}" rings 1·2·4·8</text></svg>`;
+}
+function placementHtml(pl, wide) {
+  const t = RF_TARGETS.get(pl.target);
+  const head = `<b>${esc(t.short)}</b> · ${pl.n} hits over ${pl.n_runs} run${pl.n_runs === 1 ? "" : "s"}${pl.solid ? "" : " · <i>need ~15 hits for a solid read</i>"}`;
+  const nums = `centre <b>${pl.mx >= 0 ? "+" : ""}${pl.mx.toFixed(1)}"</b> x <b>${pl.my >= 0 ? "+" : ""}${pl.my.toFixed(1)}"</b> · mean radius <b>${pl.radius.toFixed(1)}"</b> · spread <b>${pl.spread.toFixed(1)}"</b>`;
+  return `<div class="pl ${wide ? "wide" : ""}">${groupPlot(pl, wide ? 150 : 120)}<div class="plt"><div class="why">${head}</div><div class="why mono">${nums}</div>${pl.reads.map(x => `<div class="plan">${esc(x)}</div>`).join("")}${pl.first ? `<div class="plan">${esc(pl.first)}</div>` : ""}</div></div>`;
+}
 $("workBody").addEventListener("click", e => {
   const g = e.target.closest("button[data-goal]");
   if (g) return editGoal(g.dataset.goal);
   const l = e.target.closest("button[data-load]");
-  if (l) { const d = DATA.drills.find(x => x.name === l.dataset.load); if (d) { drill = d; resetEntry(); showDrill(); goPage(0); toast(`${d.name} loaded`); } return; }
+  if (l) { const d = DATA.drills.find(x => x.name === l.dataset.load); if (d) { drill = d; resetEntry(); showDrill(); goPage("log"); toast(`${d.name} loaded`); } return; }
   const cd = e.target.closest(".cd");
   if (cd) cd.classList.toggle("open");
 });
@@ -1810,6 +1988,7 @@ function renderStages() {
     + `<div class="planH">Built in</div>` + demo.map(card).join("");
 }
 $("newStage").addEventListener("click", () => editStage(null));
+$("compSeg").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; [...$("compSeg").children].forEach(x => x.setAttribute("aria-pressed", x === b)); $("compStages").hidden = b.dataset.v !== "stages"; $("compEvents").hidden = b.dataset.v !== "events"; if (b.dataset.v === "events" && window.RF) RF.renderEvents(); });
 $("stagesList").addEventListener("click", async e => {
   const b = e.target.closest("button[data-act]"); if (!b) return;
   const st = (DATA.stages || []).find(x => x.id === b.closest(".plan").dataset.s); if (!st) return;
@@ -1890,7 +2069,7 @@ function editPlan(p) {
   $("p_add").addEventListener("click", () => pickDrill(d => { items.push({ drill: d.key, reps: 1 }); draw(); }));
   $("p_adds").addEventListener("click", () => {
     const S = DATA.stages || [];
-    if (!S.length) return toast("no stages yet - build one on the Plan tab");
+    if (!S.length) return toast("no stages yet - build one on the Comp tab");
     const m = document.createElement("div"); m.className = "sheet";
     m.innerHTML = `<div class="box"><div class="list">${S.map(st => `<button class="item" data-s="${st.id}"><b>${esc(st.name)}</b><small>${Object.entries(st.ammo).map(([g, n]) => n + " " + g).join(" · ")}</small></button>`).join("")}</div><button class="cancel" type="button">Cancel</button></div>`;
     m.addEventListener("click", e => {
@@ -2012,7 +2191,7 @@ function progStart(p) {
   const queue = [];
   p.items.forEach(it => { for (let i = 0; i < it.reps; i++) queue.push(it.dry ? it.drill + "|dry" : it.drill); });
   prog = { name: p.name, queue, i: 0 };
-  progShow(); goPage(0);
+  progShow(); goPage("log");
 }
 function progShow() {
   const el = $("prog");
@@ -2056,15 +2235,20 @@ let toastT = null;
 function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("show");
   clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove("show"), 2600); }
 
+// ---- hooks for app-more.js (settings, camera, coach mode, events, roadmap) ----
+window.RF = Object.assign(window.RF || {}, {
+  $, toast, openSheet, post, esc, cap, load: () => load(true), goPage, setCoachMode, pickDrill, editStage, findDrill, progStart, loadWork: () => loadWork(true),
+  state: () => ({ who, drill, DATA, tgtType, photoPending: !!photoPending, holes: holes.length }), setDrill: d => { drill = d; resetEntry(); showDrill(); },
+});
 // ---- go -------------------------------------------------------------------
-renderZones(); renderTally(); setTmode("total"); showPane(0); fitPages(); markPage();
+drawTarget(); renderZones(); renderTally(); setTmode("total"); showPane(0); fitPages(); markPage();
 setTimeout(fitPages, 300);
 load(true);
-// Voice-logged runs arrive through her, not this page. Poll lightly so
-// they show up while the phone's still in your hand.
+// Re-read the book now and then in case another tab or a restore changed it.
 setInterval(() => { if (document.visibilityState === "visible") load(false); }, 4000);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") load(true); });
 })();
 </script>
+<script src="app-more.js"></script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 # Rangefolio
 
 Range day, scored honestly. A standalone PWA: drills, sessions, stages,
-coaching and a ballistics solver — on your phone, no account, no server.
+coaching, a class builder for instructors, photo scoring and a ballistics
+solver - on your phone, no account, no server.
 
 **Run it:** serve this folder over HTTPS (or `localhost`) and open `index.html`.
 Any static host works (GitHub Pages, Netlify, an S3 bucket). Service workers
@@ -11,5 +12,5 @@ Local test: `python -m http.server 8080` in this folder, then
 http://localhost:8080/index.html. On a phone, open it in Safari/Chrome and
 "Add to Home Screen".
 
-Start with `HANDOFF.md`. The scoring, drill and ballistics references are in
-`docs/`.
+Deploying: `DEPLOY.md`. Testers: `TESTERS.md`. Everything else: `HANDOFF.md`
+first, then `docs/`.

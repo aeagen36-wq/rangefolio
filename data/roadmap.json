@@ -1,0 +1,21 @@
+{
+  "about": "Every button that needs an account, a server or a model opens one of these cards instead of doing nothing. `needs` says what unblocks it. Tap counts are kept in the book's meta.soon so we learn what testers reach for.",
+  "features": [
+    { "key": "accounts", "title": "Accounts & sync", "needs": "backend", "blurb": "Sign in once and your book follows you: phone, tablet, a new phone next year. Backups stop being a chore. Coaches and students link through it." },
+    { "key": "sync", "title": "Send my data to Drew", "needs": "backend", "blurb": "One tap sends a copy of your book (runs, taps, profile - never photos or video) to help build the coaching and AI features. You'll see exactly what's in it before it goes, and it's off unless you tap it." },
+    { "key": "share_run", "title": "Share a run", "needs": "accounts", "blurb": "Send a run - time, hits, the target with your holes on it - to a coach or a friend as a link." },
+    { "key": "share_drill", "title": "Share a drill, session or stage", "needs": "accounts", "blurb": "Anything you build gets a short code. Whoever types it in gets the same thing in their app." },
+    { "key": "video", "title": "Video to coach", "needs": "accounts", "blurb": "Record yourself shooting the run, attach it, and it goes to your coach with the run's numbers. They watch it and leave notes at the moment in the clip. Nothing is stored on the phone until then - video eats storage." },
+    { "key": "coach_link", "title": "Link a coach", "needs": "accounts", "blurb": "Enter a coach's code and they can see your book and send you sessions, classes and goals. You control what they see and can unlink any time." },
+    { "key": "publish_class", "title": "Publish a class to students", "needs": "accounts", "blurb": "A class you built goes out to the people in it: the modules, the drills, the round count, the notes you chose to share. Their runs come back under the class so you can see who did the work." },
+    { "key": "roster", "title": "Students & roster", "needs": "accounts", "blurb": "Real students with their own books, not names on one phone. Trends per student, who hasn't shot in three weeks, who's regressing on what." },
+    { "key": "event_join", "title": "Join an event with a code", "needs": "accounts", "blurb": "The match director or instructor shares a code; you get every stage in the right order, ready to score, before you walk the first one." },
+    { "key": "event_share", "title": "Share an event", "needs": "accounts", "blurb": "Publish this event's stages as a code for squad-mates or a class." },
+    { "key": "ai_coach", "title": "AI coach", "needs": "backend", "blurb": "Reads your book - times, hits, where every round landed, splits - and talks to you about it: what the pattern says, what to work on, a plan for Saturday. Built on the same numbers the Review tab shows, never on guesses." },
+    { "key": "photo_model", "title": "Automatic hole detection", "needs": "model", "blurb": "The photo scorer finds the holes itself and proposes the hits; you confirm or fix. Until then you tap them - which is what trains the model." },
+    { "key": "timer", "title": "Shot timer link", "needs": "native", "blurb": "Pair an AMG or Shooters Global timer over Bluetooth so the time and every split land in the run without typing. Android Chrome can do it today; iPhone needs the App Store version." },
+    { "key": "xlsx", "title": "Excel export", "needs": "backend", "blurb": "A workbook with Runs, Standards and Holds sheets, not just a CSV." },
+    { "key": "voice", "title": "Voice logging", "needs": "native", "blurb": "Say 'Bill drill, six alpha, two nine' and it's on the book. Needs the native app for speech that works with ear pro on." },
+    { "key": "marketplace", "title": "Courses from instructors", "needs": "accounts", "blurb": "Instructors publish classes and drill packs; you add them to your app. Their name stays on it." }
+  ]
+}
