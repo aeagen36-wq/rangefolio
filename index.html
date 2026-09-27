@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0D10">
+<title>Rangefolio has moved</title>
+<style>
+:root{--bg:#0B0D10;--card:#14181E;--sunk:#0F1318;--hair:rgba(255,255,255,.08);--ink:#F2F4F7;--dim:#9AA5B4;--faint:#6A7684;--hot:#E8A33D;
+  --mono:ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;--sans:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--sans);min-height:100%}
+body{padding:calc(24px + env(safe-area-inset-top,0)) 18px calc(24px + env(safe-area-inset-bottom,0))}
+.box{max-width:440px;margin:0 auto}
+.brand{font:800 12px var(--mono);letter-spacing:.18em;color:var(--hot)}
+h1{font-size:26px;margin:10px 0 6px}
+p{color:var(--dim);margin:0 0 12px}
+.big{display:block;background:var(--hot);color:#1A1204;text-decoration:none;font-weight:800;font-size:18px;text-align:center;padding:16px;border-radius:14px;margin:16px 0 8px}
+.url{font:700 13px var(--mono);color:var(--ink);word-break:break-all;background:var(--sunk);border:1.5px solid var(--hair);border-radius:12px;padding:10px 12px}
+button{font:inherit;color:var(--dim);background:var(--card);border:1.5px solid var(--hair);border-radius:12px;min-height:48px;padding:0 16px;font-weight:700;width:100%;margin-top:8px}
+button.hot{color:var(--hot);border-color:var(--hot)}
+ol{color:var(--ink);padding-left:20px;margin:8px 0}
+li{margin:6px 0}
+.h{font:700 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:18px 0 6px}
+small{color:var(--faint);font-family:var(--mono);font-size:11.5px}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="brand">RANGEFOLIO</div>
+  <h1>The app has a new address.</h1>
+  <p>Same app, same invite code, faster home. Two minutes to switch. Your old icon will keep opening this page, so delete it once you're done.</p>
+  <a class="big" id="go" href="https://rangefolio.pages.dev/">Open the new Rangefolio</a>
+  <div class="url" id="urlTxt">https://rangefolio.pages.dev/</div>
+
+  <div class="h">1 · Save what you logged here (optional)</div>
+  <p>If you logged runs you want to keep, download a backup first. Skip this if it was just fiddling.</p>
+  <button type="button" class="hot" id="backup">Download my backup</button>
+  <div id="note"><small></small></div>
+
+  <div class="h">2 · Install the new one</div>
+  <ol>
+    <li>Tap the big button above. Enter your invite code.</li>
+    <li><b>iPhone:</b> Safari → Share → <b>Add to Home Screen</b>. <b>Android:</b> Chrome → <b>Install</b> (or ⋮ → Add to Home screen).</li>
+    <li>If you made a backup: in the new app, ⚙ → <b>Restore a backup</b>, pick the file.</li>
+    <li>Delete the old icon. Done.</li>
+  </ol>
+  <small>Questions → whoever sent you the link.</small>
+</div>
+<script>
+// Kill the old cached app so this page shows, not a stale copy of the app.
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+if (window.caches) caches.keys().then(ks => ks.forEach(k => caches.delete(k)));
+// Backup straight out of the old app's storage (same origin, so we can read it).
+document.getElementById("backup").addEventListener("click", () => {
+  const note = document.querySelector("#note small");
+  const done = book => {
+    if (!book) { note.textContent = "Nothing saved on this phone - nothing to back up."; return; }
+    const blob = new Blob([JSON.stringify({ ...book, exported: new Date().toISOString(), moved_from: location.href })], { type: "application/json" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `rangefolio-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+    note.textContent = `Saved: ${(book.runs || []).length} runs. Restore it in the new app under ⚙.`;
+  };
+  try {
+    const r = indexedDB.open("rangefolio");
+    r.onsuccess = () => { try { const t = r.result.transaction("book").objectStore("book").get("book"); t.onsuccess = () => done(t.result || JSON.parse(localStorage.getItem("rangefolio.book") || "null")); t.onerror = () => done(JSON.parse(localStorage.getItem("rangefolio.book") || "null")); } catch { done(JSON.parse(localStorage.getItem("rangefolio.book") || "null")); } };
+    r.onerror = () => done(JSON.parse(localStorage.getItem("rangefolio.book") || "null"));
+  } catch { done(null); }
+});
+</script>
+</body>
+</html>
